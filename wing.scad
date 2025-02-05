@@ -1,21 +1,21 @@
 
 
-module segment( i=0, r=0, p=pSD6060 )
+module segment( s, o, r=0, p=pSD6060 )
 {
-    factor = ( s[i+1] ) / ( s[i] );
-    height = ( o[i+1].z - o[i].z );
-    sx = ( o[i+1].x - o[i].x ) / height;
-    sy = ( o[i+1].y - o[i].y ) / height;
+    factor = ( s[1] ) / ( s[0] );
+    height = ( o[1].z - o[0].z );
+    sx = ( o[1].x - o[0].x ) / height;
+    sy = ( o[1].y - o[0].y ) / height;
     
     m=[ [ 1, 0,  sx, 0],
         [ 0, 1,  sy, 0],
         [ 0, 0,  1,  0],
         [ 0, 0,  0,  1] ];
     
-    translate(o[i])
+    translate(o[0])
         multmatrix(m)
             linear_extrude( height=height, scale=factor, convexity=10 ) 
-                spant2d( s=s[i], r=r, p=p );
+                spant2d( s=s[0], r=r, p=p );
 }
 
 module lastsegment( r=0, h=10, ds=50, p=pSD6060 )

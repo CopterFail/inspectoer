@@ -13,8 +13,13 @@ o = [   [+sf*0,   0, 50],
         [+sf*500, 0, 550] ]; //offset: x,y,z 
 s = [ 250, 230, 200, 170 ]; //size = factor   250 - (z-50)*
 
-tubeOffset1 = -40; /*-s[0]/3;*/    // tube offset
-tubeOffset2 = -100; /*-s[0]/3;*/    // tube offset
+tubeOffset1 = 0.25; 
+tubeOffset2 = 0.5; /*-s[0]/3;*/    // tube offset
+tubeAng1 = atan2( (o[3]-o[0]).z, 30 + tubeOffset1*(s[0]-s[3]) ) - 90;
+tubeAng2 = atan2( (o[3]-o[0]).z, 30 + tubeOffset2*(s[0]-s[3]) ) - 90;
+echo(tubeAng1);
+echo(tubeAng2);
+
 tubeOffset3 = -160; /*-s[0]/3;*/    // tube offset
 dRips = 3;//1;      // strength of the rips
 yRips = 40;     // distance of the rips
@@ -31,7 +36,7 @@ ruderseg=2;
 ruderrot=11;
 
 
-exploreWing();
+*exploreWing();
 *mirror( [0,0,1] ) exploreWing();
 *exploreFuse();
 
@@ -39,14 +44,15 @@ exploreWing();
 *wingSolid();
 *mirror( [0,0,1] ) wingSolid();
 *translate([-250,0,0])wingSolid();
-
+translate([0,0,0])wingSegment();
+wingSegment( [s[2],s[3]], [o[2],o[3]] );
 
 *fuse0();
 *fuseSolid();  
 *fuseSkin(); 
 *translate([335,0,50]) spant3d( d=0.3, offset=[0,0,0],    size=605,   r=0, p=pClarkFuse );
 *fuseNaca();
-*fuseSegment( seg=3 );
+
 
 *translate([0,-25,0]) color("Red") fuseSkid();
 
@@ -123,6 +129,7 @@ module exploreFuse()
         fuseSegment( seg=1 );
         fuseSegment( seg=2 );
         translate( [0,50,0]) fuseCoverMid();
+        color("Red") translate( [0,-50,0]) fuseSkid( r=-0.5 );
         fuseSegment( seg=3 );
         translate( [0,50,0]) color("GhostWhite") fuseCoverFront();
     }
@@ -133,7 +140,7 @@ module exploreWing()
     show([0,0,20]){
         *fuseSegment( seg=1 );
         translate([-20,0,0]) exploreFuse();
-        wingSegment(0);
+        wingSegment([s[0],s[1]], [o[0],o[1]]);
         union(){
             translate([tubeOffset1,0,zBoom]) tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=3 );
             translate([tubeOffset2,0,zBoom]) tubeConnect( d1=dBar1, d2=dBar1, a=8, w=3 );
@@ -145,9 +152,9 @@ module exploreWing()
             translate([-420,60,zBoom]) sideSolid(r=0);
             }
         wingConnect(d=4, r=-0.5, width=12 /*1.4*/, offset=o[1], size=s[1] );
-        wingSegment(1);
+        wingSegment([s[1],s[2]], [o[1],o[2]]);
         wingConnect(d=4, r=-0.5, width=1.4, offset=o[2], size=s[2] );
-        wingSegment(2);
+        wingSegment([s[2],s[3]], [o[2],o[3]]);
         wingConnect(d=4, r=-0.5, width=1.4, offset=o[3], size=s[3] );
         lastsegment();
         }
@@ -171,47 +178,51 @@ module wingSolid(r=0)
     lastsegment();
 }
 
-module wingSegment( seg=0 )
+module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
 {
-    *translate(o[seg]-[s[seg]*1.5,s[seg]*0.5,0]) cube( [s[seg]*2,s[seg],o[seg+1].z-o[seg].z], center=false  );
+    *translate(o[0]-[s[0]*1.5,s[0]*0.5,0]) cube( [s[0]*2,s[0],o[1].z-o[0].z], center=false  );
         difference(){
             union(){
-                linearSlice( sx=s[seg], sh=o[seg+1].z-o[seg].z, org=o[seg], center=true )
+                linearSlice( sx=s[0], sh=o[1].z-o[0].z, org=o[0], center=true )
                 union(){
-                    *spant3dDiff( d=0.4, offset=o[seg], size=s[seg], ri=-4 ); // der Boden
+                    *spant3dDiff( d=0.4, offset=o[0], size=s[0], ri=-4 ); // der Boden
 
                     gridSlice(dy = yRips) // die Rippen
                         outerSkin(d = dRips, h=dSkin ) 
-                            segment(seg, r=-dRips-dSkin );
+                            segment( s, o, r=-dRips-dSkin );
                     outerSkin(d = dSkin, h=dSkin)     // die Haut
-                        segment(seg, r=-dSkin);
+                        segment(s, o, r=-dSkin);
                     }
                     
                 intersection(){
                     union(){
-                        translate([tubeOffset1,0,0])
+                        translate([-tubeOffset1 * s[0] - o[0].x,0,0])
+                        rotate([0,-tubeAng1,0])
                             xBarTube( length=1000, xsize=60, diameter=dBar1, $fn=50 );
-                        translate([tubeOffset2,0,0])
+                        translate([-tubeOffset2 * s[0] - o[0].x,0,0])
+                        rotate([0,-tubeAng2,0])
                             xBarTube( length=1000, xsize=60, diameter=dBar2, $fn=50 );
                         }
-                    segment(seg, r=0);
+                    segment(s, o, r=0);
                     }
                     
-                if(ruderseg==seg){
+                *if(ruderseg==seg){
                     RuderSkin( seg, size=45,d=0 );
                     ServoSkin( seg );
                     }
                 }
                 
             union(){
-                translate([tubeOffset1,0,0])
+                #translate([-tubeOffset1 * s[0] - o[0].x,0,0])
+                rotate([0,-tubeAng1,0])
                     xTube( diameter=dBar1, length=1000, $fn=50 );
-                translate([tubeOffset2,0,0])
+                #translate([-tubeOffset2 * s[0] - o[0].x,0,0])
+                rotate([0,-tubeAng2,0])
                     xTube( diameter=dBar2, length=1000, $fn=50 );
-                wingConnect(d=4, r=-dSkin+0.1, width=1.5, offset=o[seg], size=s[seg] );
-                wingConnect(d=4, r=-dSkin+0.1, width=1.5, offset=o[seg+1], size=s[seg+1] );
+                wingConnect(d=4, r=-dSkin+0.1, width=1.5, offset=o[0], size=s[0] );
+                wingConnect(d=4, r=-dSkin+0.1, width=1.5, offset=o[1], size=s[1] );
                 }
-            if(ruderseg==seg){
+            *if(ruderseg==seg){
                 RuderDiff( seg, size=45,d=0.3 );
                 ServoDiff( seg );
                 }
