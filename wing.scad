@@ -18,8 +18,8 @@ module segment( s, o, r=0, p=pSD6060, begin=0, end=1 )
                 intersection()
                 {
                     spant2d( s=s[0], r=r, p=p );
-                    #scale(s) 
-                        mirror([1,0]) 
+                    scale(s) 
+                        mirror([1,0]) // vgl spant2d()
                             translate( [begin,-0.5] ) 
                                 square( [(end-begin), 1] );
                 }

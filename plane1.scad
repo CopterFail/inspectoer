@@ -17,16 +17,17 @@ tubeOffset1 = 0.25;
 tubeOffset2 = 0.5; /*-s[0]/3;*/    // tube offset
 tubeAng1 = atan2( (o[3]-o[0]).z, -o[3].x - tubeOffset1*(s[0]-s[3]) ) - 90;
 tubeAng2 = atan2( (o[3]-o[0]).z, -o[3].x - tubeOffset2*(s[0]-s[3]) ) - 90;
-//echo(tubeAng1 , tubeAng2);
-solidOffset1 = 0.2;
-solidOffset2 = 0.55;
+tubeAng = (tubeAng1 + tubeAng2) / 2;    // different angles make problems
+echo(tubeAng, tubeAng1 , tubeAng2);
+solidOffset1 = 0.17;
+solidOffset2 = 0.58;
 
 tubeOffset3 = -160; /*-s[0]/3;*/    // tube offset
 dRips = 1;      // strength of the rips
 yRips = 40;     // distance of the rips
 dSkin = 0.4;    // strength of the outer hull
 dBar1 = 6.4;    // diameter of the 1st tube
-dBar2 = 4.5;    // diameter of the 2nd tube
+dBar2 = 6.4;    // diameter of the 2nd tube
 zBoom = 130;
 
 
@@ -45,8 +46,8 @@ ruderrot=11;
 *wingSolid();
 *mirror( [0,0,1] ) wingSolid();
 *translate([-250,0,0])wingSolid();
-*translate([0,0,0])wingSegment([s[0],s[1]], [o[0],o[1]]);
-wingSegment( [s[2],s[3]], [o[2],o[3]] );
+wingSegment([s[0],s[1]], [o[0],o[1]]);
+*wingSegment( [s[2],s[3]], [o[2],o[3]] );
 *segment( s=[s[0],s[1]], o=[o[0],o[1]], r=0, p=pSD6060, begin=solidOffset1, end=solidOffset2 )
 
 *fuse0();
@@ -59,69 +60,7 @@ wingSegment( [s[2],s[3]], [o[2],o[3]] );
 *translate([0,-25,0]) color("Red") fuseSkid();
 
 *hinterteil();
-*test();
-*test2();
-*polyline( size=605, p=pClarkFuse ); 
-
-module test()
-{
-    seg=0;
-    translate([0,-25,0])
-        difference(){
-            union(){
-                *spant3dDiff( d=0.4, offset=o[seg], size=s[seg], ri=0);
-                gridSlice(dy = yRips) // die Rippen
-                    outerSkin(d = dRips ) 
-                        segment(seg, r=-dRips-dSkin );
-                outerSkin(d = dSkin, h = dSkin)     // die Haut
-                    segment(seg, r=-dSkin);
-                intersection(){
-                    union(){
-                        translate([tubeOffset1,0,0])
-                            xBarTube( length=1000, xsize=60, diameter=dBar1, $fn=50 );
-                        translate([tubeOffset2,0,0])
-                            xBarTube( length=1000, xsize=60, diameter=dBar2, $fn=50 );
-                        }
-                    segment(seg, r=0);
-                    }
-                 }
-            union(){
-                translate([tubeOffset1,0,0])
-                    xTube( diameter=dBar1, length=1000, $fn=50 );
-                translate([tubeOffset2,0,0])
-                    xTube( diameter=dBar2, length=1000, $fn=50 );
-                }
-            }
-    translate([0,+25,0])
-        difference(){
-            segment(seg, r=0);
-            union(){
-                translate([tubeOffset1,0,0])
-                    xTube( diameter=dBar1, length=1000, $fn=50 );
-                translate([tubeOffset2,0,0])
-                    xTube( diameter=dBar2, length=1000, $fn=50 );
-                }
-           }
-        
-}
-
-module test2()
-{
-    seg=0;
-    translate([0,+25,0])
-        difference(){
-            segment(seg, r=0);
-            union(){
-                translate([tubeOffset1,0,0])
-                    xBarTube2( diameter=dBar1, length=1000, xsize=60, w=0.1, $fn=50 );
-                translate([tubeOffset2,0,0])
-                    xBarTube2( diameter=dBar2, length=1000, xsize=60, w=0.1, $fn=50 );
-                translate([tubeOffset3,0,0])
-                    xBarTube2( diameter=0, length=1000, xsize=60, w=0.1 , $fn=50 );
-                }
-           }
-}
-
+*fusePolyline( size=605, p=pClarkFuse ); 
 
 module exploreFuse()
 {
@@ -169,8 +108,6 @@ module exploreWing()
             xTube( length=zBoom, diameter=dBar1+2, $fn=50 );
         translate([tubeOffset2,0,zBoom/2+10])
             xTube( length=zBoom, diameter=dBar2+2, $fn=50 );
-            
-        
     
 }
 
@@ -182,57 +119,46 @@ module wingSolid(r=0)
 
 module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
 {
-    *translate(o[0]-[s[0]*1.5,s[0]*0.5,0]) cube( [s[0]*2,s[0],o[1].z-o[0].z], center=false  );
-        difference(){
+    difference(){
+        union(){
+            linearSlice( sx=s[0], sh=o[1].z-o[0].z, org=o[0], center=true )
             union(){
-                linearSlice( sx=s[0], sh=o[1].z-o[0].z, org=o[0], center=true )
-                union(){
-                    *spant3dDiff( d=0.4, offset=o[0], size=s[0], ri=-4 ); // der Boden
-
-                    gridSlice(dy = yRips) // die Rippen
-                        outerSkin(d = dRips, h=dSkin ) 
-                            segment( s, o, r=-dRips-dSkin );
-                    outerSkin2(d = dSkin, h=dSkin){     // die Haut
-                        segment(s, o, r=-dSkin);
-                        segment(s, o, r=-dSkin, begin=solidOffset1 , end=solidOffset2 );
-                        }
-                    }
-                    
-                intersection(){
-                    union(){
-                    echo( o , s );
-                        translate([-tubeOffset1 * s[0] + o[0].x,0,o[0].z])
-                        rotate([0,tubeAng1,0])
-                            xBarTube( length=1000, xsize=60, diameter=dBar1, $fn=50 );
-                        translate([-tubeOffset2 * s[0] + o[0].x,0,o[0].z])
-                        rotate([0,tubeAng2,0])
-                            xBarTube( length=1000, xsize=60, diameter=dBar2, $fn=50 );
-                        }
-                    segment(s, o, r=0);
-                    }
-                    
-                *if(ruderseg==seg){
-                    RuderSkin( seg, size=45,d=0 );
-                    ServoSkin( seg );
+                outerSkin2(d = dSkin, h=dSkin){     // die Haut
+                    segment(s, o, r=-dSkin);
+                    segment(s, o, r=-dSkin, begin=solidOffset1 , end=solidOffset2 );
                     }
                 }
                 
-            union(){
-                translate([-tubeOffset1 * s[0] + o[0].x,0,o[0].z])
-                    rotate([0,tubeAng1,0])
-                        #xTube( diameter=dBar1, length=1000, $fn=50 );
-                translate([-tubeOffset2 * s[0] + o[0].x,0,o[0].z])
-                    rotate([0,tubeAng2,0])
-                        #xTube( diameter=dBar2, length=1000, $fn=50 );
-                wingConnect(d=4, r=-dSkin+0.1, width=1.5, offset=o[0], size=s[0] );
-                wingConnect(d=4, r=-dSkin+0.1, width=1.5, offset=o[1], size=s[1] );
+            intersection(){
+                union(){
+                    xBarTube( diameter=dBar1, tubeoffset=tubeOffset1, $fn=50 );
+                    xBarTube( diameter=dBar2, tubeoffset=tubeOffset2, $fn=50 );
+                    xBarTube( diameter=0, ang=60, w=0.5, tubeoffset=(tubeOffset2+tubeOffset1)/2 );
+                    }
+                segment(s, o, r=0);
                 }
+                
             *if(ruderseg==seg){
-                RuderDiff( seg, size=45,d=0.3 );
-                ServoDiff( seg );
+                RuderSkin( seg, size=45,d=0 );
+                ServoSkin( seg );
                 }
-        }
-
+            }
+            
+        union(){
+            xTube( diameter=dBar1, tubeoffset=tubeOffset1, $fn=50 );
+            xTube( diameter=dBar2, tubeoffset=tubeOffset2, $fn=50 );
+            wingConnect(d=4, r=-dSkin+0.1, width=1.5, offset=o[0], size=s[0] );
+            wingConnect(d=4, r=-dSkin+0.1, width=1.5, offset=o[1], size=s[1] );
+            }
+        *if(ruderseg==seg){
+            RuderDiff( seg, size=45,d=0.3 );
+            ServoDiff( seg );
+            }
+            
+            wingPolyLine( d=2.2, pt=pSD6060[31]+[+0.006-0.0025,+0.002] );
+            *wingPolyLine( pt=pSD6060[31-9]+[-0.01,-0.01] );
+            *wingPolyLine( pt=pSD6060[31+7]+[+0.02,+0.008] );
+    }
 }
 
 module RuderSkin(i=0, size = 45, d=0.3 )
@@ -346,59 +272,34 @@ module ServoDiff( i=0 )
                 cylinder(d=10, h=10);
 }
 
-module xTube( diameter=6, length=100 )
+module xTube( diameter=6, length=1200, tubeoffset=tubeOffset1 )
 {
-    rotate([0,0,0]) cylinder(d=diameter, h=length, center=true); // inner tube
+    translate([-tubeoffset * s[0] + o[0].x,0,o[0].z])  // based of the 1st segment
+        rotate([0,tubeAng,0]) 
+            cylinder(d=diameter, h=length, center=true); // inner tube
 }
 
-module xBarTube( length=600, xsize=30, diameter=6, w=0.8 )
-{
-    // w=0.8 is 2 walls
-    difference(){
-        union(){
-            rotate([0, 0, +45]) cube([xsize,w,length], center=true);    // X-bar
-            rotate([0, 0,-45]) cube([xsize,w,length], center=true);
-            rotate([0,0,0]) cylinder(d=diameter+2*w, h=length, center=true); // outer tube
-            xTube( diameter=diameter+2*w, length=length );
-        }
-        
-        union(){
-            *xtube(diameter=diameter, length=length+2);
-            for( y=[-length/2:1.0*xsize:+length/2] )    // holes to reduce weight
-                translate([0,0,y])
-                    rotate([90,0,0]) 
-                        scale([0.38,0.7,1])
-                        cylinder(d=xsize, h=xsize, center=true);
-        }
-    }        
-}
-
-module xBarTube2( length=600, xsize=30, diameter=6, w=0.8 )
+module xBarTube( diameter=6, length=1200, xsize=50, ang=45, w=0.8, tubeoffset=tubeOffset1  )
 {
     // w=0.8 is 2 walls
-    difference(){
-        union(){
-            rotate([0, 0, +45]) translate([(xsize+diameter)/2+0.8+0*w,0,0]) cube([xsize,w,length], center=true);    // X-bar
-            rotate([0, 0,+135]) translate([(xsize+diameter)/2+0.8+0*w,0,0]) cube([xsize,w,length], center=true);    // X-bar
-            rotate([0, 0,-135]) translate([(xsize+diameter)/2+0.8+0*w,0,0]) cube([xsize,w,length], center=true);    // X-bar
-            rotate([0, 0,-45])  translate([(xsize+diameter)/2+0*w,0,0]) cube([xsize,w,length], center=true);
-
-            rotate([0,0,0]) cylinder(d=diameter+2*w, h=length, center=true); // outer tube
-            xTube( diameter=diameter+2*w, length=length );
-        }
-        
-        union(){
-            *xTube(diameter=diameter, length=length+2);
-            *for( y=[-length/2:1.0*xsize:+length/2] )    // holes to reduce weight
-                translate([0,0,y])
-                    rotate([90,0,0]) 
-                        scale([0.38,0.7,1])
-                        cylinder(d=xsize, h=xsize, center=true);
-        }
-   }
-
+    translate([-tubeoffset * s[0] + o[0].x,0,o[0].z])   // based of the 1st segment
+    rotate([0,tubeAng,0])
+        difference(){
+            union(){
+                rotate([0, 0, +ang]) cube([xsize,w,length], center=true);    // X-bar
+                rotate([0, 0,-ang]) cube([xsize,w,length], center=true);
+                cylinder(d=diameter+1*w, h=length, center=true); // outer tube             
+            }
+            
+            union(){
+                *for( y=[-length/2:1.0*xsize:+length/2] )    // holes to reduce weight
+                    translate([0,0,y])
+                        rotate([90,0,0]) 
+                            scale([0.38,0.7,1])
+                                cylinder(d=xsize, h=xsize, center=true);
+            }
+        }        
 }
-
 
 module hinterteil() // erstmal stark vereinfacht
 {
@@ -684,7 +585,24 @@ module tubeFlansch( d=6, a=8, h=40, w=3 )
         }
 }
 
-module polyline( d=3, size=605, p=pClarkFuse )
+module wingPolyLine( d=3, pt=[0,0]  )
+{
+    echo(pt);
+    poly = [ for(i=[0:len(o)-1]) [o[i].x - s[i]*pt.x , o[i].y + s[i]*pt.y ,  o[i].z ] ];
+    echo( poly);
+    for( i=[0:(len(poly)-2)] ){
+        
+        hull(){
+            translate(poly[i]) 
+                sphere( d=d );
+            translate(poly[i+1]) 
+                sphere( d=d );
+            }
+        }
+}
+
+
+module fusePolyline( d=3, size=605, p=pClarkFuse )
 {
     //translate([0,100,0])
     for( i=[0:(len(p)-2)] ){
