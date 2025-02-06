@@ -6,7 +6,7 @@ include <profiles.scad> // wing profile polygon definition, ClarkY
 include <skin.scad> // skin funktionen
 include <wing.scad> // spant , segment funktionen, brauchen o[] und s[]
 
-sf= 30/550; // forward = 30mm pro 550mm 
+sf= 30/500; // forward = 30mm pro 500mm  (550???)
 o = [   [+sf*0,   0, 50],     
         [+sf*100, 0, 150],
         [+sf*300, 0, 350],
@@ -15,13 +15,14 @@ s = [ 250, 230, 200, 170 ]; //size = factor   250 - (z-50)*
 
 tubeOffset1 = 0.25; 
 tubeOffset2 = 0.5; /*-s[0]/3;*/    // tube offset
-tubeAng1 = atan2( (o[3]-o[0]).z, 30 + tubeOffset1*(s[0]-s[3]) ) - 90;
-tubeAng2 = atan2( (o[3]-o[0]).z, 30 + tubeOffset2*(s[0]-s[3]) ) - 90;
-echo(tubeAng1);
-echo(tubeAng2);
+tubeAng1 = atan2( (o[3]-o[0]).z, -o[3].x - tubeOffset1*(s[0]-s[3]) ) - 90;
+tubeAng2 = atan2( (o[3]-o[0]).z, -o[3].x - tubeOffset2*(s[0]-s[3]) ) - 90;
+//echo(tubeAng1 , tubeAng2);
+solidOffset1 = 0.2;
+solidOffset2 = 0.55;
 
 tubeOffset3 = -160; /*-s[0]/3;*/    // tube offset
-dRips = 3;//1;      // strength of the rips
+dRips = 1;      // strength of the rips
 yRips = 40;     // distance of the rips
 dSkin = 0.4;    // strength of the outer hull
 dBar1 = 6.4;    // diameter of the 1st tube
@@ -44,8 +45,9 @@ ruderrot=11;
 *wingSolid();
 *mirror( [0,0,1] ) wingSolid();
 *translate([-250,0,0])wingSolid();
-translate([0,0,0])wingSegment();
+*translate([0,0,0])wingSegment([s[0],s[1]], [o[0],o[1]]);
 wingSegment( [s[2],s[3]], [o[2],o[3]] );
+*segment( s=[s[0],s[1]], o=[o[0],o[1]], r=0, p=pSD6060, begin=solidOffset1, end=solidOffset2 )
 
 *fuse0();
 *fuseSolid();  
@@ -190,17 +192,20 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
                     gridSlice(dy = yRips) // die Rippen
                         outerSkin(d = dRips, h=dSkin ) 
                             segment( s, o, r=-dRips-dSkin );
-                    outerSkin(d = dSkin, h=dSkin)     // die Haut
+                    outerSkin2(d = dSkin, h=dSkin){     // die Haut
                         segment(s, o, r=-dSkin);
+                        segment(s, o, r=-dSkin, begin=solidOffset1 , end=solidOffset2 );
+                        }
                     }
                     
                 intersection(){
                     union(){
-                        translate([-tubeOffset1 * s[0] - o[0].x,0,0])
-                        rotate([0,-tubeAng1,0])
+                    echo( o , s );
+                        translate([-tubeOffset1 * s[0] + o[0].x,0,o[0].z])
+                        rotate([0,tubeAng1,0])
                             xBarTube( length=1000, xsize=60, diameter=dBar1, $fn=50 );
-                        translate([-tubeOffset2 * s[0] - o[0].x,0,0])
-                        rotate([0,-tubeAng2,0])
+                        translate([-tubeOffset2 * s[0] + o[0].x,0,o[0].z])
+                        rotate([0,tubeAng2,0])
                             xBarTube( length=1000, xsize=60, diameter=dBar2, $fn=50 );
                         }
                     segment(s, o, r=0);
@@ -213,12 +218,12 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
                 }
                 
             union(){
-                #translate([-tubeOffset1 * s[0] - o[0].x,0,0])
-                rotate([0,-tubeAng1,0])
-                    xTube( diameter=dBar1, length=1000, $fn=50 );
-                #translate([-tubeOffset2 * s[0] - o[0].x,0,0])
-                rotate([0,-tubeAng2,0])
-                    xTube( diameter=dBar2, length=1000, $fn=50 );
+                translate([-tubeOffset1 * s[0] + o[0].x,0,o[0].z])
+                    rotate([0,tubeAng1,0])
+                        #xTube( diameter=dBar1, length=1000, $fn=50 );
+                translate([-tubeOffset2 * s[0] + o[0].x,0,o[0].z])
+                    rotate([0,tubeAng2,0])
+                        #xTube( diameter=dBar2, length=1000, $fn=50 );
                 wingConnect(d=4, r=-dSkin+0.1, width=1.5, offset=o[0], size=s[0] );
                 wingConnect(d=4, r=-dSkin+0.1, width=1.5, offset=o[1], size=s[1] );
                 }

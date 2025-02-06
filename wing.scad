@@ -1,6 +1,6 @@
 
 
-module segment( s, o, r=0, p=pSD6060 )
+module segment( s, o, r=0, p=pSD6060, begin=0, end=1 )
 {
     factor = ( s[1] ) / ( s[0] );
     height = ( o[1].z - o[0].z );
@@ -15,7 +15,14 @@ module segment( s, o, r=0, p=pSD6060 )
     translate(o[0])
         multmatrix(m)
             linear_extrude( height=height, scale=factor, convexity=10 ) 
-                spant2d( s=s[0], r=r, p=p );
+                intersection()
+                {
+                    spant2d( s=s[0], r=r, p=p );
+                    #scale(s) 
+                        mirror([1,0]) 
+                            translate( [begin,-0.5] ) 
+                                square( [(end-begin), 1] );
+                }
 }
 
 module lastsegment( r=0, h=10, ds=50, p=pSD6060 )

@@ -12,6 +12,18 @@ module outerSkin( d=1, h=0, center=true )
     }
 }
 
+module outerSkin2( d=1, h=0, center=true )
+{
+    hgt = (h<=0) ? h : 2*d;
+    difference(){
+        minkowski(){
+            children(0);
+            cylinder(r=d,h=hgt,center=center ); 
+        }
+        children(1);
+    }
+}
+
 module innerSkin( )
 {
     difference(){
