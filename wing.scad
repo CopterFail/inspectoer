@@ -36,11 +36,6 @@ module lastsegment( r=0, h=10, ds=50, p=pSD6060 )
         }
 }
 
-module wingConnect( d=4, r=-0.5, width=1, offset=[0,0,0], size=100 )
-{
-    spant3dDiff( d=d, offset=offset, size, ra=r, ri=r-width, p=pSD6060 );  
-}
-
 module spant3d( d=0.3, offset=[0,0,0], size=100, r=0, p=pSD6060 )
 {
     translate(offset) linear_extrude( d, convexity=10 ) spant2d(size,r,p);
