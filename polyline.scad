@@ -4,10 +4,11 @@
 module wingPolyLine( d=3, pt=[0,0], off=[0,0]  )
 {
     *echo(pt);
-    poly = [ for(i=[0:len(o)-1]) [o[i].x - s[i]*pt.x - off.x , o[i].y + s[i]*pt.y + off.y,  o[i].z ] ];
-    *echo( poly);
+    l = len(s)-1; 
+    poly = [ for(i=[0:l]) [o[i].x - s[i]*pt.x - off.x , o[i].y + s[i]*pt.y + off.y,  o[i].z ],
+                          [o[l].x - s[l]*pt.x - off.x , o[l].y + s[l]*pt.y + off.y,  o[l].z + 20 ] ];
+    echo( poly);
     for( i=[0:(len(poly)-2)] ){
-        
         hull(){
             translate(poly[i]) 
                 sphere( d=d );

@@ -25,16 +25,6 @@ module segment( s, o, r=0, p=pSD6060, begin=0, end=1 )
                 }
 }
 
-module lastsegment( r=0, h=10, ds=50, p=pSD6060 )
-{
-    i = len(o) - 1;
-    dx = s[i]*(100-ds)/100/2;
-    hull()
-        {
-        spant3d( d=0.3, offset=o[i], s[i], r=r, p=p );  
-        spant3d( d=0.3, offset=o[i]+[-dx,0,h], s[i]*ds/100, r=r, p=p );
-        }
-}
 
 module spant3d( d=0.3, offset=[0,0,0], size=100, r=0, p=pSD6060 )
 {

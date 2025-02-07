@@ -42,8 +42,9 @@ dPoly = 2.2;
 *wingSolid();
 *wingSegment([s[0],s[1]], [o[0],o[1]]);
 *wingSegment([s[1],s[2]], [o[1],o[2]]);
-wingSegment( [s[2],s[3]], [o[2],o[3]] );
-RuderAdd2();    
+*wingSegment( [s[2],s[3]], [o[2],o[3]] );
+*RuderAdd2(); 
+lastsegment();   
 
 *fuse0();
 *fuseSolid();  
@@ -134,7 +135,23 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
             wingElectric();
             }
     }
+}
+
+module lastsegment( r=0, h=10, ds=50, p=pSD6060 )
+{
+    i = len(o) - 1;
+    dx = s[i]*(100-ds)/100/2;
     
+    difference()
+    {
+    hull()
+        {
+        spant3d( d=0.3, offset=o[i], s[i], r=r, p=p );  
+        spant3d( d=0.3, offset=o[i]+[-dx,0,h], s[i]*ds/100, r=r, p=p );
+        }
+    wingPolyLine( d=dPoly, pt=pSD6060[31], off=[+2,+0.5] );
+    wingPolyLine( d=dPoly, pt=ptRuder, off=[+0,+0] );
+    }
 
 }
 
