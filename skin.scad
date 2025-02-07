@@ -108,8 +108,8 @@ module radialSliceHelper( d, sh, mode=0, center=true )
                 }
             }
         }
-        
-    #if( mode==2 ){
+ //hier war der marker..       
+    if( mode==2 ){
         cx=5;
         cy=d/10;
         difference(){
