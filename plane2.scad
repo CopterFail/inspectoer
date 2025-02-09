@@ -35,6 +35,9 @@ hRuder = pSD6060[9].y - pSD6060[51].y;
 dPoly = 2.2;
 
 
+
+
+
 *exploreWing();
 *exploreFuse();
 
@@ -43,7 +46,28 @@ dPoly = 2.2;
 *wingSegment( [s[0],s[1]], [o[0],o[1]], do = 2 );
 *wingSegment( [s[1],s[2]], [o[1],o[2]], do = 0 );
 *wingSegment( [s[2],s[3]], [o[2],o[3]], do = 0 );
-*RuderAdd2(); 
+
+union(){
+    difference(){
+        wingSegment( [s[2],s[3]], [o[2],o[3]], do = 0 );
+        RuderCut2();    
+        RuderDiff2();
+        }
+    RuderAdd2(); // achtung verschließt das loch !!!
+}
+
+translate([-50,0,0])
+union(){
+    difference(){
+        wingSegment( [s[2],s[3]], [o[2],o[3]], do = 0 );
+        RuderCut3();
+        RuderDiff3();
+        }
+    RuderAdd3();
+}
+
+
+*RuderMountClip(r=0);
 *lastsegment();   
 
 *fuseSolid();  
@@ -56,7 +80,7 @@ dPoly = 2.2;
 *fuseWingMount(pos=0);
 *fuseWingMount(pos=1);
 
-tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
+*tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
 
 *difference(){
     wingSegment( [s[0],s[1]], [o[0],o[1]], do = 2 );
@@ -152,7 +176,6 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]], do = 0 )
                 segment(s, o, r=0);
             }
         union(){    
-            RuderDiff2();
             ServoDiff();
 
             xTube( diameter=dBar1+do, length=1200, tubeoffset=tubeOffset1 );
