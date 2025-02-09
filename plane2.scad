@@ -47,27 +47,11 @@ dPoly = 2.2;
 *wingSegment( [s[1],s[2]], [o[1],o[2]], do = 0 );
 *wingSegment( [s[2],s[3]], [o[2],o[3]], do = 0 );
 
-union(){
-    difference(){
-        wingSegment( [s[2],s[3]], [o[2],o[3]], do = 0 );
-        RuderCut2();    
-        RuderDiff2();
-        }
-    RuderAdd2(); // achtung verschließt das loch !!!
-}
-
-translate([-50,0,0])
-union(){
-    difference(){
-        wingSegment( [s[2],s[3]], [o[2],o[3]], do = 0 );
-        RuderCut3();
-        RuderDiff3();
-        }
-    RuderAdd3();
-}
+*RuderSegment();
+*translate([-20,0,0]) Ruder();
 
 
-*RuderMountClip(r=0);
+
 *lastsegment();   
 
 *fuseSolid();  
@@ -77,6 +61,8 @@ union(){
 *fuseCoverMid();
 *fuseCoverFront();
 *fuseSegment(1);
+fuseSegment(3);
+#translate([200,30,0])  color("Grey") cube([75,45,45],center=true);
 *fuseWingMount(pos=0);
 *fuseWingMount(pos=1);
 
@@ -140,8 +126,9 @@ module exploreWing()
             }
         wingSegment([s[1],s[2]], [o[1],o[2]]);
         union(){
-            wingSegment([s[2],s[3]], [o[2],o[3]]);
-            RuderAdd2(); 
+            RuderSegment();
+            translate([-20,0,0]) Ruder();
+
             }
         lastsegment();
         }
@@ -222,6 +209,24 @@ module xTube( diameter=6, length=1200, tubeoffset=tubeOffset1 )
             cylinder(d=diameter, h=length, center=true); // inner tube
 }
 
+module RuderSegment(){
+    difference(){
+        wingSegment( [s[2],s[3]], [o[2],o[3]], do = 0 );
+        RuderCut2();    
+        RuderDiff2();
+        }
+    RuderAdd2(); 
+}
+
+module Ruder(){
+    difference(){
+        wingSegment( [s[2],s[3]], [o[2],o[3]], do = 0 );
+        RuderCut3();
+        RuderDiff3();
+        }
+    RuderAdd3();
+    RuderHorn();
+}
 
 
 
@@ -325,6 +330,8 @@ module fuseSkin( fuseSkin = 5 )
             fuseCoverMask(x=120, r=45, h=120, type=3);
             *fuseCoverMask(x=0, r=60, h=120, type=2);
             fuseCoverMask(x=30, r=45, h=70, type=3);
+            fuseCoverFront();
+            fuseCoverMid();
             
             translate([-280,0,0]){   // cutout inner Motormount
                 rotate([0,90,0]) cylinder( d=30, h=40 );
@@ -404,11 +411,11 @@ module fuseCoverFront()
             fuseSolid( r=0 );
             union(){
                 fuseSolid( r=-coverSkin );
-                #translate([250,40,0]) rotate([-90,0,0 ]) scale(6) fuseNaca(w=-10+11);
+                translate([250,40,0]) rotate([-90,0,0 ]) scale(6) fuseNaca(w=-10+11);
                 }
             }
         *fuseCoverMask(x=220, type=0);
-        fuseCoverMask(x=120, r=45, h=120, type=3);
+        fuseCoverMask(x=120, r=45+3, h=120, type=3);
         }
 }
 
@@ -420,11 +427,11 @@ module fuseCoverMid()
             fuseSolid( r=0 );
             union(){
                 fuseSolid( r=-coverSkin );
-                #translate([100,50,0]) rotate([-90,0,0 ]) scale(6) fuseNaca(w=-10);
+                translate([100,50,0]) rotate([-90,0,0 ]) scale(6) fuseNaca(w=-10);
                 }
             }
         *fuseCoverMask(x=0, r=60, h=120, type=2);
-        fuseCoverMask(x=30, r=45, h=70, type=3);
+        fuseCoverMask(x=30, r=45+3, h=70, type=3);
         }
 }
 

@@ -1,40 +1,5 @@
 
 
-module RuderDiff(i=ruderseg, size = 45, d=0.3 )
-{
- // dreicksleiste, cut ruder, 3mm hole   
-    db = 10; // abstand vom rand
- 
-    module triangle( a=20,h=100 ){
-        b=a/3;
-        pt = [[ 0, 0], [+b,+a], [-b,+a]];
-        rotate([0,ruderrot,0])
-            linear_extrude( height=h, center=false ) 
-                polygon( pt );
-    }
-    sx = s[i];
-    hz = o[i+1].z-o[i].z - 2 * db;
-    union(){
-        translate( o[i] + [-s[i]+size + db ,0,db]) // dreiecksleiste oben
-            triangle( a=20,h=hz ); // dreiecksleiste unten
-        translate( o[i] + [-s[i]+size +db, 0, db])
-            mirror([0,1,0]) triangle( a=20,h=hz );
-            *translate( o[i] + [-s[i]+size,0,hz*1/5])
-                cube([6,0.5,hz/8],center=true);   // verbinder unten
-            *translate( o[i] + [-s[i]+size,0,hz*4/5])
-                cube([6,0.5,hz/8],center=true);   // verbinder oben
-            translate( o[i] + [-s[i]+size + db + hz*sin(ruderrot), -size/2, db + hz*cos(ruderrot) ])
-                rotate([0,ruderrot+180,0])
-                    cube([size+2,40,1],center=false);   // 1mm trenner oben, 
-            translate( o[i] + [-s[i]+size + db , -size/2, db] )
-                rotate([0,ruderrot+180,0])
-                    cube([size+2,40,1],center=false);   // 1mm trenner unten, 
-            translate( o[i] + [-s[i]+size + db, -size/2, db])
-                rotate([0,ruderrot,0])
-                    cube([0.1,40,hz],center=false);   // 0.1mm trenner gesammtes ruder
-            
-    }
-}
 
 
 module RuderAdd3() // elements to ruder
@@ -50,9 +15,9 @@ module RuderAdd3() // elements to ruder
        union(){
            hull(){ // drehachse
                 translate([p0.x, ptRuder.y*s[ruderseg] ,p0.y])
-                cylinder(d=d0,h=0.1);
+                cylinder(d=d0,h=0.01);
                translate([p1.x, ptRuder.y*s[ruderseg+1] ,p1.y])
-                cylinder(d=d1,h=0.1);
+                cylinder(d=d1,h=0.01);
                 }
 
             // schnitt an der achse
@@ -88,9 +53,9 @@ module RuderAdd2() // add elements to sement
        union(){
            hull(){ // drehachse
                 translate([p0.x, ptRuder.y*s[ruderseg] ,p0.y])
-                cylinder(d=d0,h=0.1);
+                cylinder(d=d0,h=0.01);
                translate([p1.x, ptRuder.y*s[ruderseg+1] ,p1.y])
-                cylinder(d=d1,h=0.1);
+                cylinder(d=d1,h=0.01);
                 }
 
             // schnitt an der achse
@@ -105,31 +70,13 @@ module RuderAdd2() // add elements to sement
            translate([0, 50/2, 0])
            rotate([90,0,0])
            linear_extrude(height=50)
-           polygon([p1+[(d1+1)/2,-1],p1+[(d1+1)/2,0], p2, p2+[0,-1]]);
+           *polygon([p1+[(d1+1)/2,-1],p1+[(d1+1)/2,0], p2, p2+[0,-1]]);
            }
        RuderDiff2MaskInv();
        }
 }
 
-module RuderDiffx()
-{
-   p0 = [-ptRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
-   p1 = [-ptRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
-   p2 = [-s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
-   p3 = [-s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
-   d0 = hRuder * s[ruderseg];
-   d1 = hRuder * s[ruderseg+1];
-
-    // schnitt an der achse
-   translate([0, 50/2, 0])
-    rotate([90,0,0])
-     linear_extrude(height=50)
-      polygon([p0+[(d0+1)/2,0],p1+[(d1+1)/2,0],p2,p3]);
-      
-   *polygon([p0,p1,p2,p3]);
-}
-
-module RuderCut2() // cut the segment
+module RuderCut2() // cut the ruder from segmen
 {
    p0 = [-ptRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
    p1 = [-ptRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
@@ -143,9 +90,10 @@ module RuderCut2() // cut the segment
     rotate([90,0,0])
      linear_extrude(height=50)
       polygon([p0,p1,p2,p3]);
+   RuderDiff2Axis( rot = 400, doff=-0.5 );
 }
 
-module RuderCut3() // cut the ruder
+module RuderCut3() // cut the segment from the ruder
 {
    p0 = [-ptRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
    p1 = [-ptRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
@@ -161,91 +109,71 @@ module RuderCut3() // cut the ruder
     rotate([90,0,0])
      linear_extrude(height=50)
       polygon([p0,p1,p4,p5]);
+   RuderDiff2Axis( rot = 400, doff=-0.5 );
 }
 
 module RuderDiff2() // cut element from segment
 {
-    intersection(){
-        RuderDiff2Axis( 0 );
-        RuderDiff2Mask();
+   intersection(){
+        RuderDiff2Axis( rot = 0, doff=0 );
+        RuderDiff2Mask( doff=0 );
         }
-    
+   RuderDiff2Axis( rot = 0, doff=-0.5 );
 }
 
 module RuderDiff3() // cut elements from ruder
 {
     difference(){
-        RuderDiff2Axis( 180 );
-        RuderDiff2Mask();
+        RuderDiff2Axis( rot = 180, doff=0 );
+        RuderDiff2Mask( doff=0.5 );
         }
+    RuderDiff2Axis( rot = 180, doff=-0.5 );
 }
 
 
-module RuderDiff2Mask()
+module RuderDiff2Mask( doff = 0.5 )
 {   //todo: this has to depend on o,s...
-    translate([-150,0,50]+o[ruderseg]) cube( [100,50,50], center=true );
-    translate([-150,0,150]+o[ruderseg]) cube( [100,50,50], center=true );
+    translate([-150,0,50]+o[ruderseg]) cube( [100,50,50-doff], center=true );
+    translate([-150,0,150]+o[ruderseg]) cube( [100,50,50-doff], center=true );
 }
-module RuderDiff2MaskInv()
+module RuderDiff2MaskInv( doff = 0.5 )
 {   //todo: this has to depend on o,s...
-    translate([-150,0,0]+o[ruderseg]) cube( [100,50,50], center=true );
-    translate([-150,0,100]+o[ruderseg]) cube( [100,50,50], center=true );
-    translate([-150,0,200]+o[ruderseg]) cube( [100,50,50], center=true );
+    translate([-170,0,0]+o[ruderseg]) cube( [100,50,50-doff], center=true );
+    translate([-160,0,100]+o[ruderseg]) cube( [100,50,50-doff], center=true );
+    translate([-150,0,200]+o[ruderseg]) cube( [100,50,50-doff], center=true );
 }
 
 // axis with rotation limits used as mask
-module RuderDiff2Axis( rot=0, doff=0.5 )
+module RuderDiff2Axis( rot=0, doff=0 )
 {
    p0 = [-ptRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
    p1 = [-ptRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
-   d0 = hRuder * s[ruderseg];
-   d1 = hRuder * s[ruderseg+1];
+   d0 = hRuder * s[ruderseg] - doff;
+   d1 = hRuder * s[ruderseg+1] - doff;
    w = 40; // max ruder angle
 
    
   hull(){ 
     translate([p0.x, ptRuder.y*s[ruderseg] ,p0.y]) {
-        cylinder( d=d0 + doff, h=0.1, center=false );
-        rotate([0,0,rot+w]) translate([-2*d0,-d0/2,0]) cube([2*d0, d0, 0.1], center=false );
-        rotate([0,0,rot-w]) translate([-2*d0,-d0/2,0]) cube([2*d0, d0, 0.1], center=false );
+        cylinder( d=d0, h=0.01, center=false );
+        if( rot < 360 ){
+            rotate([0,0,rot+w]) translate([-2*d0,-d0/2,0]) cube([2*d0, d0, 0.01], center=false );
+            rotate([0,0,rot-w]) translate([-2*d0,-d0/2,0]) cube([2*d0, d0, 0.01], center=false );
+            }
         }
     translate([p1.x, ptRuder.y*s[ruderseg+1] ,p1.y]) {
-        cylinder( d=d1 + doff, h=0.1, center=false );
-        rotate([0,0,rot+w]) translate([-2*d1,-d1/2,0]) cube([2*d1, d1, 0.1], center=false );
-        rotate([0,0,rot-w]) translate([-2*d1,-d1/2,0]) cube([2*d1, d1, 0.1], center=false );
+        cylinder( d=d1, h=0.01, center=false );
+        if( rot < 360 ){
+            rotate([0,0,rot+w]) translate([-2*d1,-d1/2,0]) cube([2*d1, d1, 0.01], center=false );
+            rotate([0,0,rot-w]) translate([-2*d1,-d1/2,0]) cube([2*d1, d1, 0.01], center=false );
+            }
         }
     }
-  *RuderMountClip( x = 50 );
 }
 
-
-
-
-
-
-/*
-module RuderMountClip( x = 50, r=0.2 )
+module RuderHorn()
 {
-    // calculate the x point between ruderseg and ruderseg+1
-    sx = ( ( s[ruderseg]*(100-x) ) + ( s[ruderseg+1]*x ) ) / 100;
-    ox = ((100-x)*o[ruderseg] + x * o[ruderseg+1]) / 100;
-    px = [-ptRuder.x * sx + ox.x, ox.z];
-    dx = hRuder * sx;
-    
-    *echo( sx, ox, px, dx );
-    // schleift wg schraege!!!!
-    difference(){
-        hull(){
-            translate([px.x, ptRuder.y*sx ,px.y]) {
-                cylinder( d=dx + r, h=2, center=false );
-                }
-            translate([px.x+dx, ptRuder.y*sx ,px.y]) {
-                cylinder( d=dx + r, h=2, center=false );
-                }
-            }
-        translate([px.x, ptRuder.y*sx ,px.y]) {
-                cylinder( d=dPoly + 0.0, h=2+1, center=false );
-                }
-        }
+    // fehlt noch
 }
-*/
+
+
