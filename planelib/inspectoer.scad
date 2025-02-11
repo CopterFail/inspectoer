@@ -48,20 +48,20 @@ dPoly = 2.2;
 *wingSegment( [s[0],s[1]], [o[0],o[1]], do = 2 );
 *wingSegment( [s[1],s[2]], [o[1],o[2]], do = 0 );
 *RuderSegment();
-*translate([-20,0,0]) Ruder();
+*translate([-0,0,0]) Ruder();
 *lastsegment();   
 
 
 
 
 *fuseSolid();  
-*fuseSkin(); 
-*fusePoly();
+fuseSkin(); 
+fusePoly();
 *translate([335,0,50]) spant3d( d=0.3, offset=[0,0,0],    size=605,   r=0, p=pClarkFuse );
 *fuseNaca();
 *fuseCoverMid(d=0);
 *fuseCoverFront(d=0);
-*fuseSegment(1);
+fuseSegment(1);
 *fuseSegment(2);
 *fuseSegment(3);
 *translate([200,0,0])  color("Grey") cube([75,45,45],center=true); // akku
@@ -507,12 +507,19 @@ module fusePoly()
     translate([355-5,0,0])
         mirror([1,0,0])
         {
-            fusePolyline( d=2.2, off=[-2.5+fuseWidth/2,-5], size=605, p=pClarkFusePolyUp ); 
-            fusePolyline( d=2.2, off=[-2.5+fuseWidth/2,+5], size=605, p=pClarkFusePolyDown ); 
+            fusePolyLine( d=dPoly, off=[-2.5+fuseWidth/2,-5], size=605, p=pClarkFusePolyUp ); 
+            fusePolyLine( d=dPoly, off=[-2.5+fuseWidth/2,+5], size=605, p=pClarkFusePolyDown ); 
 
-            fusePolyline( d=2.2, off=[+2.5-fuseWidth/2,-5], size=605, p=pClarkFusePolyUp ); 
-            fusePolyline( d=2.2, off=[+2.5-fuseWidth/2,+5], size=605, p=pClarkFusePolyDown ); 
+            fusePolyLine( d=dPoly, off=[+2.5-fuseWidth/2,-5], size=605, p=pClarkFusePolyUp ); 
+            fusePolyLine( d=dPoly, off=[+2.5-fuseWidth/2,+5], size=605, p=pClarkFusePolyDown ); 
+            
+            //offsetPolyLine(  d=dPoly, size=605, off=0, p=pClarkY );
+            //offsetPolyLine(  d=dPoly, size=605, off=-10, p=pClarkY );
+            
             }
+    fusePolyLineQ( d=dPoly, pt=pSD6060[31], off=[+2,+0.5] );
+    fusePolyLineQ( d=dPoly, pt=ptRuder, off=[+0,+0] );
+
 }
 
 module tubeConnectCut()
