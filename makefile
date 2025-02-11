@@ -1,27 +1,20 @@
-# Variablen
-OPENSCAD = openscad  # DOS-Style-Pfad für OpenSCAD
-SRCDIR = scad_files
-BUILDDIR = stl_files
 
-# Finde alle SCAD-Dateien im Quellverzeichnis
+#OPENSCAD = openscad
+OPENSCAD = /home/dab/Applications/OpenSCAD-2025.01.20.ai22731-x86_64_a4c72bcfe5c1c89d509dc8e83641dfac.AppImage
 
-SCAD_FILES := $(wildcard $(SRCDIR)/*.scad)
+SRC_DIR = scad_files
+BUILD_DIR = stl_files
 
-# Generiere die entsprechenden STL-Dateinamen
-STL_FILES = $(patsubst $(SRCDIR)\%.scad,$(BUILDDIR)\%.stl,$(SCAD_FILES))
+SCAD_FILES = $(wildcard $(SRC_DIR)/*.scad)
+STL_FILES = $(patsubst $(SRC_DIR)/%.scad,$(BUILD_DIR)/%.stl,$(SCAD_FILES))
 
-# Standardziel
 all: $(STL_FILES)
 
-# Regel zum Erstellen der STL-Dateien aus den SCAD-Dateien
-$(BUILDDIR)\%.stl: $(SRCDIR)\%.scad
-               @echo 'Building file: $*.scad'
-               #@if not exist $(BUILDDIR) mkdir $(BUILDDIR)
-               @echo 'Invoking: openscad'
-               $(OPENSCAD) -o $@ $<   
+$(BUILD_DIR)/%.stl: $(SRC_DIR)/%.scad
+	@mkdir -p $(BUILD_DIR)
+	$(OPENSCAD) -o $@ $<
 
-# Aufräumen
 clean:
-               @if exist "$(BUILDDIR)" rmdir /S /Q "$(BUILDDIR)"
+	rm -rf $(BUILD_DIR)
 
 .PHONY: all clean
