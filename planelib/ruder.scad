@@ -112,22 +112,26 @@ module RuderCut3() // cut the segment from the ruder
    RuderDiff2Axis( rot = 400, doff=-0.5 );
 }
 
-module RuderDiff2() // cut element from segment
+module RuderDiff2( doff = 0.5 ) // cut element from segment
 {
    intersection(){
         RuderDiff2Axis( rot = 0, doff=0 );
         RuderDiff2Mask( doff=0 );
         }
-   RuderDiff2Axis( rot = 0, doff=-0.5 );
+   RuderDiff2Axis( rot = 0, doff = -doff );
 }
 
-module RuderDiff3() // cut elements from ruder
+module RuderDiff3( doff = 0.5 ) // cut elements from ruder
 {
     difference(){
         RuderDiff2Axis( rot = 180, doff=0 );
-        RuderDiff2Mask( doff=0.5 );
+        RuderDiff2Mask( doff = +doff );
         }
-    RuderDiff2Axis( rot = 180, doff=-0.5 );
+    RuderDiff2Axis( rot = 180, doff = -doff );
+    translate([-s[ruderseg],-50,0]+o[ruderseg]) cube( [100,100,doff], center=false );
+    translate([-s[ruderseg+1],-50,-doff]+o[ruderseg+1]) cube( [100,100,doff], center=false );
+    
+   
 }
 
 
