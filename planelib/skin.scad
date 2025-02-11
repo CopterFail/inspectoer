@@ -85,7 +85,7 @@ module radialSlice( sh=100, sx=100, org=[0,0,0], rot=[0,0,0], mode=0, center=tru
         children();
         translate( org + [0,0,0] )
             rotate( rot )
-                #radialSliceHelper( d=2*sx, sh=sh, mode, center );
+                radialSliceHelper( d=2*sx, sh=sh, mode, center );
     }
 }
 

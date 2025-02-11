@@ -55,19 +55,19 @@ dPoly = 2.2;
 
 
 *fuseSolid();  
-fuseSkin(); 
-fusePoly();
+*fuseSkin(); 
+*fusePoly();
 *translate([335,0,50]) spant3d( d=0.3, offset=[0,0,0],    size=605,   r=0, p=pClarkFuse );
 *fuseNaca();
 *fuseCoverMid(d=0);
 *fuseCoverFront(d=0);
-fuseSegment(1);
+*fuseSegment(0);
+*fuseSegment(1);
 *fuseSegment(2);
 *fuseSegment(3);
 *translate([200,0,0])  color("Grey") cube([75,45,45],center=true); // akku
 *fuseWingMount(pos=0);
 *fuseWingMount(pos=1);
-
 
 *tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
 *difference(){
@@ -336,24 +336,26 @@ module fuseSkin( fuseSkin = 5 )
             fuseCoverFront(d=0.3);
             fuseCoverMid(d=0.3);
             
-            translate([-280,0,0]){   // cutout inner Motormount
+            *translate([-280,0,0]){   // cutout inner Motormount
                 rotate([0,90,0]) cylinder( d=30, h=40 );
                 }
-            translate([-310,0,0]){   // cutout outer Motormount
+            *translate([-310,0,0]){   // cutout outer Motormount
                 rotate([0,90,0]) cylinder( d=35, h=40 );
                 }
+                
+            fuseMotor(d=0, holes=false);
                 
             xTube( diameter=dBar1+2, length=100, tubeoffset=tubeOffset1, $fn=50 );
             mirror([0,0,1]) xTube( diameter=dBar1+2, length=100, tubeoffset=tubeOffset1, $fn=50 );
             xTube( diameter=dBar2+2, length=100, tubeoffset=tubeOffset2, $fn=50 );
             mirror([0,0,1]) xTube( diameter=dBar2+2, length=100, tubeoffset=tubeOffset2, $fn=50 );
             
-            translate([-260,0,+30])
-                rotate([0,-90,0])
-                    cylinder(d=10,h=30);
-            translate([-260,0,-30])
-                rotate([0,-90,0])
-                    cylinder(d=10,h=30);
+            translate([-200,-5,+30])
+                rotate([0,-90,20])
+                    cylinder(d=10,h=80,center=true);
+            translate([-200,-5,-30])
+                rotate([00,-90,20])
+                    cylinder(d=10,h=80,center=true);
              fuseSkid();
              fusePoly();
              
@@ -363,6 +365,7 @@ module fuseSkin( fuseSkin = 5 )
             }
         }
        
+       *fuseMotor(d=0.5, holes=true);
        *wingSegment( [s[0],s[1]], [o[0],o[1]], do = 2 );
        *mirror( [0,0,1] ) wingSegment( [s[0],s[1]], [o[0],o[1]], do = 2 );
 }
@@ -437,37 +440,55 @@ module fuseCoverMid(d=0.1)
         }
 }
 
-module fuseMotor()
+module fuseMotor(d=0.5, holes=true)
 {
 // 19mm Löcher, Motokreuz: Balken mit 2 Schrauben, Gegenstück in den Rumpf kleben....
+    translate([9.5,0,0])
     difference()
     {
         union()
         {
             translate([-280,0,0]){   // cutout inner Motormount
-                rotate([0,90,0]) cylinder( d=30-0.3, h=5 );
+                rotate([0,90,0]) cylinder( d=30-d, h=5 );
                 }
             translate([-282,0,0]){   // cutout outer Motormount
-                rotate([0,90,0]) cylinder( d=35-0.3, h=3 );
+                rotate([0,90,0]) cylinder( d=35-d, h=3 );
                 }
+            translate([-282,0,0]){   // cutout outer Motormount
+                rotate([0,90,0]) resize([50,20,3])cylinder( d=35-d, h=3 );
+                }
+            translate([-260,0,+20]) 
+                    rotate([0,-90,0]) 
+                        cylinder( d=3.8, h=30 );   
+            translate([-260,0,-20]) 
+                    rotate([0,-90,0]) 
+                        cylinder( d=3.8, h=30 );   
+            translate([-250+6,0,-20]) 
+                    rotate([0,-90,0]) 
+                        cylinder( d=6.5, h=30,$fn=6 );   
+            translate([-250+6,0,+20]) 
+                    rotate([0,-90,0]) 
+                        cylinder( d=6.5, h=30,$fn=6 );   
+            
         }
+        if(holes)
         union()
         {
             translate([-270,0,0]) 
                     rotate([0,-90,0]) 
-                        cylinder( d=7, h=40 );   
+                        cylinder( d=9, h=40 );   
             translate([-270,0,0])
                 rotate([0,-90,0])
                     for( rot=[0:90:360] )
-                        hull()
-                        {
-                            rotate([0,0,rot+45])
-                                translate([0,13/2,0])
-                                        cylinder( d=3.5, h=40 );
-                            rotate([0,0,rot+45])
-                                translate([0,19/2,0])
-                                        cylinder( d=3.5, h=40 );
-                        }
+                        rotate([0,0,rot+45])
+                            translate([0,19/2,0])
+                                    cylinder( d=3.8, h=40 );
+            translate([-260,0,+20]) 
+                    rotate([0,-90,0]) 
+                        cylinder( d=3.8, h=30 );   
+            translate([-260,0,-20]) 
+                    rotate([0,-90,0]) 
+                        cylinder( d=3.8, h=30 );   
         }
     }
 }
@@ -507,10 +528,10 @@ module fusePoly()
     translate([355-5,0,0])
         mirror([1,0,0])
         {
-            fusePolyLine( d=dPoly, off=[-2.5+fuseWidth/2,-5], size=605, p=pClarkFusePolyUp ); 
-            fusePolyLine( d=dPoly, off=[-2.5+fuseWidth/2,+5], size=605, p=pClarkFusePolyDown ); 
+            fusePolyLine( d=dPoly, off=[-2.7+fuseWidth/2,-4], size=605, p=pClarkFusePolyUp ); 
+            fusePolyLine( d=dPoly, off=[-2.+fuseWidth/2,+5], size=605, p=pClarkFusePolyDown ); 
 
-            fusePolyLine( d=dPoly, off=[+2.5-fuseWidth/2,-5], size=605, p=pClarkFusePolyUp ); 
+            fusePolyLine( d=dPoly, off=[+2.7-fuseWidth/2,-4], size=605, p=pClarkFusePolyUp ); 
             fusePolyLine( d=dPoly, off=[+2.5-fuseWidth/2,+5], size=605, p=pClarkFusePolyDown ); 
             
             //offsetPolyLine(  d=dPoly, size=605, off=0, p=pClarkY );
