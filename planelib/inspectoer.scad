@@ -60,10 +60,10 @@ dPoly = 2.2;
 *translate([335,0,50]) spant3d( d=0.3, offset=[0,0,0],    size=605,   r=0, p=pClarkFuse );
 *fuseNaca();
 *fuseCoverMid(d=0);
-*fuseCoverFront(d=0);
+fuseCoverFront(d=0);
 *fuseSegment(0);
 *fuseSegment(1);
-*fuseSegment(2);
+fuseSegment(2);
 *fuseSegment(3);
 *translate([200,0,0])  color("Grey") cube([75,45,45],center=true); // akku
 *fuseWingMount(pos=0);
@@ -198,10 +198,10 @@ module lastsegment( r=0, h=10, ds=50, p=pSD6060 )
 module wingElectric()
 {
     off = (tubeOffset1+tubeOffset2)/2;
-    l = 400;
+    l = 407;
     translate([-off * s[0] + o[0].x,0,o[0].z-1])  // based of the 1st segment
         rotate([0,tubeAng,0]) 
-            translate([0,0,l/2]) cube( [12,6,l],center=true);
+            translate([0,4,l/2-10]) cube( [12,6,l],center=true);
 }
 
 module xTube( diameter=6, length=1200, tubeoffset=tubeOffset1 )
@@ -227,7 +227,7 @@ module Ruder(){
         RuderDiff3();
         }
     RuderAdd3();
-    RuderHorn();
+    #RuderHorn();
 }
 
 
@@ -358,6 +358,7 @@ module fuseSkin( fuseSkin = 5 )
                     cylinder(d=10,h=80,center=true);
              fuseSkid();
              fusePoly();
+             wingElectric();
              
              *translate([260,-8,+23]) rotate([8,0,0 ]) scale(8) fuseNaca(w=-10);
              *translate([260,-8,-23]) rotate([180-8,0,0 ]) scale(8) fuseNaca(w=-10);
@@ -412,8 +413,22 @@ module fuseWingMount(pos=0)
 
 module fuseCoverFront(d=0.1)
 {
+
+    module coverHook()
+    {
+        cylinder(d=8,h=7);    
+        *translate([0,0,3.5]) cylinder(d=8+2*3,h=2);
+        hull()
+        {
+            translate([0,0,4]) cylinder(d=8,h=2);
+            translate([4,0,4]) cylinder(d=8,h=2);
+            }
+    }
+
     coverSkin = 2;
-    Slice(){
+
+    
+    *Slice(){
         innerSkin(){
             fuseSolid( r=+d );
             union(){
@@ -423,6 +438,18 @@ module fuseCoverFront(d=0.1)
             }
         fuseCoverMask(x=120, y=63-3-d, r=fuseWidth+20, h=100, type=3);
         }
+     
+    translate([296-4,37,0])
+        rotate([90,0,-12])
+            coverHook();
+
+    translate([172.5,52.5,0])
+        rotate([90,180,0])
+        {
+            coverHook();
+            translate([0,0,-10])cylinder(d=6,h=10);
+        }
+        
 }
 
 module fuseCoverMid(d=0.1)

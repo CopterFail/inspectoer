@@ -177,7 +177,24 @@ module RuderDiff2Axis( rot=0, doff=0 )
 
 module RuderHorn()
 {
-    // fehlt noch
+
+    p0 = [-ptRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
+    p1 = [-ptRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
+    pm = (p0 + p1)/2;
+    sm = (s[ruderseg]+s[ruderseg+1])/2;
+
+    translate([pm.x,ptRuder.y*sm ,pm.y + 24 ])
+    rotate([0,ruderrot, 2])
+    difference()
+    {
+        hull()
+        {
+            translate([-5,2,0]) cylinder(d=2,h=4);
+            translate([2,12,0]) cylinder(d=6,h=2);
+            translate([-20,0,0]) cylinder(d=2,h=4);
+        }
+        translate([2,12,0]) cylinder(d=1.5,h=2);
+   }
 }
 
 
