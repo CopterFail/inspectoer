@@ -60,10 +60,13 @@ dPoly = 2.2;
 *translate([335,0,50]) spant3d( d=0.3, offset=[0,0,0],    size=605,   r=0, p=pClarkFuse );
 *fuseNaca();
 *fuseCoverMid(d=0);
-fuseCoverFront(d=0);
+*fuseCoverFront(d=0);
+fuseCoverHook( true );
+fuseCoverHook( false );
+fuseCoverHookKnop();
 *fuseSegment(0);
 *fuseSegment(1);
-fuseSegment(2);
+*fuseSegment(2);
 *fuseSegment(3);
 *translate([200,0,0])  color("Grey") cube([75,45,45],center=true); // akku
 *fuseWingMount(pos=0);
@@ -356,12 +359,17 @@ module fuseSkin( fuseSkin = 5 )
             translate([-200,-5,-30])
                 rotate([00,-90,20])
                     cylinder(d=10,h=80,center=true);
+            #translate([-258,+20,0])
+                rotate([00,-90,-20])
+                    cylinder(d=10,h=80,center=true);
+
              fuseSkid();
              fusePoly();
              wingElectric();
+             fuseCamera();
              
-             *translate([260,-8,+23]) rotate([8,0,0 ]) scale(8) fuseNaca(w=-10);
-             *translate([260,-8,-23]) rotate([180-8,0,0 ]) scale(8) fuseNaca(w=-10);
+             translate([260,-8,+23]) rotate([8,0,0 ]) scale(8) fuseNaca(w=-10);
+             translate([260,-8,-23]) rotate([180-8,0,0 ]) scale(8) fuseNaca(w=-10);
 
             }
         }
@@ -411,60 +419,98 @@ module fuseWingMount(pos=0)
 
 }
 
-module fuseCoverFront(d=0.1)
+module fuseCoverHookKnop()
 {
-
-    module coverHook()
-    {
-        cylinder(d=8,h=7);    
-        *translate([0,0,3.5]) cylinder(d=8+2*3,h=2);
-        hull()
-        {
-            translate([0,0,4]) cylinder(d=8,h=2);
-            translate([4,0,4]) cylinder(d=8,h=2);
+    difference(){
+        hull(){
+            translate([-10,0,-8])cylinder(d=1,h=5);
+            translate([0,0,-10])cylinder(d=8,h=8.3);
+            translate([+10,0,-8])cylinder(d=1,h=5);
             }
+        translate([0,0,-10])cylinder(d=6.4,h=10);
     }
-
-    coverSkin = 2;
-
-    
-    *Slice(){
-        innerSkin(){
-            fuseSolid( r=+d );
-            union(){
-                fuseSolid( r=-coverSkin-d );
-                translate([250,40,0]) rotate([-90,0,0 ]) scale(6) fuseNaca(w=-10+11);
-                }
-            }
-        fuseCoverMask(x=120, y=63-3-d, r=fuseWidth+20, h=100, type=3);
-        }
-     
-    translate([296-4,37,0])
-        rotate([90,0,-12])
-            coverHook();
-
-    translate([172.5,52.5,0])
-        rotate([90,180,0])
-        {
-            coverHook();
-            translate([0,0,-10])cylinder(d=6,h=10);
-        }
-        
 }
 
-module fuseCoverMid(d=0.1)
+module fuseCoverHook(op=false)
+{
+    cylinder(d=8,h=7);    
+    hull()
+    {
+        translate([0,0,4]) cylinder(d=8,h=2);
+        translate([4,0,4]) cylinder(d=8,h=2);
+        }
+    if( op == true ){
+        translate([0,0,-10])cylinder(d=6,h=10);
+        *fuseCoverHookKnop();
+    }else{
+        translate([0,0,-2])cylinder(d=6,h=2);
+    }
+}
+
+module fuseCoverFront(d=0.1)
 {
     coverSkin = 2;
+    hx1 = 296-4;
+    hy1 = 37;
+    hx2 = 172.5;
+    hy2 = 52.5;
+
     Slice(){
         innerSkin(){
             fuseSolid( r=+d );
             union(){
                 fuseSolid( r=-coverSkin-d );
-                translate([100,50,0]) rotate([-90,0,0 ]) scale(6) fuseNaca(w=-10);
+                *translate([250,40,0]) rotate([-90,0,0 ]) scale(6) fuseNaca(w=-10+11);
+                translate([ hx1, hy1, 0])
+                    rotate([90,0,-12])
+                        translate([0,0,-10])cylinder(d=6.4,h=10);
+                translate([hx2, hy2, 0])
+                    rotate([90,180,0])
+                        translate([0,0,-10])cylinder(d=6.4,h=10);
+                }
+            }
+        fuseCoverMask(x=120, y=63-3-d, r=fuseWidth+20, h=100, type=3);
+        }
+    *translate([hx1,hy1,0])
+        rotate([90,0,-12])
+            fuseCoverHook();
+
+    *translate([hx2,hy2,0])
+        rotate([90,180,0])
+            fuseCoverHook( true );
+}
+
+module fuseCoverMid(d=0.1)
+{
+    coverSkin = 2;
+    hx1 = 122;
+    hy1 = 52.5;
+    hx2 = 22.5;
+    hy2 = 47;
+
+    Slice(){
+        innerSkin(){
+            fuseSolid( r=+d );
+            union(){
+                fuseSolid( r=-coverSkin-d );
+                *translate([100,50,0]) rotate([-90,0,0 ]) scale(6) fuseNaca(w=-10);
+                translate([ hx1, hy1, 0])
+                    rotate([90,0,0])
+                        translate([0,0,-10])cylinder(d=6.4,h=10);
+                translate([hx2, hy2, 0])
+                    rotate([90,180,0])
+                        translate([0,0,-10])cylinder(d=6.4,h=10);
                 }
             }
         fuseCoverMask(x=35, y=80-3-d, r=fuseWidth+40, h=80, type=3);
         }
+    *translate([hx1,hy1,0])
+        rotate([90,0,0])
+            fuseCoverHook();
+
+    *translate([hx2,hy2,0])
+        rotate([90,180,0])
+            fuseCoverHook( true );
 }
 
 module fuseMotor(d=0.5, holes=true)
@@ -489,13 +535,15 @@ module fuseMotor(d=0.5, holes=true)
                         cylinder( d=3.8, h=30 );   
             translate([-260,0,-20]) 
                     rotate([0,-90,0]) 
-                        cylinder( d=3.8, h=30 );   
+                        cylinder( d=3.8, h=30 );  
+            if( !holes ){
             translate([-250+6,0,-20]) 
                     rotate([0,-90,0]) 
                         cylinder( d=6.5, h=30,$fn=6 );   
             translate([-250+6,0,+20]) 
                     rotate([0,-90,0]) 
                         cylinder( d=6.5, h=30,$fn=6 );   
+                }
             
         }
         if(holes)
@@ -543,11 +591,16 @@ module fuseSkid( r=0 )
             }
         translate([200,-25,0]) rotate([90,0,0]) resize([3*45-r,45-r,45-r]) cylinder(d=45,h=50);
         }
+}
 
-    
-    
-    
-    
+module fuseCamera()
+{
+    translate([332,3,0])
+        rotate([0,90,0])
+            union(){
+                cylinder(d=15, h=30);
+                cube([21,21,15], center=true);
+                }
 }
 
 module fusePoly()
