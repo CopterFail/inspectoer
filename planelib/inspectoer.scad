@@ -74,26 +74,21 @@ dPoly = 2.2;
 
 *tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
 *tubeFlansh();
-*difference(){
-    wingSegment( [s[0],s[1]], [o[0],o[1]], do = 2 );
-    translate([-tubeOffset1*s[1]+o[1].x,0,o[1].z-7]) tubeConnectCut();
-    translate([-tubeOffset2*s[1]+o[1].x-5,0,o[1].z-7]) tubeConnectCut();
-    translate([tubeOffset2-260,-8,zBoom]) 
-        rotate([0,90,0])  
-            cylinder(d=dBar1, h=440, center=true);
 
-}
-*translate([-tubeOffset1*s[1]+o[1].x,0,o[1].z-7]) tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
-*translate([-tubeOffset2*s[1]+o[1].x-5,0,o[1].z-7]) tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
-*translate([tubeOffset2-260,-8,zBoom+13]) 
-    rotate([0,90,0]) 
-        color( "Black")
-            cylinder(d=dBar1, h=440, center=true);
+*wingConnectCut();
+// dBar contains 0.4 offset, reduce to 0.2
+*translate([-tubeOffset1*s[1]+o[1].x,0,o[1].z-7]) mirror([0,1,0]) tubeConnect( d1=dBar1, d2=dBar1+2-0.2, a=8, w=6 ); 
+*translate([-tubeOffset2*s[1]+o[1].x-5,0,o[1].z-7]) mirror([0,1,0]) tubeConnect( d1=dBar1, d2=dBar1+2-0.2, a=8, w=6 );
+*xTube( diameter=8, length=1200, tubeoffset=tubeOffset1 );
+*xTube( diameter=8, length=1200, tubeoffset=tubeOffset2 );
+*tail();            
+            
+            
 
 *translate([0,-25,0]) color("Red") fuseSkid();
 *fuseMotor(d=0.5, holes=true);
 
-*hinterteil();
+
 
 
 
@@ -254,9 +249,9 @@ ho = [  [0, 0,  0 ],
 so = [ 120, 120 ]; //size = factor  
 
 
-module hinterteil() // erstmal stark vereinfacht
+module tail() // erstmal stark vereinfacht
 {
-    z0 = +10;
+    z0 = +8;
     translate([-420, z0-3, 0]) heigtSolid();
     translate([-420, z0+6, +zBoom]) mirror([0,0,1]) sideSolid();
     translate([-420, z0+6, -zBoom]) sideSolid();
@@ -281,7 +276,7 @@ module sideSolid(r=0)
 
 module heigtSolid(r=0)
 {
-    br = 185 - 20 - 40;
+    br = zBoom-6;
     difference(){
         hull(){
             translate([0,0,-br]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pNaca0012 );
@@ -601,12 +596,20 @@ module fuseSkid( r=0 )
 {
     // wechselbare Platte für den Boden... 25x5cm, 2 Layer?
     // Rand ???
+    d = 40;
+    l = 250-d;
     Slice(){
         innerSkin(){
             fuseSolid( r=0 );
             fuseSolid( r=-0.5 );
             }
-        translate([200,-25,0]) rotate([90,0,0]) resize([3*45-r,45-r,45-r]) cylinder(d=45,h=50);
+        *translate([200,-25,0]) rotate([90,0,0]) resize([3*45-r,45-r,45-r]) cylinder(d=45,h=50);
+        #translate([200,-15,0]) 
+            rotate([90,0,0]) 
+                hull(){
+                    translate([-l/2,0,0]) cylinder(d=d-r,h=50);
+                    translate([+l/2,0,0]) cylinder(d=d-r,h=50);
+                    }
         }
 }
 
@@ -640,13 +643,28 @@ module fusePoly()
 
 }
 
+module wingConnectCut()
+{
+    difference()
+    {
+        wingSegment( [s[0],s[1]], [o[0],o[1]], do = 2 );
+        translate([-tubeOffset1*s[1]+o[1].x,0,o[1].z-7]) mirror([0,1,0]) tubeConnectCut();
+        translate([-tubeOffset2*s[1]+o[1].x-5,0,o[1].z-7]) mirror([0,1,0]) tubeConnectCut();
+        translate([tubeOffset2-260,+8,zBoom]) 
+            rotate([0,90,0])  
+                cylinder(d=dBar1+2, h=440, center=true);
+        translate([-tubeOffset2*s[1]+o[1].x+40,3,o[1].z-1.4]) 
+            cube([20,4.1,3],center = true );
+    }
+}
+
 module tubeConnectCut()
 {
     minkowski(){
         hull(){
             tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
             }
-        cylinder(r=0.8,h=0.8);
+        translate([0,0,-0.8]) cylinder(r=3,h=4);
         }
 }
 
@@ -710,8 +728,8 @@ module tubeFlansh( d=6, a=0, h=60, w=3, r=0 )
                 translate([-45,-3,-1.5]) rotate([180,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
                 }
             }
-        translate([-2*h,-a,0]) rotate([0,90,0]) cylinder(d=d, h=h*3, center = false );
-        translate([8,-a,0]) rotate([0,90,0]) cylinder(d1=d,d2=d+1, h=12, center = false );
+        translate([-2*h,-a,0]) rotate([0,90,0]) cylinder(d=d+0.2, h=h*3, center = false );
+        translate([8,-a,0]) rotate([0,90,0]) cylinder(d1=d+0.2,d2=d+1, h=12, center = false );
         
         translate([0-2*h,-a, 0] )
             rotate( [45+90,0,0] )
