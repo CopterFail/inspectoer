@@ -21,11 +21,11 @@ tubeOffset2 = 0.5; /*-s[0]/3;*/    // tube offset in [%]
 tubeAng1 = atan2( (o[3]-o[0]).z, -o[3].x - tubeOffset1*(s[0]-s[3]) ) - 90;
 tubeAng2 = atan2( (o[3]-o[0]).z, -o[3].x - tubeOffset2*(s[0]-s[3]) ) - 90;
 tubeAng = (tubeAng1 + tubeAng2) / 2;    // different angles will make problems
-echo(tubeAng, tubeAng1 , tubeAng2);
+*echo(tubeAng, tubeAng1 , tubeAng2);
 
 dBar1 = 6.4;    // diameter of the 1st tube
 dBar2 = 6.4;    // diameter of the 2nd tube
-zBoom = 130;
+zBoom = 130+13;
 
 wall = 0.5;
 ruderseg=2;
@@ -61,9 +61,9 @@ dPoly = 2.2;
 *fuseNaca();
 *fuseCoverMid(d=0);
 *fuseCoverFront(d=0);
-fuseCoverHook( true );
-fuseCoverHook( false );
-fuseCoverHookKnop();
+*fuseCoverHook( true );
+*fuseCoverHook( false );
+*fuseCoverHookKnop();
 *fuseSegment(0);
 *fuseSegment(1);
 *fuseSegment(2);
@@ -73,11 +73,12 @@ fuseCoverHookKnop();
 *fuseWingMount(pos=1);
 
 *tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
+*tubeFlansh();
 *difference(){
     wingSegment( [s[0],s[1]], [o[0],o[1]], do = 2 );
     translate([-tubeOffset1*s[1]+o[1].x,0,o[1].z-7]) tubeConnectCut();
     translate([-tubeOffset2*s[1]+o[1].x-5,0,o[1].z-7]) tubeConnectCut();
-    translate([tubeOffset2-260,-8,zBoom+13]) 
+    translate([tubeOffset2-260,-8,zBoom]) 
         rotate([0,90,0])  
             cylinder(d=dBar1, h=440, center=true);
 
@@ -90,6 +91,7 @@ fuseCoverHookKnop();
             cylinder(d=dBar1, h=440, center=true);
 
 *translate([0,-25,0]) color("Red") fuseSkid();
+*fuseMotor(d=0.5, holes=true);
 
 *hinterteil();
 
@@ -205,6 +207,10 @@ module wingElectric()
     translate([-off * s[0] + o[0].x,0,o[0].z-1])  // based of the 1st segment
         rotate([0,tubeAng,0]) 
             translate([0,4,l/2-10]) cube( [12,6,l],center=true);
+    mirror([0,0,1])    // for the fuse, we need both sides, so mirror and dublicate     
+    translate([-off * s[0] + o[0].x,0,o[0].z-1])  // based of the 1st segment
+        rotate([0,tubeAng,0]) 
+            translate([0,4,l/2-10]) cube( [12,6,l],center=true);
 }
 
 module xTube( diameter=6, length=1200, tubeoffset=tubeOffset1 )
@@ -230,7 +236,7 @@ module Ruder(){
         RuderDiff3();
         }
     RuderAdd3();
-    #RuderHorn();
+    RuderHorn();
 }
 
 
@@ -242,36 +248,47 @@ module Ruder(){
 
 
 
+ho = [  [0, 0,  0 ],     
+        [0, 0,  zBoom ],
+        [0, 0,  150 ] ]; //offset: x,y,z 
+so = [ 120, 120 ]; //size = factor  
 
 
 module hinterteil() // erstmal stark vereinfacht
 {
-    bardist = 130; /*150*/
-    translate([-420,0,0]) heigtSolid();
-    translate([-420, 0, +bardist]) mirror([0,0,1]) sideSolid();
-    translate([-420, 0, -bardist]) sideSolid();
-    color( "BLACK") translate([-40,-8,+bardist]) rotate([0,-90,0]) cylinder(d=6,h=450);
-    color( "BLACK") translate([-40,-8,-bardist]) rotate([0,-90,0]) cylinder(d=6,h=450);
+    z0 = +10;
+    translate([-420, z0-3, 0]) heigtSolid();
+    translate([-420, z0+6, +zBoom]) mirror([0,0,1]) sideSolid();
+    translate([-420, z0+6, -zBoom]) sideSolid();
+    color( "BLACK") translate([-40, z0, +zBoom]) rotate([0,-90,0]) cylinder(d=6,h=450);
+    color( "BLACK") translate([-40, z0 ,-zBoom]) rotate([0,-90,0]) cylinder(d=6,h=450);
+    
+    translate([-420, z0, +zBoom]) tubeFlansh();
+    translate([-420, z0, -zBoom]) mirror([0,0,1])tubeFlansh();
 }
 
 module sideSolid(r=0)
 {
-    hull(){
-        translate([0,0,0]) rotate([90,0,0]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pSD6060 );
-        translate([0,130,0]) rotate([90,0,0]) spant3d( d=0.3, offset=[10,0,0], size=58, r=r, p=pSD6060 );
-        }
+    bardist = 130;
+    difference(){
+        hull(){
+            translate([0,0,0]) rotate([90,0,0]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pSD6060 );
+            translate([0,zBoom,0]) rotate([90,0,0]) spant3d( d=0.3, offset=[10,0,0], size=58, r=r, p=pSD6060 );
+            }
+        translate([0,2-8,0]) mirror([0,0,1])tubeFlansh(r=0.2);
+    }
 }
 
 module heigtSolid(r=0)
 {
-    br = 185 - 20;
+    br = 185 - 20 - 40;
     difference(){
         hull(){
             translate([0,0,-br]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pNaca0012 );
             translate([0,0,+br]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pNaca0012 );
             }
-        #translate([-50-1.5,0,+br-35]) cube([40,20,4]);
-        #translate([-50-1.5,0,-br+35]) cube([40,20,4]);
+        translate([0, 11-8,-zBoom]) mirror([0,0,1])tubeFlansh(r=0.2);
+        translate([0, 11-8,+zBoom]) tubeFlansh(r=0.2);
         }
 }
 
@@ -286,13 +303,13 @@ module heigtSolid(r=0)
 fuseWidth = 52;    // Rumpfbreite war 50
 fuseLength0 = 355; // Spitze vor dem nullpunkt bei r=0 , war 355
 fuseLength1 = 270; // hinterster Punkt - 5
-fuseMotor = 40;    // Durchmesser am Motor
+fuseMotorDia = 40;    // Durchmesser am Motor
 
 module fuseSolid( r=0 )
 {
     hull()
     {
-        translate([-(fuseLength1 + r),0,0]) rotate([0,90,0]) cylinder(d=fuseMotor+2*r,h=5,center=true); //motor
+        translate([-(fuseLength1 + r),0,0]) rotate([0,90,0]) cylinder(d=fuseMotorDia+2*r,h=5,center=true); //motor
         translate([0,0,-0.15])  spant3d( d=0.3, offset=(o[0]+[0,0,r]),  size=s[0],  r=r, p=pSD6060 );
         translate([fuseLength0,0,-0.15]) spant3d( d=0.3, offset=[0,0,fuseWidth/2+r],    size=605,   r=r, p=pClarkFuse );
         translate([fuseLength0,0,-0.15]) spant3d( d=0.3, offset=[0,0,-(fuseWidth/2+r)], size=605,   r=r, p=pClarkFuse );
@@ -359,7 +376,7 @@ module fuseSkin( fuseSkin = 5 )
             translate([-200,-5,-30])
                 rotate([00,-90,20])
                     cylinder(d=10,h=80,center=true);
-            #translate([-258,+20,0])
+            translate([-258,+20,0])
                 rotate([00,-90,-20])
                     cylinder(d=10,h=80,center=true);
 
@@ -522,7 +539,7 @@ module fuseMotor(d=0.5, holes=true)
         union()
         {
             translate([-280,0,0]){   // cutout inner Motormount
-                rotate([0,90,0]) cylinder( d=30-d, h=5 );
+                rotate([0,90,0]) cylinder( d=30-d, h = 3 ); // h=5 was too fat, because it is solid
                 }
             translate([-282,0,0]){   // cutout outer Motormount
                 rotate([0,90,0]) cylinder( d=35-d, h=3 );
@@ -636,47 +653,74 @@ module tubeConnectCut()
 module tubeConnect( d1=8, d2=6, h=10, a=8, w=3 )
 {
     // min a is d1?
+    
+    sp = -a-h/2;  // position of screw
     difference(){
         hull(){
             rotate( [0,+tubeAng,0] )
-                cylinder(d=d2+w, h=h, center = true );
+                cylinder(d=d2+w, h=h, center = true );  // cylinder d2 (rotated)
             translate( [0,-a,0] )
                 rotate( [0,90,0] )
-                    cylinder(d=d1+w, h=h, center = true );
-            translate( [0,-a-h,0] )
+                    cylinder(d=d1+w, h=h, center = true );// cylinder d1 (not rotated)
+            translate( [0,sp,0] )
                 rotate( [0,90,0] )
-                    cube([d1+w,h,h], center = true );
+                    sphere(d=h+2);  // was: cube([d1+w,h,h], center = true );
 
                 }
         rotate( [0,+tubeAng,0] )
-            cylinder(d=d2, h=h+10, center = true );
+            cylinder(d=d2, h=h+10, center = true );     // cylinder d1 (rotated)
         translate( [0,-a,0] )
             rotate( [0,90,0] )
-                cylinder(d=d1, h=h+10, center = true );
-        translate( [0,-a-h,0] )
+                cylinder(d=d1, h=h+10, center = true ); // cylinder d2 (not rotated)
+        translate( [0,sp,0] )
             rotate( [0,90,0] )
-                cube([1,h+10,h+10], center = true );
-        translate( [0,-a-h,0] )
-            cylinder(d=2.2, h=h+10, center = true );
-        translate( [0,-a-h,-5] )
-            cylinder(d=4.5, h=3, center = true, $fn=6 );
-        translate( [0,-a-h,+5] )
-            cylinder(d=4.5, h=3, center = true );
+                cube([1,-sp,-sp], center = true );    // cut a 1mm gap
+        translate( [0,sp,0] )
+            cylinder(d=2.2, h=h+10, center = true );    // 3mm screw
+        translate( [0,sp,-5] )
+            cylinder(d=4.5, h=3, center = true, $fn=6 );// screw nut
+        translate( [0,sp,+5] )
+            cylinder(d=4.5, h=3, center = true );       // screw head
         }
 }
 
-module tubeFlansch( d=6, a=8, h=40, w=3 )
+module tubeFlansh( d=6, a=0, h=60, w=3, r=0 )
 {
-    
-    rotate([0,-90,0])
+    offh = +(d+w)/2+1;
+    translate([-20,0,0])
     difference(){
         union(){
-            hull(){
-                translate([0,-a,0]) cylinder(d=d+w, h=h, center = false );   
-                translate([-d,0,0]) cube([2*d,0.1,h]);  // Fehlt: naca profil abbilden
+            hull()
+                {
+                translate([0,-a,0]) rotate([0,-90,0]) cylinder(d=d+w, h=h, center = false );   
+                translate([20,+offh,0]) rotate([90,0,0]) 
+                    mirror([0,1,0])
+                        spant3d( d=0.3, offset=[0,0,0], size=120, r=0, p=pSD6060 );
+                translate([20,-3,-offh]) 
+                    spant3d( d=0.3, offset=[0,0,0], size=120, r=0, p=pNaca0012 );
                 }
-            translate([-1.5,0,0]) cube([3,20,h]);
+            hull()
+                {
+                translate([-5,offh,-1.5]) rotate([-90,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
+                translate([-45,offh,-1.5]) rotate([-90,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
+                }
+            hull()
+                {
+                translate([-5,-3,-1.5]) rotate([180,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
+                translate([-45,-3,-1.5]) rotate([180,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
+                }
             }
-        translate([0,-a,-1]) cylinder(d=d, h=h+2, center = false );
+        translate([-2*h,-a,0]) rotate([0,90,0]) cylinder(d=d, h=h*3, center = false );
+        translate([8,-a,0]) rotate([0,90,0]) cylinder(d1=d,d2=d+1, h=12, center = false );
+        
+        translate([0-2*h,-a, 0] )
+            rotate( [45+90,0,0] )
+                cube([h*3,h*3,1], center = false );    // cut a 1mm gap
+
         }
+        
+        
+        
+        
+        
 }

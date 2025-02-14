@@ -91,7 +91,7 @@ module radialSlice( sh=100, sx=100, org=[0,0,0], rot=[0,0,0], mode=0, center=tru
 
 module radialSliceHelper( d, sh, mode=0, center=true )
 {
-    gap = 0.5;
+    gap = 0.3;  // 0.5 was too loose
     
     if( mode==0 ){
         cylinder( d=d, h=sh, center=center );
