@@ -7,7 +7,8 @@ include <skin.scad> // skin funktionen
 include <wing.scad> // spant , segment funktionen, brauchen o[] und s[]
 include <polyline.scad> 
 include <servo.scad>
-include <ruder.scad>
+include <qruder.scad>   // for wing
+include <hruder.scad>   // for tail
 
 sf= 30/500; // forward = 30mm pro 500mm  (550???)
 o = [   [+sf*0,   0, 50],     
@@ -35,24 +36,18 @@ hRuder = pSD6060[9].y - pSD6060[51].y;
 dPoly = 2.2;
 
 
-
-
 // Dokmentation:
-*exploreWing();
+exploreWing();
 *exploreFuse();
 // complete();
-
 
 //solid:
 *wingSolid();
 *wingSegment( [s[0],s[1]], [o[0],o[1]], do = 2 );
 *wingSegment( [s[1],s[2]], [o[1],o[2]], do = 0 );
-*RuderSegment();
-*translate([-0,0,0]) Ruder();
+*QRuderSegment();
+*translate([-0,0,0]) QRuder();
 *lastsegment();   
-
-
-
 
 *fuseSolid();  
 *fuseSkin(); 
@@ -96,7 +91,7 @@ dPoly = 2.2;
 module exploreFuse()
 {
     show([20,0,0]){
-        fuseMotor();
+        fuseMotor( d=0.5, holes=true);
         fuseSegment( seg=0 );
         union(){
             fuseSegment( seg=1 );
@@ -115,21 +110,21 @@ module exploreWing()
 {
     show([0,0,20]){
         translate([-20,0,0]) exploreFuse();
-        wingSegment([s[0],s[1]], [o[0],o[1]]);
+        wingConnectCut();
         union(){
-            translate([-tubeOffset1*s[1],0,zBoom]) tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
-            translate([-tubeOffset2*s[1],0,zBoom]) tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
-            translate([tubeOffset2-260,-8,zBoom]) 
+            *translate([-tubeOffset1*s[1],0,zBoom]) tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 ); // need an update
+            *translate([-tubeOffset2*s[1],0,zBoom]) tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
+            *translate([tubeOffset2-260,-8,zBoom]) 
                 rotate([0,90,0])  
                     cylinder(d=dBar1, h=440, center=true);
-            translate([-420,0,zBoom]) tubeFlansch();
+            translate([-420,0,zBoom]) tubeFlansh();
             translate([-420,30,0]) heigtSolid(r=0);
             translate([-420,60,zBoom]) sideSolid(r=0);
             }
         wingSegment([s[1],s[2]], [o[1],o[2]]);
         union(){
-            RuderSegment();
-            translate([-20,0,0]) Ruder();
+            QRuderSegment();
+            translate([-20,0,0]) QRuder();
 
             }
         lastsegment();
@@ -215,23 +210,23 @@ module xTube( diameter=6, length=1200, tubeoffset=tubeOffset1 )
             cylinder(d=diameter, h=length, center=true); // inner tube
 }
 
-module RuderSegment(){
+module QRuderSegment(){
     difference(){
         wingSegment( [s[2],s[3]], [o[2],o[3]], do = 0 );
-        RuderCut2();    
-        RuderDiff2();
+        QRuderCut2();    
+        QRuderDiff2();
         }
-    RuderAdd2(); 
+    QRuderAdd2(); 
 }
 
-module Ruder(){
+module QRuder(){
     difference(){
         wingSegment( [s[2],s[3]], [o[2],o[3]], do = 0 );
-        RuderCut3();
-        RuderDiff3();
+        QRuderCut3();
+        QRuderDiff3();
         }
-    RuderAdd3();
-    RuderHorn();
+    QRuderAdd3();
+    QRuderHorn();
 }
 
 
