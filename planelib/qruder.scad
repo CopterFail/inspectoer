@@ -4,19 +4,19 @@
 
 module QRuderAdd3() // elements to ruder
 {
-   p0 = [-ptRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
-   p1 = [-ptRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
+   p0 = [-ptQRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
+   p1 = [-ptQRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
    p2 = [-s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
    p3 = [-s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
-   d0 = hRuder * s[ruderseg];
-   d1 = hRuder * s[ruderseg+1];
+   d0 = hQRuder * s[ruderseg];
+   d1 = hQRuder * s[ruderseg+1];
 
    intersection(){
        union(){
            hull(){ // drehachse
-                translate([p0.x, ptRuder.y*s[ruderseg] ,p0.y])
+                translate([p0.x, ptQRuder.y*s[ruderseg] ,p0.y])
                 cylinder(d=d0,h=0.01);
-               translate([p1.x, ptRuder.y*s[ruderseg+1] ,p1.y])
+               translate([p1.x, ptQRuder.y*s[ruderseg+1] ,p1.y])
                 cylinder(d=d1,h=0.01);
                 }
 
@@ -28,7 +28,7 @@ module QRuderAdd3() // elements to ruder
            }
        difference(){
            segment([s[ruderseg],s[ruderseg+1]], [o[ruderseg],o[ruderseg+1]], r=0);
-           wingPolyLine( d=dPoly, pt=ptRuder, off=[+0,+0] );
+           wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
            translate([0, 50/2, 0])
            rotate([90,0,0])
            linear_extrude(height=50)
@@ -40,21 +40,21 @@ module QRuderAdd3() // elements to ruder
 
 module QRuderAdd2() // add elements to sement
 {
-   p0 = [-ptRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
-   p1 = [-ptRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
+   p0 = [-ptQRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
+   p1 = [-ptQRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
    p2 = [-s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
    p3 = [-s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
    p4 = [+ o[ruderseg+1].x, o[ruderseg+1].z];
    p5 = [+ o[ruderseg].x, o[ruderseg].z];
-   d0 = hRuder * s[ruderseg];
-   d1 = hRuder * s[ruderseg+1];
+   d0 = hQRuder * s[ruderseg];
+   d1 = hQRuder * s[ruderseg+1];
 
    intersection(){
        union(){
            hull(){ // drehachse
-                translate([p0.x, ptRuder.y*s[ruderseg] ,p0.y])
+                translate([p0.x, ptQRuder.y*s[ruderseg] ,p0.y])
                 cylinder(d=d0,h=0.01);
-               translate([p1.x, ptRuder.y*s[ruderseg+1] ,p1.y])
+               translate([p1.x, ptQRuder.y*s[ruderseg+1] ,p1.y])
                 cylinder(d=d1,h=0.01);
                 }
 
@@ -66,7 +66,7 @@ module QRuderAdd2() // add elements to sement
            }
        difference(){
            segment([s[ruderseg],s[ruderseg+1]], [o[ruderseg],o[ruderseg+1]], r=0);
-           wingPolyLine( d=dPoly, pt=ptRuder, off=[+0,+0] );
+           wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
            translate([0, 50/2, 0])
            rotate([90,0,0])
            linear_extrude(height=50)
@@ -78,12 +78,12 @@ module QRuderAdd2() // add elements to sement
 
 module QRuderCut2() // cut the ruder from segmen
 {
-   p0 = [-ptRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
-   p1 = [-ptRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
+   p0 = [-ptQRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
+   p1 = [-ptQRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
    p2 = [-s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
    p3 = [-s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
-   d0 = hRuder * s[ruderseg];
-   d1 = hRuder * s[ruderseg+1];
+   d0 = hQRuder * s[ruderseg];
+   d1 = hQRuder * s[ruderseg+1];
 
     // schnitt an der achse
    translate([0, 50/2, 0])
@@ -95,14 +95,14 @@ module QRuderCut2() // cut the ruder from segmen
 
 module QRuderCut3() // cut the segment from the ruder
 {
-   p0 = [-ptRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
-   p1 = [-ptRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
+   p0 = [-ptQRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
+   p1 = [-ptQRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
    p2 = [-s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
    p3 = [-s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
    p4 = [+ o[ruderseg+1].x, o[ruderseg+1].z];
    p5 = [+ o[ruderseg].x, o[ruderseg].z];
-   d0 = hRuder * s[ruderseg];
-   d1 = hRuder * s[ruderseg+1];
+   d0 = hQRuder * s[ruderseg];
+   d1 = hQRuder * s[ruderseg+1];
 
     // schnitt an der achse
    translate([0, 50/2, 0])
@@ -150,22 +150,22 @@ module QRuderDiff2MaskInv( doff = 0.5 )
 // axis with rotation limits used as mask
 module QRuderDiff2Axis( rot=0, doff=0 )
 {
-   p0 = [-ptRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
-   p1 = [-ptRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
-   d0 = hRuder * s[ruderseg] - doff;
-   d1 = hRuder * s[ruderseg+1] - doff;
+   p0 = [-ptQRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
+   p1 = [-ptQRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
+   d0 = hQRuder * s[ruderseg] - doff;
+   d1 = hQRuder * s[ruderseg+1] - doff;
    w = 40; // max ruder angle
 
    
   hull(){ 
-    translate([p0.x, ptRuder.y*s[ruderseg] ,p0.y]) {
+    translate([p0.x, ptQRuder.y*s[ruderseg] ,p0.y]) {
         cylinder( d=d0, h=0.01, center=false );
         if( rot < 360 ){
             rotate([0,0,rot+w]) translate([-2*d0,-d0/2,0]) cube([2*d0, d0, 0.01], center=false );
             rotate([0,0,rot-w]) translate([-2*d0,-d0/2,0]) cube([2*d0, d0, 0.01], center=false );
             }
         }
-    translate([p1.x, ptRuder.y*s[ruderseg+1] ,p1.y]) {
+    translate([p1.x, ptQRuder.y*s[ruderseg+1] ,p1.y]) {
         cylinder( d=d1, h=0.01, center=false );
         if( rot < 360 ){
             rotate([0,0,rot+w]) translate([-2*d1,-d1/2,0]) cube([2*d1, d1, 0.01], center=false );
@@ -178,12 +178,12 @@ module QRuderDiff2Axis( rot=0, doff=0 )
 module QRuderHorn()
 {
 
-    p0 = [-ptRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
-    p1 = [-ptRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
+    p0 = [-ptQRuder.x * s[ruderseg] + o[ruderseg].x, o[ruderseg].z];
+    p1 = [-ptQRuder.x * s[ruderseg+1] + o[ruderseg+1].x, o[ruderseg+1].z];
     pm = (p0 + p1)/2;
     sm = (s[ruderseg]+s[ruderseg+1])/2;
 
-    translate([pm.x,ptRuder.y*sm ,pm.y + 24 ])
+    translate([pm.x,ptQRuder.y*sm ,pm.y + 24 ])
     rotate([0,ruderrot, 2])
     difference()
     {

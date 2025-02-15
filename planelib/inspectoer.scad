@@ -26,20 +26,22 @@ tubeAng = (tubeAng1 + tubeAng2) / 2;    // different angles will make problems
 
 dBar1 = 6.4;    // diameter of the 1st tube
 dBar2 = 6.4;    // diameter of the 2nd tube
-zBoom = 130+13;
+//zBoom = 130+13;
 
 wall = 0.5;
 ruderseg=2;
 ruderrot=tubeAng;
-ptRuder = [pSD6060[9].x, (pSD6060[9].y+pSD6060[51].y)/2];
-hRuder = pSD6060[9].y - pSD6060[51].y;
+ptQRuder = [pSD6060[9].x, (pSD6060[9].y+pSD6060[51].y)/2];
+hQRuder = pSD6060[9].y - pSD6060[51].y;
+ptHRuder = [pNaca0012[5].x, (pNaca0012[5].y+pNaca0012[57].y)/2];
+hHRuder = pNaca0012[5].y - pNaca0012[57].y;
 dPoly = 2.2;
 
 
 // Dokmentation:
-exploreWing();
+*exploreWing();
 *exploreFuse();
-// complete();
+complete();
 
 //solid:
 *wingSolid();
@@ -76,7 +78,10 @@ exploreWing();
 *translate([-tubeOffset2*s[1]+o[1].x-5,0,o[1].z-7]) mirror([0,1,0]) tubeConnect( d1=dBar1, d2=dBar1+2-0.2, a=8, w=6 );
 *xTube( diameter=8, length=1200, tubeoffset=tubeOffset1 );
 *xTube( diameter=8, length=1200, tubeoffset=tubeOffset2 );
+
 *tail();            
+*HRuderSegment();
+*translate([-0,0,0]) HRuder();
             
             
 
@@ -87,6 +92,33 @@ exploreWing();
 
 
 
+module complete()
+{
+
+//view: [ -138.68, -75.77, 45.99 ] [ 142.00, 35.00, 175.90 ] 1754.01 22.50
+
+    wingConnectCut();
+    wingSegment( [s[1],s[2]], [o[1],o[2]], do = 0 );
+    QRuderSegment();
+    translate([-0,0,0]) QRuder();
+    lastsegment();   
+    mirror([0,0,1]){
+        wingConnectCut();
+        wingSegment( [s[1],s[2]], [o[1],o[2]], do = 0 );
+        QRuderSegment();
+        translate([-0,0,0]) QRuder();
+        lastsegment();   
+        }
+    fuseMotor( d=0.5, holes=true);
+    fuseSegment( seg=0 );
+    fuseSegment( seg=1 );
+    fuseSegment( seg=2 );
+    fuseSegment( seg=3 );
+    color("GhostWhite") fuseCoverMid();
+    color("Red") fuseSkid( r=-0.5 );
+    color("GhostWhite") fuseCoverFront();
+    tail(); 
+}
 
 module exploreFuse()
 {
@@ -166,7 +198,7 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]], do = 0 )
             xTube( diameter=dBar2+do, length=1200, tubeoffset=tubeOffset2 );
 
             wingPolyLine( d=dPoly, pt=pSD6060[31], off=[+2,+0.5] );
-            wingPolyLine( d=dPoly, pt=ptRuder, off=[+0,+0] );
+            wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
             wingElectric();
             }
     }
@@ -185,7 +217,7 @@ module lastsegment( r=0, h=10, ds=50, p=pSD6060 )
         spant3d( d=0.3, offset=o[i]+[-dx,0,h], s[i]*ds/100, r=r, p=p );
         }
     wingPolyLine( d=dPoly, pt=pSD6060[31], off=[+2,+0.5] );
-    wingPolyLine( d=dPoly, pt=ptRuder, off=[+0,+0] );
+    wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
     }
 
 }
@@ -229,6 +261,38 @@ module QRuder(){
     QRuderHorn();
 }
 
+module HRuderSegment(){
+    difference(){
+        union(){
+        difference(){
+            heigtSolid(r=0);
+            HRuderCut2();    
+            HRuderDiff2();
+            
+            *translate([0, 11-8,-zBoom]) mirror([0,0,1])tubeFlansh(r=0.2);
+            *translate([0, 11-8,+zBoom-1]) tubeFlansh(r=0.2);
+            hull(){ 
+                translate([-2, 0, -ho-dPoly]) sphere(d=dPoly); 
+                translate([-2, 0, +ho+dPoly]) sphere(d=dPoly); 
+                }
+
+            }
+        HRuderAdd2(); 
+        }
+        translate([-35,2,0]) servo_sg90();
+    }
+
+}
+
+module HRuder(){
+    difference(){
+        heigtSolid(r=0);
+        HRuderCut3();
+        HRuderDiff3();
+        }
+   HRuderAdd3();
+   HRuderHorn();
+}
 
 
 
@@ -237,19 +301,15 @@ module QRuder(){
 
 
 
-
-ho = [  [0, 0,  0 ],     
-        [0, 0,  zBoom ],
-        [0, 0,  150 ] ]; //offset: x,y,z 
-so = [ 120, 120 ]; //size = factor  
 
 
 module tail() // erstmal stark vereinfacht
 {
     z0 = +8;
-    translate([-420, z0-3, 0]) heigtSolid();
-    translate([-420, z0+6, +zBoom]) mirror([0,0,1]) sideSolid();
-    translate([-420, z0+6, -zBoom]) sideSolid();
+    translate([-420, z0-3, 0]) HRuderSegment();
+    translate([-420, z0-3, 0]) HRuder();
+    translate([-420, z0+6, +zBoom+3]) mirror([0,0,1]) sideSolid();
+    translate([-420, z0+6, -zBoom-3]) sideSolid();
     color( "BLACK") translate([-40, z0, +zBoom]) rotate([0,-90,0]) cylinder(d=6,h=450);
     color( "BLACK") translate([-40, z0 ,-zBoom]) rotate([0,-90,0]) cylinder(d=6,h=450);
     
@@ -275,10 +335,9 @@ module heigtSolid(r=0)
     difference(){
         hull(){
             translate([0,0,-br]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pNaca0012 );
-            translate([0,0,+br]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pNaca0012 );
+            translate([0,0,+br-0.3]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pNaca0012 );
             }
-        translate([0, 11-8,-zBoom]) mirror([0,0,1])tubeFlansh(r=0.2);
-        translate([0, 11-8,+zBoom]) tubeFlansh(r=0.2);
+        ;
         }
 }
 
@@ -634,7 +693,7 @@ module fusePoly()
             
             }
     fusePolyLineQ( d=dPoly, pt=pSD6060[31], off=[+2,+0.5] );
-    fusePolyLineQ( d=dPoly, pt=ptRuder, off=[+0,+0] );
+    fusePolyLineQ( d=dPoly, pt=ptQRuder, off=[+0,+0] );
 
 }
 
@@ -706,7 +765,7 @@ module tubeFlansh( d=6, a=0, h=60, w=3, r=0 )
             hull()
                 {
                 translate([0,-a,0]) rotate([0,-90,0]) cylinder(d=d+w, h=h, center = false );   
-                translate([20,+offh,0]) rotate([90,0,0]) 
+                translate([20,+offh,3]) rotate([90,0,0]) 
                     mirror([0,1,0])
                         spant3d( d=0.3, offset=[0,0,0], size=120, r=0, p=pSD6060 );
                 translate([20,-3,-offh]) 
@@ -729,6 +788,15 @@ module tubeFlansh( d=6, a=0, h=60, w=3, r=0 )
         translate([0-2*h,-a, 0] )
             rotate( [45+90,0,0] )
                 cube([h*3,h*3,1], center = false );    // cut a 1mm gap
+
+        hull(){ 
+            translate([+20-ptHRuder.x*120, -3+ptHRuder.y*120, -4-dPoly]) sphere(d=dPoly); 
+            translate([+20-ptHRuder.x*120, -3+ptHRuder.y*120, +3+dPoly]) sphere(d=dPoly); 
+            }
+        hull(){ 
+            translate([+20-2, -3, -4-dPoly]) sphere(d=dPoly); 
+            translate([+20-2, -3, +3+dPoly]) sphere(d=dPoly); 
+            }
 
         }
         
