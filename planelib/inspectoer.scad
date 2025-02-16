@@ -41,7 +41,7 @@ dPoly = 2.2;
 // Dokmentation:
 *exploreWing();
 *exploreFuse();
-complete();
+*complete();
 
 //solid:
 *wingSolid();
@@ -280,6 +280,7 @@ module HRuderSegment(){
         HRuderAdd2(); 
         }
         translate([-35,2,0]) servo_sg90();
+        translate([-53,0,-80]) rotate([0,20,0]) cube([12,6,140], center=true );
     }
 
 }
@@ -303,13 +304,13 @@ module HRuder(){
 
 
 
-module tail() // erstmal stark vereinfacht
+module tail() 
 {
     z0 = +8;
-    translate([-420, z0-3, 0]) HRuderSegment();
-    translate([-420, z0-3, 0]) HRuder();
-    translate([-420, z0+6, +zBoom+3]) mirror([0,0,1]) sideSolid();
-    translate([-420, z0+6, -zBoom-3]) sideSolid();
+    translate([-420, 8-3, 0]) HRuderSegment();
+    translate([-420, 8-3, 0]) HRuder();
+    translate([-420, 8+6, +zBoom+3]) mirror([0,0,1]) sideSolid();
+    translate([-420, 8+6, -zBoom-3]) sideSolid();
     color( "BLACK") translate([-40, z0, +zBoom]) rotate([0,-90,0]) cylinder(d=6,h=450);
     color( "BLACK") translate([-40, z0 ,-zBoom]) rotate([0,-90,0]) cylinder(d=6,h=450);
     
@@ -797,6 +798,7 @@ module tubeFlansh( d=6, a=0, h=60, w=3, r=0 )
             translate([+20-2, -3, -4-dPoly]) sphere(d=dPoly); 
             translate([+20-2, -3, +3+dPoly]) sphere(d=dPoly); 
             }
+        translate([-53,-2,-8]) cube([12,6,10], center=true ); // servo cable - bad
 
         }
         
