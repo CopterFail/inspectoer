@@ -352,7 +352,7 @@ module heigtSolid(r=0)
 
 fuseWidth = 52;    // Rumpfbreite war 50
 fuseLength0 = 355; // Spitze vor dem nullpunkt bei r=0 , war 355
-fuseLength1 = 270; // hinterster Punkt - 5
+fuseLength1 = 270; // hinterster Punkt - 5, die Länge in Dirks plan war 605mm
 fuseMotorDia = 40;    // Durchmesser am Motor
 
 module fuseSolid( r=0 )
