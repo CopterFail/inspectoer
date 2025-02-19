@@ -18,12 +18,13 @@ module servo_sg90()
 }
     
 
-module ServoDiff( i=ruderseg, sy=7 )
+module ServoDiff( i=ruderseg, sx=100, sy=7, sz=348, rot=0 )
 { 
-    sx = s[i]*(tubeOffset1+tubeOffset2)/2;  // between the tubes
-    sz = (o[i+1].z-o[i].z)/2;   // in the middle of the segment
-    translate( o[i] + [-sx, sy, sz])
-            rotate([0,ruderrot, 2])
+    //sx = s[i]*(tubeOffset1+tubeOffset2)/2;  // between the tubes
+    //sz = (o[i+1].z-o[i].z)/2;   // in the middle of the segment
+    //sz = -2;
+    translate( [-sx, sy, sz])
+            rotate([0,rot, 2])
                 servo_sg90();
                 
     

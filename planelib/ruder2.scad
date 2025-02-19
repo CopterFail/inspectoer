@@ -12,9 +12,10 @@ module Ruder2( ptStart=[0,0,0], dStart=20, ptStop=[0,0,100], dStop=10, dSpace=1.
 {
     difference(){
         children();
-        #cutterObjectAll(  ptStart, dStart, ptStop, dStop, dSpace, rot, steps );
+        cutterObjectAll(  ptStart, dStart, ptStop, dStop, dSpace, rot, steps );
         cutterInnerAxis( ptStart, ptStop );
-        cutterEnds( ptStart, dStart, ptStop, dStop, dSpace );
+        cutterEnds( ptStart, dStart, dSpace, axis=false );
+        cutterEnds( ptStop, dStop, dSpace, axis=false );
         }
 }
 
@@ -25,11 +26,11 @@ module cutterObjectAll( ptStart, dStart, ptStop, dStop, dSpace, rot=45, steps=5 
     
     for( i=[0:steps-1] )
     {
-        dir=((i%2)==0);
-        cutterObjectSingle(  ptStart+i*ptDelta, dStart+i*dDelta, 
+        dir = ((i%2)==0);
+        cutterObjectSingle(  
+            ptStart+i*ptDelta, dStart+i*dDelta, 
             ptStart+(i+1)*ptDelta, dStart+(i+1)*dDelta, 
             dSpace, dir, steps );
-        // spacer fehlt noch!
     }
 }
 
@@ -111,18 +112,16 @@ module cutterInnerAxis( ptStart, ptStop, dAxis=2.2 )    // set the correct param
     }
 }
 
-module cutterEnds( ptStart, dStart, ptStop, dStop, dSpace )
+module cutterEnds( pt, d, dSpace, axis=false )
 {
-    translate( ptStart ) 
-        union()
+    translate( pt ) 
+        difference()
         {
-            cylinder( d=dStart+2*dSpace, h=dSpace, center=true );
-            translate( [-100,-20,0] ) cube( [100,40,dSpace], center=false );
-        }
-    translate( ptStop ) 
-        union()
-        {
-            cylinder( d=dStop+2*dSpace, h=dSpace, center=true );
-            translate( [-100,-20,-dSpace] ) cube( [100,40,dSpace], center=false );
+            union()
+            {
+                cylinder( d=d+2*dSpace, h=dSpace, center=true );
+                translate( [-100,-20,-dSpace/2] ) cube( [100,40,dSpace], center=false );
+            }
+            if ( axis==false ) cylinder( d=d+2*dSpace, h=dSpace, center=true );
         }
 }

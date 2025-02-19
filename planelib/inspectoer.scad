@@ -18,8 +18,9 @@ o = [   [+sf*0,   0, 50],
         [+sf*500, 0, 550] ]; //offset: x,y,z 
 s = [ 250, 234, 202, 170 ]; //size = factor   250 - (z-50)*
 
-tubeOffset1 = 0.25; 
-tubeOffset2 = 0.5; /*-s[0]/3;*/    // tube offset in [%]
+tubeOffset1 = 40; 
+tubeOffset2 = tubeOffset1 + 80;
+tubeOffsety = 3.5;
 tubeAng1 = atan2( (o[3]-o[0]).z, -o[3].x - tubeOffset1*(s[0]-s[3]) ) - 90;
 tubeAng2 = atan2( (o[3]-o[0]).z, -o[3].x - tubeOffset2*(s[0]-s[3]) ) - 90;
 //tubeAng = (tubeAng1 + tubeAng2) / 2;    // different angles will make problems
@@ -28,7 +29,7 @@ tubeAng = 0;
 dBar1 = 8.4;    // diameter of the front tube
 lBar1 = 1005;   // length for front tube
 dBar2 = 6.4;    // diameter of the rear tube
-lBar2 = 350;    // length for rear tube
+lBar2 = 350;    // length for rear tube, abs max length is 780 
 //zBoom = 130+13;
 
 wall = 0.5;
@@ -62,10 +63,11 @@ o2 = RuderGetXOffset( z2, zStart=o[0].z , zStop=o[3].z, o[0].x, o[3].x );
 d2 = RuderGetHeight( z2, zStart=o[0].z , zStop=o[3].z, s[0], s[3], hQRuder );
 echo( z2, p2, o2, d2);
 
-Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
+*Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
     union(){
-        wingSegment( [s[2],s[3]], [o[2],o[3]] );
-        wingSegment( [s[1],s[2]], [o[1],o[2]] );
+        *wingSegment( [s[2],s[3]], [o[2],o[3]] );
+        *wingSegment( [s[1],s[2]], [o[1],o[2]] );
+        wingSegment( [s[0],s[1]], [o[0],o[1]] );
         }
         
 
@@ -75,7 +77,7 @@ Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dSto
 
 *fuseSolid();  
 *fuseSkin(); 
-*fusePoly();
+fusePoly();
 *translate([335,0,50]) spant3d( d=0.3, offset=[0,0,0],    size=605,   r=0, p=pClarkFuse );
 *fuseNaca();
 *fuseCoverMid(d=0);
@@ -83,13 +85,14 @@ Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dSto
 *fuseCoverHook( true );
 *fuseCoverHook( false );
 *fuseCoverHookKnop();
-*fuseSegment(0);
-*fuseSegment(1);
+fuseSegment(0);
+fuseSegment(1);
 *fuseSegment(2);
 *fuseSegment(3);
 *translate([200,0,0])  color("Grey") cube([75,45,45],center=true); // akku
-*fuseWingMount(pos=0);
-*fuseWingMount(pos=1);
+
+*fuseWingMount(dx=0);
+*mirror([0,0,1])fuseWingMount(dx=0);
 
 *tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
 *tubeFlansh();
@@ -98,8 +101,8 @@ Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dSto
 // dBar contains 0.4 offset, reduce to 0.2
 *translate([-tubeOffset1*s[1]+o[1].x,0,o[1].z-7]) mirror([0,1,0]) tubeConnect( d1=dBar1, d2=dBar1+2-0.2, a=8, w=6 ); 
 *translate([-tubeOffset2*s[1]+o[1].x-5,0,o[1].z-7]) mirror([0,1,0]) tubeConnect( d1=dBar1, d2=dBar1+2-0.2, a=8, w=6 );
-xTube( diameter=8, length=lBar1, tubeoffset=tubeOffset1 );
-xTube( diameter=6, length=lBar2, tubeoffset=tubeOffset2 );
+*xTube( diameter=dBar1, length=lBar1, tubeoffset=tubeOffset1 );
+*xTube( diameter=dBar2, length=lBar2, tubeoffset=tubeOffset2 );
 
 *tail();            
 *HRuderSegment();
@@ -136,6 +139,9 @@ module complete()
     fuseSegment( seg=1 );
     fuseSegment( seg=2 );
     fuseSegment( seg=3 );
+    fuseWingMount(dx=0);
+    mirror([0,0,1])fuseWingMount(dx=0);
+
     color("GhostWhite") fuseCoverMid();
     color("Red") fuseSkid( r=-0.5 );
     color("GhostWhite") fuseCoverFront();
@@ -149,8 +155,7 @@ module exploreFuse()
         fuseSegment( seg=0 );
         union(){
             fuseSegment( seg=1 );
-            translate( [0,-100,0]) fuseWingMount(pos=0);
-            translate( [0,-100,0]) fuseWingMount(pos=1);
+            translate( [0,-100,0]) mirror( )fuseWingMount();
             }
         fuseSegment( seg=2 );
         translate( [0,50,0]) color("GhostWhite") fuseCoverMid();
@@ -201,7 +206,8 @@ module exploreWing()
 
 module wingSolid(r=0)
 {
-    for(i=[0:len(o)-2]) segment(i, r);
+    for(i=[0:len(o)-2]) 
+        segment(s=[s[i],s[i+1]], o=[o[i],o[i+1]], r=0);
     lastsegment();
 }
 
@@ -212,9 +218,10 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
         union(){
             linearSlice( sx=s[0], sh=o[1].z-o[0].z, org=o[0], center=true )
                 segment(s, o, r=0);
+            *wingSolid(r=0);
             }
         union(){    
-            ServoDiff();
+            #ServoDiff(sx=85,sy=4,sz=350-3.5,rot=5);
 
             xTube( diameter=dBar1, length=lBar1, tubeoffset=tubeOffset1 );
             xTube( diameter=dBar2, length=lBar2, tubeoffset=tubeOffset2 );
@@ -222,6 +229,7 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
             wingPolyLine( d=dPoly, pt=pSD6060[31], off=[+2,+0.5] );
             wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
             wingElectric();
+            mirror([0,0,1]) fuseWingMount(dx=0.2);
             }
     }
 }
@@ -247,7 +255,7 @@ module lastsegment( r=0, h=10, ds=50, p=pSD6060 )
 module wingElectric()
 {
     off = (tubeOffset1+tubeOffset2)/2;
-    l = 407;
+    l = 407-100;
     translate([-off * s[0] + o[0].x,0,o[0].z-1])  // based of the 1st segment
         rotate([0,tubeAng,0]) 
             translate([0,4,l/2-10]) cube( [12,6,l],center=true);
@@ -259,9 +267,8 @@ module wingElectric()
 
 module xTube( diameter=6, length=1200, tubeoffset=tubeOffset1 )
 {
-    translate([-tubeoffset * s[0] + o[0].x,0])  // based of the 1st segment
-        rotate([0,tubeAng,0]) 
-            cylinder(d=diameter, h=length, center=true); // inner tube
+    translate([-tubeoffset,tubeOffsety,0] )  
+        cylinder(d=diameter, h=length, center=true); // inner tube
 }
 
 module QRuderSegment(){
@@ -275,7 +282,7 @@ module QRuderSegment(){
 
 module QRuder(){
     difference(){
-        wingSegment( [s[2],s[3]], [o[2],o[3]], do = 0 );
+        wingSegment( [s[2],s[3]], [o[2],o[3]] );
         QRuderCut3();
         QRuderDiff3();
         }
@@ -375,6 +382,7 @@ module heigtSolid(r=0)
 fuseWidth = 52;    // Rumpfbreite war 50
 fuseLength0 = 325; // Spitze vor dem nullpunkt bei r=0 , war 355
 fuseLength1 = 270; // hinterster Punkt - 5, die Länge in Dirks plan war 605mm,355+270=635,gemessen 640
+fuseY0 = -10; // y offset of inner fuse
 fuseMotorDia = 40;    // Durchmesser am Motor
 fuseInnerSpant = 570;
 
@@ -384,8 +392,10 @@ module fuseSolid( r=0 )
     {
         *translate([-(fuseLength1 + r),0,0]) rotate([0,90,0]) cylinder(d=fuseMotorDia+2*r,h=5,center=true); //motor
         translate([0,0,-0.15])  spant3d( d=0.3, offset=(o[0]+[0,0,r]),  size=s[0],  r=r, p=pSD6060 );
-        translate([fuseLength0,0,-0.15]) spant3d( d=0.3, offset=[0,0,fuseWidth/2+r],    size=fuseInnerSpant,   r=r, p=pClarkFuse );
-        translate([fuseLength0,0,-0.15]) spant3d( d=0.3, offset=[0,0,-(fuseWidth/2+r)], size=fuseInnerSpant,   r=r, p=pClarkFuse );
+        translate([fuseLength0,fuseY0,-0.15]) 
+            spant3d( d=0.3, offset=[0,0,fuseWidth/2+r],    size=fuseInnerSpant,   r=r, p=pClarkY /* pClarkFuse */ );
+        translate([fuseLength0,fuseY0,-0.15]) 
+            spant3d( d=0.3, offset=[0,0,-(fuseWidth/2+r)], size=fuseInnerSpant,   r=r, p=pClarkY /* pClarkFuse */ );
         translate([0,0,-0.15])  spant3d( d=0.3, offset=-(o[0]+[0,0,r]), size=s[0],  r=r, p=pSD6060 );
     }
 }
@@ -424,12 +434,12 @@ module fuseSkin( fuseSkin = 5 )
         union(){
             fuseSolid( r=-fuseSkin );
             
-            //fuseCoverMask(x=120, y=63, r=fuseWidth+20, h=100, type=3);
-            fuseCoverMask(x=120, y=63-20, r=fuseWidth-10, h=100, type=3);
-            //fuseCoverMask(x=35, y=80, r=fuseWidth+40, h=80, type=3);
-            fuseCoverMask(x=35, y=80-20, r=fuseWidth-10, h=100, type=3);
+            //fuseCoverMask(x=120, y=63-20+fuseY0, r=fuseWidth-10, h=100, type=3);
+            //fuseCoverFront(d=0.3);
+            #fuseCoverMask(x=80, y=63-20+fuseY0, r=fuseWidth-10, h=100+110, type=3);
             fuseCoverFront(d=0.3);
-            fuseCoverMid(d=0.3);
+            //fuseCoverMask(x=35, y=80-20+fuseY0, r=fuseWidth-10, h=100, type=3);
+            //fuseCoverMid(d=0.3);
             
             *fuseMotor(d=0, holes=false);
                 
@@ -438,13 +448,13 @@ module fuseSkin( fuseSkin = 5 )
             xTube( diameter=dBar2+2, length=100, tubeoffset=tubeOffset2, $fn=50 );
             mirror([0,0,1]) xTube( diameter=dBar2+2, length=100, tubeoffset=tubeOffset2, $fn=50 );
             
-            translate([-200,-5,+30])
+            translate([-210,-10,+30])
                 rotate([0,-90,20])
-                    cylinder(d=10,h=80,center=true);
-            translate([-200,-5,-30])
+                    cylinder(d=10,h=40,center=true);
+            translate([-210,-10,-30])
                 rotate([00,-90,20])
-                    cylinder(d=10,h=80,center=true);
-            translate([-258,+20,0])
+                    cylinder(d=10,h=40,center=true);
+            *translate([-258,+20,0])
                 rotate([00,-90,-20])
                     cylinder(d=10,h=80,center=true);
 
@@ -455,6 +465,9 @@ module fuseSkin( fuseSkin = 5 )
              
              translate([260,-2,+23]) rotate([8,0,0 ]) scale(7) fuseNaca(w=-10);
              translate([260,-2,-23]) rotate([180-8,0,0 ]) scale(7) fuseNaca(w=-10);
+             
+             fuseWingMount(dx=0.2);
+             mirror([0,0,1])fuseWingMount(dx=0.2);
 
             }
         }
@@ -473,8 +486,10 @@ module fuseSegment( seg=0 )
         fuseSkin( fuseSkin = 5 );
     }
 }
-module fuseWingMount(pos=0)
+
+module fuseWingMount( pos=0, dx=0 )
 {
+/* reused, the old function is not longer used 
     ox = (pos<=0) ? 0 : 62.5;
     to = (pos<=0) ? tubeOffset1 : tubeOffset2;
     
@@ -501,7 +516,39 @@ module fuseWingMount(pos=0)
             }
         fuseSolid( r=-5.3 );
         }
+*/
+    h1 = 5+dx;
+    w1 = 8+dx;
+    translate([0,tubeOffsety,-o[0].z-h1/2]) rotate([0,0,180])
+        difference()
+            {
+            union()
+                {
+                translate([tubeOffset1,0,0]) cylinder( d = dBar1+2+2+dx, h = o[0].z+h1/2 );
+                hull()
+                    {
+                    translate([tubeOffset1,0,0]) cylinder( d = 19+dx, h = h1 );
+                    translate([tubeOffset1+0,-w1/2,0]) cube( [19,w1,h1]);
+                    }
 
+                translate([tubeOffset2,0,0]) cylinder( d = dBar2+2+2+dx, h = o[0].z+h1/2 );
+                hull()
+                    {
+                    translate([tubeOffset2,0,0]) cylinder( d = 16+dx, h = h1 );
+                    translate([tubeOffset2-16,-w1/2,0]) cube( [16,w1,h1]);
+                    }
+                translate([tubeOffset1,-w1/2,0]) cube( [tubeOffset2-tubeOffset1,w1,h1]);
+                }
+            union()
+                {
+                echo(dx);
+                if ( dx<=0.0 )
+                {
+                    translate([tubeOffset1,0,-1]) cylinder( d = dBar1, h = o[0].z+h1/2+2 );
+                    translate([tubeOffset2,0,-1]) cylinder( d = dBar2, h = o[0].z+h1/2+2 );
+                    }
+                }
+            }    
 }
 
 module fuseCoverHookKnop()
@@ -554,7 +601,9 @@ module fuseCoverFront(d=0.1)
                 }
             }
         //fuseCoverMask(x=120, y=63-3-d, r=fuseWidth+20, h=100, type=3);
-        fuseCoverMask(x=120, y=63-3-d-16, r=fuseWidth-4, h=100, type=3);
+        //fuseCoverMask(x=120, y=63-3-d-16+fuseY0, r=fuseWidth-4, h=100, type=3);
+        fuseCoverMask(x=80, y=63-3-d-20+fuseY0, r=fuseWidth-4, h=100+110, type=3);
+
         }
     *translate([hx1,hy1,0])
         rotate([90,0,-12])
@@ -587,7 +636,7 @@ module fuseCoverMid(d=0.1)
                 }
             }
         //fuseCoverMask(x=35, y=80-3-d, r=fuseWidth+40, h=80, type=3);
-        fuseCoverMask(x=35, y=80-3-d-17, r=fuseWidth-4, h=100, type=3);
+        fuseCoverMask(x=35, y=80-3-d-17+fuseY0, r=fuseWidth-4, h=100, type=3);
         }
     *translate([hx1,hy1,0])
         rotate([90,0,0])
@@ -687,7 +736,7 @@ module fuseSkid( r=0 )
 
 module fuseCamera()
 {
-    translate([fuseLength0-20,3,0])
+    translate([fuseLength0-20,3+fuseY0,0])
         rotate([0,90,0])
             union(){
                 cylinder(d=15, h=30);
@@ -697,21 +746,24 @@ module fuseCamera()
 
 module fusePoly()
 {
-    translate([fuseLength0-3,0,0])
+    //translate([fuseLength0-3,0,0])
+    translate([fuseLength0-2.5,fuseY0,-0.15]) 
         mirror([1,0,0])
         {
-            fusePolyLine( d=dPoly, off=[-2.7+fuseWidth/2,-4], size=fuseInnerSpant, p=pClarkFusePolyUp ); 
-            fusePolyLine( d=dPoly, off=[-2.5+fuseWidth/2,+5], size=fuseInnerSpant, p=pClarkFusePolyDown ); 
+            //fusePolyLine( d=dPoly, off=[-2.7+fuseWidth/2,-4], size=fuseInnerSpant, p=pClarkFusePolyUp ); 
+            //fusePolyLine( d=dPoly, off=[-2.5+fuseWidth/2,+5], size=fuseInnerSpant, p=pClarkFusePolyDown ); 
 
-            fusePolyLine( d=dPoly, off=[+2.7-fuseWidth/2,-4], size=fuseInnerSpant, p=pClarkFusePolyUp ); 
-            fusePolyLine( d=dPoly, off=[+2.5-fuseWidth/2,+5], size=fuseInnerSpant, p=pClarkFusePolyDown ); 
+            //fusePolyLine( d=dPoly, off=[+2.7-fuseWidth/2,-4], size=fuseInnerSpant, p=pClarkFusePolyUp ); 
+            //fusePolyLine( d=dPoly, off=[+2.5-fuseWidth/2,+5], size=fuseInnerSpant, p=pClarkFusePolyDown ); 
             
             //offsetPolyLine(  d=dPoly, size=605, off=0, p=pClarkY );
             //offsetPolyLine(  d=dPoly, size=605, off=-10, p=pClarkY );
+            color("Green")  fusePolyLine(  d=dPoly, off=[0,+2.7], size=fuseInnerSpant, p=pClarkY2 );
+            color("Red")    fusePolyLine(  d=dPoly, off=[-3,-2.5], size=fuseInnerSpant, p=pClarkY2 );
             
             }
-    fusePolyLineQ( d=dPoly, pt=pSD6060[31], off=[+2,+0.5] );
-    fusePolyLineQ( d=dPoly, pt=ptQRuder, off=[+0,+0] );
+    *fusePolyLineQ( d=dPoly, pt=pSD6060[31], off=[+2,+0.5] );
+    *fusePolyLineQ( d=dPoly, pt=ptQRuder, off=[+0,+0] );
 
 }
 
@@ -719,7 +771,7 @@ module wingConnectCut()
 {
     difference()
     {
-        wingSegment( [s[0],s[1]], [o[0],o[1]], do = 2 );
+        wingSegment( [s[0],s[1]], [o[0],o[1]] );
         translate([-tubeOffset1*s[1]+o[1].x,0,o[1].z-7]) mirror([0,1,0]) tubeConnectCut();
         translate([-tubeOffset2*s[1]+o[1].x-5,0,o[1].z-7]) mirror([0,1,0]) tubeConnectCut();
         translate([tubeOffset2-260,+8,zBoom]) 
