@@ -84,10 +84,10 @@ Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dSto
 *fuseCoverHook( false );
 *fuseCoverHookKnop();
 *fuseSegment(0);
-%fuseSegment(1);
+fuseSegment(1);
 *fuseSegment(2);
 *fuseSegment(3);
-translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku
+*translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku
 
 *fuseWingMount(dx=0);
 *mirror([0,0,1])fuseWingMount(dx=0);
@@ -505,12 +505,17 @@ wingMotorPlate();
 module wingMotorPlate()
 {
     translate([xoff,yoff,zBoom])
-    rotate([0,90,0])
-    difference(){
-        cylinder(d=33,h=4,center=true);
-        for( a=[45:90:360]) rotate([0,0,a]) translate( [0, 19/2, 0] ) cylinder( d=3.5, h=6, center=true );
-        cylinder( d=8, h=6, center=true );
-        }
+    {
+        rotate([0,-90,0])
+        difference(){
+            cylinder(d=33,h=55,center=false);
+            translate([0,0,4])cylinder(d=29,h=55,center=false);
+            for( a=[45:90:360]) rotate([0,0,a]) translate( [0, 19/2, -1] ) cylinder( d=3.5, h=8, center=false );
+            translate( [0, 0, -1] ) cylinder( d=8, h=6, center=false );
+            }
+        
+    }
+    translate([-tubeOffset1 ,tubeOffsety, zBoom]) cylinder(d=dBar1+6, h=33,center=true );
 }
 
 module wingMotor(d=0.5, holes=true)
@@ -520,10 +525,11 @@ module wingMotor(d=0.5, holes=true)
         difference(){
             union(){
                 translate([xoff,yoff,zBoom])
-                %hull(){
+                *hull(){
                     translate([ -60,0,0]) rotate([0,90,0])cylinder(d=33, h=60,center=false);
                     translate([ -xlen,0,0]) rotate([0,90,0])cylinder(d=8+2,h=30,center=true);
                     }
+                
 
                 %Slice(){
                     wingSolid();
@@ -532,7 +538,7 @@ module wingMotor(d=0.5, holes=true)
                 translate([-tubeOffset1 ,tubeOffsety, zBoom]) cylinder(d=dBar1+10, h=h0,center=true );
                 translate([-tubeOffset2 ,tubeOffsety, zBoom]) cylinder(d=dBar2+10, h=h0,center=true );
                 
-                translate([ xoff-160/2, yoff, zBoom]) rotate([0,90,0])cylinder(d=8+0.3+4,h=160,center=true);  //8mm version
+                translate([ xoff-120/2-tubeOffset1, yoff, zBoom]) rotate([0,90,0])cylinder(d=8+0.3+4,h=120,center=true);  //8mm version
                 }
             union(){
                 translate([xoff,yoff,zBoom])
