@@ -67,11 +67,11 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 
 //solid:
 *wingSolid();
-wingConnectCut();
+*wingConnectCut();
 Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
     union(){
         *wingSegment( [s[2],s[3]], [o[2],o[3]] );
-        wingSegment( [s[1],s[2]], [o[1],o[2]] );
+        *wingSegment( [s[1],s[2]], [o[1],o[2]] );
         }
 *lastsegment();   
 
@@ -233,16 +233,25 @@ fuseInnerSpant = 570;
 
 module fuseSolid( r=0 )
 {
-    hull()
-    {
-        *translate([-(fuseLength1 + r),0,0]) rotate([0,90,0]) cylinder(d=fuseMotorDia+2*r,h=5,center=true); //motor
-        translate([0,0,-0.15])  spant3d( d=0.3, offset=(o[0]+[0,0,r]),  size=s[0],  r=r, p=pSD6060 );
-        translate([fuseLength0,fuseY0,-0.15]) 
-            spant3d( d=0.3, offset=[0,0,fuseWidth/2+r],    size=fuseInnerSpant,   r=r, p=pClarkY /* pClarkFuse */ );
-        translate([fuseLength0,fuseY0,-0.15]) 
-            spant3d( d=0.3, offset=[0,0,-(fuseWidth/2+r)], size=fuseInnerSpant,   r=r, p=pClarkY /* pClarkFuse */ );
-        translate([0,0,-0.15])  spant3d( d=0.3, offset=-(o[0]+[0,0,r]), size=s[0],  r=r, p=pSD6060 );
-    }
+    difference(){
+        union(){
+            hull()
+            {
+                *translate([-(fuseLength1 + r),0,0]) rotate([0,90,0]) cylinder(d=fuseMotorDia+2*r,h=5,center=true); //motor
+                translate([0,0,-0.15])  spant3d( d=0.3, offset=(o[0]+[0,0,r]),  size=s[0],  r=r, p=pSD6060 );
+                translate([fuseLength0,fuseY0,-0.15]) 
+                    spant3d( d=0.3, offset=[0,0,fuseWidth/2+r],    size=fuseInnerSpant,   r=r, p=pClarkY /* pClarkFuse */ );
+                translate([fuseLength0,fuseY0,-0.15]) 
+                    spant3d( d=0.3, offset=[0,0,-(fuseWidth/2+r)], size=fuseInnerSpant,   r=r, p=pClarkY /* pClarkFuse */ );
+                translate([0,0,-0.15])  spant3d( d=0.3, offset=-(o[0]+[0,0,r]), size=s[0],  r=r, p=pSD6060 );
+            }
+        }
+        union(){
+            fuseFinger( df=25-r );  // here r has only the half effect 
+            mirror([0,0,1]) fuseFinger(  df=25-r  );
+        }
+     }
+    
 }
 
 module fuseCoverMask( x=0, y=100, r=90, h=400, type = 0 )
@@ -268,6 +277,16 @@ module fuseCoverMask( x=0, y=100, r=90, h=400, type = 0 )
             rotate([0,90,0]) cylinder( r=r, h=h );
             }
 
+}
+module fuseFinger( df=25 )
+{
+    translate([-30,-58,-45-1])
+    rotate([0,0,-30])
+    rotate([-80,0,0])
+    union(){
+    cylinder(d=df,h=50);
+    translate([0,0,50]) sphere( d=df );
+    }
 }
 
 module fuseSkin( fuseSkin = 5 )
@@ -313,6 +332,8 @@ module fuseSkin( fuseSkin = 5 )
              
              fuseWingMount(dx=0.2);
              mirror([0,0,1])fuseWingMount(dx=0.2);
+             
+             *fuseFinger();
 
             }
         }
@@ -523,9 +544,10 @@ module wingMotor(d=0.5, holes=true)
        
     }
     
-    color("Red") translate([xoff,yoff,zBoom]){
-        translate([15+12,0,0]) rotate([0,90,0]) cylinder(d=7*25.4,h=8,center=true);        
-        translate([12,0,0]) rotate([0,90,0]) cylinder(d=33,h=17,center=true);        
+    translate([xoff,yoff,zBoom]){
+        color("Red") translate([15+12,0,0]) rotate([0,90,0]) cylinder(d=7*25.4,h=8,center=true);   // propeller     
+        color("Red") translate([12,0,0]) rotate([0,90,0]) cylinder(d=33,h=17,center=true);   // motor
+        *%translate([0,-60,0]) cube( [300,1,500], center=true );
         }
     %color("Black") xTube( diameter=8, length=1000, tubeoffset=tubeOffset1 );
     %color("Black") xTube( diameter=6, length=400, tubeoffset=tubeOffset2 );    
