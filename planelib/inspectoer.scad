@@ -67,11 +67,11 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 
 //solid:
 *wingSolid();
-*wingConnectCut();
-*Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
+wingConnectCut();
+Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
     union(){
         *wingSegment( [s[2],s[3]], [o[2],o[3]] );
-        *wingSegment( [s[1],s[2]], [o[1],o[2]] );
+        wingSegment( [s[1],s[2]], [o[1],o[2]] );
         }
 *lastsegment();   
 
@@ -84,10 +84,10 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 *fuseCoverHook( false );
 *fuseCoverHookKnop();
 *fuseSegment(0);
-*fuseSegment(1);
+%fuseSegment(1);
 *fuseSegment(2);
 *fuseSegment(3);
-*translate([200,0,0])  color("Grey") cube([75,45,45],center=true); // akku
+translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku
 
 *fuseWingMount(dx=0);
 *mirror([0,0,1])fuseWingMount(dx=0);
@@ -466,35 +466,70 @@ module fuseCoverMid(d=0.1)
 
 
 
-Slice( ){
-    wingSolid();
-    #translate([-250,-125,o[1].z-5]) cube([250,250,10]);
-    }
-color("Black") xTube( diameter=8, length=1000, tubeoffset=tubeOffset1 );
-color("Black") xTube( diameter=6, length=400, tubeoffset=tubeOffset2 );    
+
+
+
+
+
+
+
+
+yoff=10+2;
+xoff=5;//10+17;
+xlen=200;
+
 wingMotor();
+wingMotorPlate();
+
+module wingMotorPlate()
+{
+    translate([xoff,yoff,zBoom])
+    rotate([0,90,0])
+    difference(){
+        cylinder(d=33,h=4,center=true);
+        for( a=[45:90:360]) rotate([0,0,a]) translate( [0, 19/2, 0] ) cylinder( d=3.5, h=6, center=true );
+        cylinder( d=8, h=6, center=true );
+        }
+}
 
 module wingMotor(d=0.5, holes=true)
 {
-    yoff=10;
-    xoff=10;
-    xlen=200;
-    translate([xoff,yoff,zBoom])
+    h0=10;    
     {
         difference(){
             union(){
-                hull(){
-                    translate([ 0,0,0]) rotate([0,90,0])cylinder(d=33,h=30,center=true);
+                translate([xoff,yoff,zBoom])
+                %hull(){
+                    translate([ -60,0,0]) rotate([0,90,0])cylinder(d=33, h=60,center=false);
                     translate([ -xlen,0,0]) rotate([0,90,0])cylinder(d=8+2,h=30,center=true);
                     }
-                color("Red") translate([15+25,0,0]) rotate([0,90,0]) cylinder(d=7*25.4,h=8,center=true);        
+
+                %Slice(){
+                    wingSolid();
+                    translate( [-240,-125, o[1].z-5] ) cube([250,250,h0]);
+                    }
+                translate([-tubeOffset1 ,tubeOffsety, zBoom]) cylinder(d=dBar1+10, h=h0,center=true );
+                translate([-tubeOffset2 ,tubeOffsety, zBoom]) cylinder(d=dBar2+10, h=h0,center=true );
+                
+                translate([ xoff-160/2, yoff, zBoom]) rotate([0,90,0])cylinder(d=8+0.3+4,h=160,center=true);  //8mm version
                 }
             union(){
-                #translate([ -200,0,0]) rotate([0,90,0])cylinder(d=dBar2,h=500,center=true);
+                translate([xoff,yoff,zBoom])
+                translate([ -200,0,0]) rotate([0,90,0])cylinder(d=8+0.3,h=500,center=true);  //8mm version
+                color("Black") xTube( diameter=8, length=1000, tubeoffset=tubeOffset1 );
+                color("Black") xTube( diameter=6, length=400, tubeoffset=tubeOffset2 );    
                 }
         }
-        
+       
     }
+    
+    color("Red") translate([xoff,yoff,zBoom]){
+        translate([15+12,0,0]) rotate([0,90,0]) cylinder(d=7*25.4,h=8,center=true);        
+        translate([12,0,0]) rotate([0,90,0]) cylinder(d=33,h=17,center=true);        
+        }
+    %color("Black") xTube( diameter=8, length=1000, tubeoffset=tubeOffset1 );
+    %color("Black") xTube( diameter=6, length=400, tubeoffset=tubeOffset2 );    
+
 }
 
 
