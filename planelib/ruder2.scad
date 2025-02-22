@@ -8,7 +8,7 @@ function RuderGetHeight( z, zStart, zStop, sStart, sStop, hBase ) = ( RuderGetSi
 function RuderGetPoint( z, zStart, zStop, sStart, sStop, ptBase ) = ( RuderGetSize( z, zStart, zStop, sStart, sStop) * ptBase );
 function RuderGetXOffset( z, zStart, zStop, oStart, oStop ) = ( ( oStart + (oStop-oStart)/(zStop-zStart)*(z-zStart) ) );
 
-module Ruder2( ptStart=[0,0,0], dStart=20, ptStop=[0,0,100], dStop=10, dSpace=1.0, rot=45, steps=5 )
+module Ruder2( ptStart=[0,0,0], dStart=20, ptStop=[0,0,100], dStop=10, dSpace=1.0, rot=45, steps=5, horn=false )
 {
     difference(){
         children();
@@ -17,6 +17,33 @@ module Ruder2( ptStart=[0,0,0], dStart=20, ptStop=[0,0,100], dStop=10, dSpace=1.
         cutterEnds( ptStart, dStart, dSpace, axis=false );
         cutterEnds( ptStop, dStop, dSpace, axis=false );
         }
+        
+    if( horn ) 
+        RuderHorn( dStart, pos = ptStart + [0,0,dSpace/2] );
+}
+
+module RuderHorn( dbase, daxsis=2.2, dwire=2, pos=[0,0,0], h=2, a=18 )
+{
+    b=a;
+    translate( pos ) 
+        difference(){
+            union(){
+                hull(){
+                    translate([0,0,0])  cylinder( d=dbase-2, h=h, center=false );
+                    translate([-a,0,0]) cylinder( d=2, h=h, center=false );
+                    }
+                hull(){
+                    translate([-a,0,0]) cube( [10,1,h], center=false );
+                    translate([0,b,0])  cylinder( d=6, h=h, center=false );
+                    }
+                }
+            union(){
+                translate([0,0,0])  cylinder( d=daxsis, h=h, center=false );
+                translate([0,b,0])  cylinder( d=dwire, h=h, center=false ); 
+                c = b-6/2-dbase/2; 
+                *translate([-c,c,0])  cylinder( d=c, h=h, center=false ); 
+            }
+    }
 }
 
 module cutterObjectAll( ptStart, dStart, ptStop, dStop, dSpace, rot=45, steps=5 )

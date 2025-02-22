@@ -68,11 +68,12 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 //solid:
 *wingSolid();
 *wingConnectCut();
-Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
+Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=5 )
     union(){
-        *wingSegment( [s[2],s[3]], [o[2],o[3]] );
-        *wingSegment( [s[1],s[2]], [o[1],o[2]] );
+        wingSegment( [s[2],s[3]], [o[2],o[3]] );
+        wingSegment( [s[1],s[2]], [o[1],o[2]] );
         }
+RuderHorn( d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
 *lastsegment();   
 
 *fuseSolid();  
@@ -84,7 +85,7 @@ Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dSto
 *fuseCoverHook( false );
 *fuseCoverHookKnop();
 *fuseSegment(0);
-fuseSegment(1);
+*fuseSegment(1);
 *fuseSegment(2);
 *fuseSegment(3);
 *translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku
@@ -134,6 +135,9 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
             wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
             wingElectric();
             mirror([0,0,1]) fuseWingMount(dx=0.2);
+             
+            #hull()wingMotor();
+
             }
     }
 }
@@ -500,22 +504,60 @@ xoff=5;//10+17;
 xlen=200;
 
 wingMotor();
-wingMotorPlate();
+*wingMotorPlate();
 
 module wingMotorPlate()
 {
-    translate([xoff,yoff,zBoom])
+    module mcylinder( diff=0 )
     {
-        rotate([0,-90,0])
-        difference(){
-            cylinder(d=33,h=55,center=false);
-            translate([0,0,4])cylinder(d=29,h=55,center=false);
-            for( a=[45:90:360]) rotate([0,0,a]) translate( [0, 19/2, -1] ) cylinder( d=3.5, h=8, center=false );
-            translate( [0, 0, -1] ) cylinder( d=8, h=6, center=false );
-            }
-        
+        rotate([0,-90,0]) 
+            translate([ 0,0,-3-diff ]) 
+                cylinder(d=33+diff, h=55,center=false);   // body cylinder
     }
-    translate([-tubeOffset1 ,tubeOffsety, zBoom]) cylinder(d=dBar1+6, h=33,center=true );
+    
+    module mholes()
+    {
+        rotate([0,-90,0]) 
+            for( a=[45:90:360]) 
+                rotate([0,0,a]) 
+                    translate( [0, 19/2, -4] ) 
+                        cylinder( d=3.5, h=60, center=false ); // motor screws
+        rotate([0,-90,0]) 
+            translate( [0, 0, -4] ) 
+                cylinder( d=8, h=6, center=false ); // motor center
+    }
+    
+    difference(){
+        union()
+        {
+            translate([xoff,yoff,zBoom])
+                difference(){
+                    mcylinder(0);
+                    mcylinder(-4);
+                    mholes();
+                            }
+            translate([xoff,yoff,zBoom])
+                intersection(){
+                    mcylinder(0);
+                    translate([-tubeOffset1-xoff ,tubeOffsety-yoff, 0]) 
+                        cylinder(d=dBar1+8, h=33,center=true ); // bar mount
+                    }
+        }
+        union()
+        {
+            translate([-tubeOffset1 ,tubeOffsety, zBoom]) 
+                        cube([dBar1+10,dBar1+10,10+0.2], center=true );
+            translate([ xoff-120/2-tubeOffset1, yoff, zBoom]) 
+                rotate([0,90,0])
+                    cylinder(d=8+0.3+4+0.5,h=140,center=true);  // mount for boom 8mm version
+                        
+            wingPolyLine( d=dPoly, pt=pSD6060[31], off=[+2,+0.5] );
+            wingElectric();
+            xTube( diameter=8, length=1000, tubeoffset=tubeOffset1 );
+        }
+    }
+
+
 }
 
 module wingMotor(d=0.5, holes=true)
@@ -524,13 +566,6 @@ module wingMotor(d=0.5, holes=true)
     {
         difference(){
             union(){
-                translate([xoff,yoff,zBoom])
-                *hull(){
-                    translate([ -60,0,0]) rotate([0,90,0])cylinder(d=33, h=60,center=false);
-                    translate([ -xlen,0,0]) rotate([0,90,0])cylinder(d=8+2,h=30,center=true);
-                    }
-                
-
                 %Slice(){
                     wingSolid();
                     translate( [-240,-125, o[1].z-5] ) cube([250,250,h0]);
@@ -550,13 +585,14 @@ module wingMotor(d=0.5, holes=true)
        
     }
     
-    translate([xoff,yoff,zBoom]){
+    *translate([xoff,yoff,zBoom]){
         color("Red") translate([15+12,0,0]) rotate([0,90,0]) cylinder(d=7*25.4,h=8,center=true);   // propeller     
         color("Red") translate([12,0,0]) rotate([0,90,0]) cylinder(d=33,h=17,center=true);   // motor
         *%translate([0,-60,0]) cube( [300,1,500], center=true );
         }
-    %color("Black") xTube( diameter=8, length=1000, tubeoffset=tubeOffset1 );
-    %color("Black") xTube( diameter=6, length=400, tubeoffset=tubeOffset2 );    
+    *color("Black") xTube( diameter=8, length=1000, tubeoffset=tubeOffset1 );
+    *color("Black") xTube( diameter=6, length=400, tubeoffset=tubeOffset2 );    
+    wingMotorPlate();
 
 }
 
