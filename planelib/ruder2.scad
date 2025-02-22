@@ -8,11 +8,11 @@ function RuderGetHeight( z, zStart, zStop, sStart, sStop, hBase ) = ( RuderGetSi
 function RuderGetPoint( z, zStart, zStop, sStart, sStop, ptBase ) = ( RuderGetSize( z, zStart, zStop, sStart, sStop) * ptBase );
 function RuderGetXOffset( z, zStart, zStop, oStart, oStop ) = ( ( oStart + (oStop-oStart)/(zStop-zStart)*(z-zStart) ) );
 
-module Ruder2( ptStart=[0,0,0], dStart=20, ptStop=[0,0,100], dStop=10, dSpace=1.0, rot=45, steps=5, horn=false )
+module Ruder2( ptStart=[0,0,0], dStart=20, ptStop=[0,0,100], dStop=10, dSpace=1.0, rot=45, steps=5, inverse=false, horn=false )
 {
     difference(){
         children();
-        cutterObjectAll(  ptStart, dStart, ptStop, dStop, dSpace, rot, steps );
+        cutterObjectAll(  ptStart, dStart, ptStop, dStop, dSpace, rot, steps, inverse );
         cutterInnerAxis( ptStart, ptStop );
         cutterEnds( ptStart, dStart, dSpace, axis=false );
         cutterEnds( ptStop, dStop, dSpace, axis=false );
@@ -46,14 +46,14 @@ module RuderHorn( dbase, daxsis=2.2, dwire=2, pos=[0,0,0], h=2, a=18 )
     }
 }
 
-module cutterObjectAll( ptStart, dStart, ptStop, dStop, dSpace, rot=45, steps=5 )
+module cutterObjectAll( ptStart, dStart, ptStop, dStop, dSpace, rot=45, steps=5, inverse=false )
 {
     ptDelta = (ptStop - ptStart) / steps; 
     dDelta = (dStop - dStart) / steps; 
     
     for( i=[0:steps-1] )
     {
-        dir = ((i%2)==0);
+        dir = inverse ? !((i%2)==0) : ((i%2)==0) ;
         cutterObjectSingle(  
             ptStart+i*ptDelta, dStart+i*dDelta, 
             ptStart+(i+1)*ptDelta, dStart+(i+1)*dDelta, 

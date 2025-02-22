@@ -13,8 +13,10 @@ sf= 30/500; // forward = 30mm pro 500mm  (550???)
 o = [   [+sf*0,   0, 50],     
         [+sf*100, 0, 150],
         [+sf*300, 0, 350],
-        [+sf*500, 0, 550] ]; //offset: x,y,z 
-s = [ 250, 234, 202, 170 ]; //size = factor   250 - (z-50)*
+        [+sf*500, 0, 550], 
+        [+sf*550, 0, 600] // gerade Randbogen als verlängerung? 
+        ]; //offset: x,y,z 
+s = [ 250, 234, 202, 170, 162 ]; //dsize is -32mm/200mm * dz
 
 tubeOffset1 = 40; 
 tubeOffset2 = tubeOffset1 + 80;
@@ -38,7 +40,9 @@ ptQRuder = [pSD6060[9].x, (pSD6060[9].y+pSD6060[51].y)/2];
 hQRuder = pSD6060[9].y - pSD6060[51].y;
 ptHRuder = [pNaca0012[5].x, (pNaca0012[5].y+pNaca0012[57].y)/2];
 hHRuder = pNaca0012[5].y - pNaca0012[57].y;
-dPoly = 2.2;
+dPoly = 2.2;    // diameter of the polygon tubes
+tailz0 = +8+4;  // z offset of the tail
+
 
 z1 = 280;
 p1 = RuderGetPoint( z1, zStart=o[0].z , zStop=o[3].z, s[0], s[3], ptQRuder );
@@ -70,11 +74,11 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 *wingConnectCut();
 Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=5 )
     union(){
-        wingSegment( [s[2],s[3]], [o[2],o[3]] );
-        wingSegment( [s[1],s[2]], [o[1],o[2]] );
+        *wingSegment( [s[3],s[4]], [o[3],o[4]] ); // was last segment
+        *wingSegment( [s[2],s[3]], [o[2],o[3]] );
+        *wingSegment( [s[1],s[2]], [o[1],o[2]] );
         }
-RuderHorn( d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
-*lastsegment();   
+*RuderHorn( d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
 
 *fuseSolid();  
 *fuseSkin(); 
@@ -95,8 +99,9 @@ RuderHorn( d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace
 
 *tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
 *tubeFlansh();
-
+*wingConnect();
 *wingConnectCut();
+
 // dBar contains 0.4 offset, reduce to 0.2
 *translate([-tubeOffset1*s[1]+o[1].x,0,o[1].z-7]) mirror([0,1,0]) tubeConnect( d1=dBar1, d2=dBar1+2-0.2, a=8, w=6 ); 
 *translate([-tubeOffset2*s[1]+o[1].x-5,0,o[1].z-7]) mirror([0,1,0]) tubeConnect( d1=dBar1, d2=dBar1+2-0.2, a=8, w=6 );
@@ -113,7 +118,6 @@ module wingSolid(r=0)
 {
     for(i=[0:len(o)-2]) 
         segment(s=[s[i],s[i+1]], o=[o[i],o[i+1]], r=0);
-    lastsegment();
 }
 
 module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
@@ -126,7 +130,7 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
             *wingSolid(r=0);
             }
         union(){    
-            #ServoDiff(sx=85,sy=4,sz=350-3.5,rot=5);
+            mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(350+17),rot=0);
 
             xTube( diameter=dBar1, length=lBar1, tubeoffset=tubeOffset1 );
             xTube( diameter=dBar2, length=lBar2, tubeoffset=tubeOffset2 );
@@ -137,27 +141,42 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
             mirror([0,0,1]) fuseWingMount(dx=0.2);
              
             #hull()wingMotor();
+            
+            wingConnect();
 
             }
     }
 }
 
-module lastsegment( r=0, h=10, ds=50, p=pSD6060 )
-{
-    i = len(o) - 1;
-    dx = s[i]*(100-ds)/100/2;
-    
+
+module wingConnect( d=0 )
+{   
     difference()
     {
-    hull()
+        intersection()
         {
-        spant3d( d=0.3, offset=o[i], s[i], r=r, p=p );  
-        spant3d( d=0.3, offset=o[i]+[-dx,0,h], s[i]*ds/100, r=r, p=p );
+            wingSolid(r=0);
+            translate( [-tubeOffset1-70+10,-20,o[2].z] ) cube([70,40,12], center= false ); //body
         }
-    wingPolyLine( d=dPoly, pt=pSD6060[31], off=[+2,+0.5] );
-    wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
-    }
+        
+        translate( [-tubeOffset1-17+10, 3, o[2].z] ) cube([17,0.7,12], center= false ); //cut
+        xTube( diameter=dBar1, length=lBar1, tubeoffset=tubeOffset1 );  //tube
+        mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(350+17),rot=0);   // servo
+        
+        translate( [-tubeOffset1+3, -3, o[2].z+(12-4)/2 ] ) 
+            cube([8,2.2,4.2], center= false );     // m2 nut
+        translate( [-tubeOffset1+6.5, -11, o[2].z+12/2 ] ) 
+            rotate([-90,0,0])
+                cylinder(d=2.3, h=30 ); //m2 screw
+        translate( [-tubeOffset1+6.5, +10, o[2].z+12/2 ] ) 
+            rotate([-90,0,0])
+                cylinder(d=4.2, h=10 ); //m2 head
 
+        #translate( [-tubeOffset1-16.3, 6, o[2].z+4 ] ) 
+            cylinder(d=1.5, h=10 ); // servo screw
+        #translate( [-tubeOffset1-16.3-27.5, 6, o[2].z+4 ] ) 
+            cylinder(d=1.5, h=10 ); // servo screw
+    }
 }
 
 module wingElectric()
@@ -181,24 +200,37 @@ module xTube( diameter=6, length=1200, tubeoffset=tubeOffset1 )
 
 
 
+
 module tail() 
 {
-    z0 = +8;
-    translate([-420, 8-3, 0])
-    Ruder2( ptStart=[-ph1.x+oh1,+ph1.y,zh1], dStart=dh1, ptStop=[-ph2.x+oh2,+ph2.y,zh2], dStop=dh2, dSpace=0.8, steps=5 )
-        heigtSolid(r=0);
-    translate([-420, 8+6, +zBoom+3]) mirror([0,0,1]) sideSolid();
-    translate([-420, 8+6, -zBoom-3]) sideSolid();
-    color( "BLACK") translate([-40, z0, +zBoom]) rotate([0,-90,0]) cylinder(d=6,h=450);
-    color( "BLACK") translate([-40, z0 ,-zBoom]) rotate([0,-90,0]) cylinder(d=6,h=450);
+    difference(){
+        translate([-420, tailz0-3, 0])
+        {
+            Ruder2( ptStart=[-ph1.x+oh1,+ph1.y,zh1], dStart=dh1, ptStop=[-ph2.x+oh2,+ph2.y,zh2], dStop=dh2, dSpace=0.8, steps=5, inverse=true )
+                heigtSolid(r=0);
+            RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 12.5]  ); // manual adjusted to servo
+        }
+        #ServoDiff(sx=460,sy=tailz0-1-2,sz=-3,rot=0);
+        }
     
-    translate([-420, z0, +zBoom]) tubeFlansh();
-    translate([-420, z0, -zBoom]) mirror([0,0,1])tubeFlansh();
+    mirror([0,0,1]) sideSolid();
+    sideSolid();
+    
+    tubeFlansh();
+    mirror([0,0,1])tubeFlansh();
+
+    
+    if($preview){
+    color( "BLACK") translate([-40, tailz0, +zBoom]) rotate([0,-90,0]) cylinder(d=8,h=450);
+    color( "BLACK") translate([-40, tailz0 ,-zBoom]) rotate([0,-90,0]) cylinder(d=8,h=450);
+    }
+
 }
 
 module sideSolid(r=0)
 {
     bardist = 130;
+    translate([-420, tailz0+6, -zBoom-3]) 
     difference(){
         hull(){
             translate([0,0,0]) rotate([90,0,0]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pSD6060 );
@@ -503,7 +535,7 @@ yoff=10+2;
 xoff=5;//10+17;
 xlen=200;
 
-wingMotor();
+*wingMotor();
 *wingMotorPlate();
 
 module wingMotorPlate()
@@ -778,9 +810,10 @@ module tubeConnect( d1=8, d2=6, h=10, a=8, w=3 )
         }
 }
 
-module tubeFlansh( d=6, a=0, h=60, w=3, r=0 )
+module tubeFlansh( d=8, a=0, h=60, w=3, r=0 )
 {
     offh = +(d+w)/2+1;
+    translate([-420, tailz0, +zBoom])
     translate([-20,0,0])
     difference(){
         union(){
@@ -795,13 +828,13 @@ module tubeFlansh( d=6, a=0, h=60, w=3, r=0 )
                 }
             hull()
                 {
-                translate([-5,offh,-1.5]) rotate([-90,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
-                translate([-45,offh,-1.5]) rotate([-90,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
+                translate([-2,offh,1]) rotate([-90,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
+                translate([-42,offh,1]) rotate([-90,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
                 }
             hull()
                 {
-                translate([-5,-3,-1.5]) rotate([180,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
-                translate([-45,-3,-1.5]) rotate([180,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
+                translate([-2,-3,-1.5]) rotate([180,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
+                translate([-42,-3,-1.5]) rotate([180,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
                 }
             }
         translate([-2*h,-a,0]) rotate([0,90,0]) cylinder(d=d+0.2, h=h*3, center = false );
