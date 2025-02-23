@@ -36,10 +36,10 @@ zBoom = 150; //130+13;
 wall = 0.5;
 ruderseg=2;
 ruderrot=tubeAng;
-ptQRuder = [pSD6060[9].x, (pSD6060[9].y+pSD6060[51].y)/2];
-hQRuder = pSD6060[9].y - pSD6060[51].y;
-ptHRuder = [pNaca0012[5].x, (pNaca0012[5].y+pNaca0012[57].y)/2];
-hHRuder = pNaca0012[5].y - pNaca0012[57].y;
+ptQRuder = [pSD6060[11].x, (pSD6060[11].y+pSD6060[47].y)/2];    //note: 9/51(25%) -> 12/48(37%) -> 11/47(32%)
+hQRuder = pSD6060[11].y - pSD6060[47].y;
+ptHRuder = [pNaca0012[7].x, (pNaca0012[7].y+pNaca0012[55].y)/2]; //note: 5/57(25%) -> 7/55(35%)
+hHRuder = pNaca0012[7].y - pNaca0012[55].y;
 dPoly = 2.2;    // diameter of the polygon tubes
 tailz0 = +8+4;  // z offset of the tail
 
@@ -76,7 +76,7 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
     union(){
         *wingSegment( [s[3],s[4]], [o[3],o[4]] ); // was last segment
         wingSegment( [s[2],s[3]], [o[2],o[3]] );
-        wingSegment( [s[1],s[2]], [o[1],o[2]] );
+        *wingSegment( [s[1],s[2]], [o[1],o[2]] );
         }
 *RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
 
@@ -159,6 +159,10 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
              
             #hull()wingMotor();
             
+            for(i=[1:len(o)-1])
+                translate(o[i] - s[i]*[ptQRuder.x , ptQRuder.y, 0] + [-30,2.5,0] ) 
+                    cylinder( d=dPoly, h=10, center=true ); // glue helper
+            
             wingConnect(d=0.2);
             
             // ruder glue helper is missing
@@ -237,6 +241,10 @@ module tail()
             RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 12.5]  ); // manual adjusted to servo
         }
         #ServoDiff(sx=460,sy=tailz0-1-2,sz=-3,rot=0);
+        
+        translate( [-420 - 120 * ptHRuder.x , tailz0-3 + 120 * ptHRuder.y, 0] + [-20,0,0] ) 
+            cylinder( d=dPoly, h=10, center=true ); // glue helper
+
         }
     
     mirror([0,0,1]) sideSolid();
