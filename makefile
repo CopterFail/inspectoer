@@ -1,7 +1,7 @@
 
-#OPENSCAD = openscad
-OPENSCAD = /home/dab/Applications/OpenSCAD-2025.01.20.ai22731-x86_64_a4c72bcfe5c1c89d509dc8e83641dfac.AppImage
-ARGS := --imgsize=1200,900 --camera=0,0,0,55,0,25,180 --viewall --autocenter
+OPENSCAD = openscad
+#OPENSCAD = /home/dab/Applications/OpenSCAD-2025.01.20.ai22731-x86_64_a4c72bcfe5c1c89d509dc8e83641dfac.AppImage
+ARGS := --backend=manifold --imgsize=1200,900 --camera=0,0,0,55,0,25,180 --viewall --autocenter
 
 SRC_DIR = scad_files
 BUILD_DIR = stl_files
@@ -15,7 +15,7 @@ all: $(STL_FILES) $(DOC_FILES)
 
 $(BUILD_DIR)/%.stl: $(SRC_DIR)/%.scad
 	@mkdir -p $(BUILD_DIR)
-	$(OPENSCAD) -o $@ $<
+	$(OPENSCAD) $(ARGS) -o $@ $<
 
 $(DOC_DIR)/%.png : $(DOC_DIR)/%.scad
 #%.png : $(DOC_DIR)/%.scad
