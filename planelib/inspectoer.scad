@@ -102,7 +102,7 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 *wingConnect();
 *wingElectric();
 *wingConnectCut();//????
-
+*HRuder();
 
 
 // dBar contains 0.4 offset, reduce to 0.2
@@ -233,19 +233,7 @@ module xTube( diameter=6, length=1200, tubeoffset=tubeOffset1 )
 
 module tail() 
 {
-    difference(){
-        translate([-420, tailz0-3, 0])
-        {
-            Ruder2( ptStart=[-ph1.x+oh1,+ph1.y,zh1], dStart=dh1, ptStop=[-ph2.x+oh2,+ph2.y,zh2], dStop=dh2, dSpace=0.8, steps=5, inverse=true )
-                heigtSolid(r=0);
-            RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 12.5]  ); // manual adjusted to servo
-        }
-        #ServoDiff(sx=460,sy=tailz0-1-2,sz=-3,rot=0);
-        
-        translate( [-420 - 120 * ptHRuder.x , tailz0-3 + 120 * ptHRuder.y, 0] + [-20,0,0] ) 
-            cylinder( d=dPoly, h=10, center=true ); // glue helper
-
-        }
+    HRuder();
     
     mirror([0,0,1]) sideSolid();
     sideSolid();
@@ -254,10 +242,10 @@ module tail()
     mirror([0,0,1])tubeFlansh();
 
     
-    if($preview){
+    //if($preview){
     color( "BLACK") translate([-40, tailz0, +zBoom]) rotate([0,-90,0]) cylinder(d=8,h=450);
     color( "BLACK") translate([-40, tailz0 ,-zBoom]) rotate([0,-90,0]) cylinder(d=8,h=450);
-    }
+    //}
 
 }
 
@@ -273,6 +261,25 @@ module sideSolid(r=0)
         translate([0,2-8,0]) mirror([0,0,1])tubeFlansh(r=0.2);
     }
 }
+
+module HRuder()
+{
+    difference(){
+        translate([-420, tailz0-3, 0])
+            {
+            Ruder2( ptStart=[-ph1.x+oh1,+ph1.y,zh1], dStart=dh1, 
+                    ptStop=[-ph2.x+oh2,+ph2.y,zh2], 
+                    dStop=dh2, dSpace=0.8, steps=5, inverse=true )
+                heigtSolid(r=0);
+            RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 12.5]  ); // manual adjusted to servo
+            }
+        #ServoDiff(sx=460,sy=tailz0-1-2,sz=-3,rot=0);
+        translate( [-420 - 120 * ptHRuder.x , tailz0-3 + 120 * ptHRuder.y, 0] + [-20,0,0] ) 
+            cylinder( d=dPoly, h=10, center=true ); // glue helper
+
+        }
+}
+
 
 module heigtSolid(r=0)
 {
