@@ -1,4 +1,4 @@
 
 include <../planelib/inspectoer.scad>
 
-wingConnect();
+mirror([0,0,1]) wingConnect();

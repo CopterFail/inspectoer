@@ -72,13 +72,13 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 //solid:
 *wingSolid();
 *wingConnectCut();
-Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=5 )
+*Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=5 )
     union(){
         *wingSegment( [s[3],s[4]], [o[3],o[4]] ); // was last segment
-        *wingSegment( [s[2],s[3]], [o[2],o[3]] );
-        *wingSegment( [s[1],s[2]], [o[1],o[2]] );
+        wingSegment( [s[2],s[3]], [o[2],o[3]] );
+        wingSegment( [s[1],s[2]], [o[1],o[2]] );
         }
-*RuderHorn( d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
+*RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
 
 *fuseSolid();  
 *fuseSkin(); 
@@ -100,7 +100,12 @@ Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dSto
 *tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
 *tubeFlansh();
 *wingConnect();
-*wingConnectCut();
+*wingElectric();
+*wingConnectCut();//????
+
+wingMotor();
+*wingMotorPlate();
+
 
 // dBar contains 0.4 offset, reduce to 0.2
 *translate([-tubeOffset1*s[1]+o[1].x,0,o[1].z-7]) mirror([0,1,0]) tubeConnect( d1=dBar1, d2=dBar1+2-0.2, a=8, w=6 ); 
@@ -111,7 +116,18 @@ Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dSto
 *tail();            
 
 *translate([0,-25,0]) color("Red") fuseSkid();
-*fuseMotor(d=0.5, holes=true);
+
+translate([-52,0,-20])
+rotate([0,90,90]){
+import("NacelleR.3mf");
+color("Green") translate([-270,0,0]) import("Motor mount LR.3mf");
+}
+
+
+
+
+
+
 
 
 module wingSolid(r=0)
@@ -142,7 +158,9 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
              
             #hull()wingMotor();
             
-            wingConnect();
+            wingConnect(d=0.2);
+            
+            // ruder glue helper is missing
 
             }
     }
@@ -156,15 +174,17 @@ module wingConnect( d=0 )
         intersection()
         {
             wingSolid(r=0);
-            translate( [-tubeOffset1-70+10,-20,o[2].z] ) cube([70,40,12], center= false ); //body
+            translate( [-tubeOffset1-70+10,-20,o[2].z] ) cube([70+d,40+d,12+d], center= false ); //body
         }
+       
+        if( d==0 ){
+        translate( [-tubeOffset1-17+10, 3, o[2].z] ) cube([17,1,12], center= false ); //cut
+        xTube( diameter=8, length=lBar1, tubeoffset=tubeOffset1 );  //tube 8mm,dBar1 will not work
+        mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(350+17),rot=0);   // servo, what about the electric connection?
         
-        translate( [-tubeOffset1-17+10, 3, o[2].z] ) cube([17,0.7,12], center= false ); //cut
-        xTube( diameter=dBar1, length=lBar1, tubeoffset=tubeOffset1 );  //tube
-        mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(350+17),rot=0);   // servo
-        
-        translate( [-tubeOffset1+3, -3, o[2].z+(12-4)/2 ] ) 
-            cube([8,2.2,4.2], center= false );     // m2 nut
+        translate( [-tubeOffset1+6.5, -12, o[2].z+12/2 ] ) 
+            rotate([-90,0,0])
+                cylinder(d=4.6, h=10,$fn=6 ); //m2 nut, 6 edge hole
         translate( [-tubeOffset1+6.5, -11, o[2].z+12/2 ] ) 
             rotate([-90,0,0])
                 cylinder(d=2.3, h=30 ); //m2 screw
@@ -172,24 +192,29 @@ module wingConnect( d=0 )
             rotate([-90,0,0])
                 cylinder(d=4.2, h=10 ); //m2 head
 
-        #translate( [-tubeOffset1-16.3, 6, o[2].z+4 ] ) 
+        translate( [-tubeOffset1-16.3, 6+0.5, o[2].z+4 ] ) 
+            cylinder(d=1.5, h=10 ); // servo screw, does not realy fit
+        translate( [-tubeOffset1-16.3-27.5, 6-0.5 , o[2].z+4 ] ) 
             cylinder(d=1.5, h=10 ); // servo screw
-        #translate( [-tubeOffset1-16.3-27.5, 6, o[2].z+4 ] ) 
-            cylinder(d=1.5, h=10 ); // servo screw
+            
+        wingElectric();
+        }
     }
 }
 
 module wingElectric()
 {
-    off = (tubeOffset1+tubeOffset2)/2;
-    l = 407-100;
-    translate([-off * s[0] + o[0].x,0,o[0].z-1])  // based of the 1st segment
-        rotate([0,tubeAng,0]) 
-            translate([0,4,l/2-10]) cube( [12,6,l],center=true);
-    mirror([0,0,1])    // for the fuse, we need both sides, so mirror and dublicate     
-    translate([-off * s[0] + o[0].x,0,o[0].z-1])  // based of the 1st segment
-        rotate([0,tubeAng,0]) 
-            translate([0,4,l/2-10]) cube( [12,6,l],center=true);
+    off1 = (tubeOffset1+tubeOffset2)/2;
+    l1 = 770;
+    translate([-off1 + o[0].x-8,-2-2,0])  // based of the 1st segment
+        translate([0,4,0]) cube( [12,6,l1],center=true);
+    l2= 300;
+    translate( [ o[0].x-8, 5,0 ] )
+        hull(){
+            translate([-2,-2,0]) cylinder(d=4,h=l2,center=true );
+            translate([-18,-3,0]) cylinder(d=4,h=l2,center=true );
+            translate([-18,+3,0]) cylinder(d=4,h=l2,center=true );
+        }
 }
 
 module xTube( diameter=6, length=1200, tubeoffset=tubeOffset1 )
@@ -402,16 +427,16 @@ module fuseWingMount( pos=0, dx=0 )
                 hull()
                     {
                     translate([tubeOffset1,0,0]) cylinder( d = 19+dx, h = h1 );
-                    translate([tubeOffset1+0,-w1/2,0]) cube( [19,w1,h1]);
+                    translate([tubeOffset1+0,-w1/2-4,0]) cube( [19,w1,h1]);
                     }
 
                 translate([tubeOffset2,0,0]) cylinder( d = dBar2+2+2+dx, h = o[0].z+h1/2 );
                 hull()
                     {
                     translate([tubeOffset2,0,0]) cylinder( d = 16+dx, h = h1 );
-                    translate([tubeOffset2-16,-w1/2,0]) cube( [16,w1,h1]);
+                    translate([tubeOffset2-16,-w1/2-4,0]) cube( [16,w1,h1]);
                     }
-                translate([tubeOffset1,-w1/2,0]) cube( [tubeOffset2-tubeOffset1,w1,h1]);
+                translate([tubeOffset1,-w1/2-4,0]) cube( [tubeOffset2-tubeOffset1,w1,h1]);
                 }
             union()
                 {
@@ -534,10 +559,6 @@ module fuseCoverMid(d=0.1)
 yoff=10+2;
 xoff=5;//10+17;
 xlen=200;
-
-*wingMotor();
-*wingMotorPlate();
-
 module wingMotorPlate()
 {
     module mcylinder( diff=0 )

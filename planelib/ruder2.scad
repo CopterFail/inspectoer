@@ -19,7 +19,7 @@ module Ruder2( ptStart=[0,0,0], dStart=20, ptStop=[0,0,100], dStop=10, dSpace=1.
         }
         
     if( horn ) 
-        RuderHorn( dStart, pos = ptStart + [0,0,dSpace/2] );
+        RuderHorn( dbase=dStart, pos = ptStart + [0,0,dSpace/2] );
 }
 
 module RuderHorn( dbase, daxsis=2.2, dwire=2, pos=[0,0,0], h=2, a=18 )
@@ -40,6 +40,7 @@ module RuderHorn( dbase, daxsis=2.2, dwire=2, pos=[0,0,0], h=2, a=18 )
             union(){
                 translate([0,0,0])  cylinder( d=daxsis, h=h, center=false );
                 translate([0,b,0])  cylinder( d=dwire, h=h, center=false ); 
+                //translate([-a,0,0])  cylinder( d=dwire, h=h, center=false ); 
                 c = b-6/2-dbase/2; 
                 *translate([-c,c,0])  cylinder( d=c, h=h, center=false ); 
             }

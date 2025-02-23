@@ -13,12 +13,12 @@ module servo_sg90()
             cube( servo_size_2, center=true );
         // servoarm...
         translate([-5,6,17])
-        resize([60,12,6])
+        resize([60,12,6+1])
         sphere( d=1 );
 }
     
 
-module ServoDiff( i=ruderseg, sx=100, sy=7, sz=348, rot=0 )
+module ServoDiff( sx=100, sy=7, sz=348, rot=0 )
 { 
     //sx = s[i]*(tubeOffset1+tubeOffset2)/2;  // between the tubes
     //sz = (o[i+1].z-o[i].z)/2;   // in the middle of the segment
