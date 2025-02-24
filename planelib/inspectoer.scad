@@ -7,6 +7,7 @@ include <skin.scad> // skin funktionen
 include <wing.scad> // spant , segment funktionen, brauchen o[] und s[]
 include <polyline.scad> 
 include <servo.scad>
+include <screw.scad>
 include <ruder2.scad>   
 
 sf= 30/500; // forward = 30mm pro 500mm  (550???)
@@ -14,9 +15,9 @@ o = [   [+sf*0,   0, 50],
         [+sf*100, 0, 150],
         [+sf*300, 0, 350],
         [+sf*500, 0, 550], 
-        [+sf*550, 0, 600] // gerade Randbogen als verlängerung? 
+        [+sf*530, 0, 580] // gerade Randbogen als verlängerung? 
         ]; //offset: x,y,z 
-s = [ 250, 234, 202, 170, 162 ]; //dsize is -32mm/200mm * dz
+s = [ 250, 234, 202, 170, 170-32/200*30 ]; //dsize is -32mm/200mm * dz
 
 tubeOffset1 = 40; 
 tubeOffset2 = tubeOffset1 + 80;
@@ -115,7 +116,7 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 
 *translate([0,-25,0]) color("Red") fuseSkid();
 
-/*
+/**/
 wingMotor();
 *wingMotorPlate();
 translate([-52,0,-20])
@@ -123,7 +124,7 @@ rotate([0,90,90]){
 import("NacelleR.3mf");
 color("Green") translate([-270,0,0]) import("Motor mount LR.3mf");
 }
-*/
+/**/
 
 
 
@@ -187,20 +188,14 @@ module wingConnect( d=0 )
         xTube( diameter=8, length=lBar1, tubeoffset=tubeOffset1 );  //tube 8mm,dBar1 will not work
         mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(350+17),rot=0);   // servo, what about the electric connection?
         
-        translate( [-tubeOffset1+6.5, -12, o[2].z+12/2 ] ) 
+        translate( [-tubeOffset1+6.5, +3, o[2].z+12/2 ] ) 
             rotate([-90,0,0])
-                cylinder(d=4.6, h=10,$fn=6 ); //m2 nut, 6 edge hole
-        translate( [-tubeOffset1+6.5, -11, o[2].z+12/2 ] ) 
-            rotate([-90,0,0])
-                cylinder(d=2.3, h=30 ); //m2 screw
-        translate( [-tubeOffset1+6.5, +10, o[2].z+12/2 ] ) 
-            rotate([-90,0,0])
-                cylinder(d=4.2, h=10 ); //m2 head
-
+                ScrewAndHexNut( m=2 );
+        
         translate( [-tubeOffset1-16.3, 6+0.5, o[2].z+4 ] ) 
-            cylinder(d=1.5, h=10 ); // servo screw, does not realy fit
+            ScrewServo( dist=10 );
         translate( [-tubeOffset1-16.3-27.5, 6-0.5 , o[2].z+4 ] ) 
-            cylinder(d=1.5, h=10 ); // servo screw
+            ScrewServo( dist=10 );
             
         wingElectric();
         }
@@ -587,13 +582,7 @@ module wingMotorPlate()
     module mholes()
     {
         rotate([0,-90,0]) 
-            for( a=[45:90:360]) 
-                rotate([0,0,a]) 
-                    translate( [0, 19/2, -4] ) 
-                        cylinder( d=3.5, h=60, center=false ); // motor screws
-        rotate([0,-90,0]) 
-            translate( [0, 0, -4] ) 
-                cylinder( d=8, h=6, center=false ); // motor center
+            ScrewMotorPlate(screwlen=60);
     }
     
     difference(){
@@ -873,6 +862,12 @@ module tubeFlansh( d=8, a=0, h=60, w=3, r=0 )
                 translate([-2,-3,-1.5]) rotate([180,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
                 translate([-42,-3,-1.5]) rotate([180,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
                 }
+            hull()
+                {
+                translate([-15,-5,-1.5]) rotate([180,0,0]) cylinder(d=20, h=2, center = false );
+                translate([-50,-5,-1.5]) rotate([180,0,0]) cylinder(d=20, h=2, center = false );
+                }
+            
             }
         translate([-2*h,-a,0]) rotate([0,90,0]) cylinder(d=d+0.2, h=h*3, center = false );
         translate([8,-a,0]) rotate([0,90,0]) cylinder(d1=d+0.2,d2=d+1, h=12, center = false );
