@@ -116,7 +116,7 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 
 *translate([0,-25,0]) color("Red") fuseSkid();
 
-/**/
+/*
 wingMotor();
 *wingMotorPlate();
 translate([-52,0,-20])
@@ -124,7 +124,7 @@ rotate([0,90,90]){
 import("NacelleR.3mf");
 color("Green") translate([-270,0,0]) import("Motor mount LR.3mf");
 }
-/**/
+*/
 
 
 

@@ -1,0 +1,41 @@
+Geometries in cache: 52
+Geometry cache size in bytes: 1123648
+CGAL Polyhedrons in cache: 4
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:00.576
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      2
+   Vertices:     1158
+   Facets:       2320
+  adding: body_0.stl (deflated 89%)
+  adding: body_1.stl (deflated 87%)
+  adding: body_2.stl (deflated 91%)
+  adding: body_3.stl (deflated 90%)
+  adding: hood_front.stl (deflated 91%)
+  adding: hood_mid.stl (deflated 91%)
+  adding: hook_1.stl (deflated 94%)
+  adding: hook_2.stl (deflated 94%)
+  adding: hook_knop.stl (deflated 93%)
+  adding: hruder_0.stl (deflated 90%)
+  adding: hruder_1.stl (deflated 92%)
+  adding: hruder_connect_left.stl (deflated 88%)
+  adding: hruder_connect_right.stl (deflated 88%)
+  adding: motor.stl (deflated 94%)
+  adding: sruder_left.stl (deflated 87%)
+  adding: sruder_right.stl (deflated 87%)
+  adding: tube_connect_6_6_left.stl (deflated 89%)
+  adding: tube_connect_6_6_right.stl (deflated 89%)
+  adding: tube_connect_8_6_left.stl (deflated 89%)
+  adding: tube_connect_8_6_right.stl (deflated 89%)
+  adding: wing_0_left.stl (deflated 88%)
+  adding: wing_0_right.stl (deflated 88%)
+  adding: wing_1_left.stl (deflated 87%)
+  adding: wing_1_right.stl (deflated 87%)
+  adding: wing_2_left.stl (deflated 88%)
+  adding: wing_2_right.stl (deflated 88%)
+  adding: wing_3_left.stl (deflated 89%)
+  adding: wing_3_right.stl (deflated 89%)
+  adding: wing_connect_left.stl (deflated 89%)
+  adding: wing_connect_right.stl (deflated 89%)
+  adding: wing_mount_0.stl (deflated 93%)

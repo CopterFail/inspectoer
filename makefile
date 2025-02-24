@@ -9,24 +9,26 @@ ARGS := --backend=manifold --imgsize=4000,3000 --camera=141.80,32.00,175.50,-53.
 SRC_DIR = scad_files
 BUILD_DIR = stl_files
 DOC_DIR = doc_files
+LOG = logfile.txt
 
 SCAD_FILES = $(wildcard $(SRC_DIR)/*.scad)
 STL_FILES = $(patsubst $(SRC_DIR)/%.scad,$(BUILD_DIR)/%.stl,$(SCAD_FILES))
 DOC_FILES = $(patsubst $(DOC_DIR)/%.scad,$(DOC_DIR)/%.png,$(wildcard $(DOC_DIR)/*.scad))
 
-all: $(STL_FILES) $(DOC_FILES)
+all: $(STL_FILES) $(DOC_FILES) inspectoer.zip
 
 $(BUILD_DIR)/%.stl: $(SRC_DIR)/%.scad
 	@mkdir -p $(BUILD_DIR)
-	$(OPENSCAD) $(ARGS) -o $@ $<
+	$(OPENSCAD) $(ARGS) -o $@ $<  > $(LOG) 2>&1
 
 $(DOC_DIR)/%.png : $(DOC_DIR)/%.scad
-	$(OPENSCAD) $(ARGS) -o $@ $<
-#	$(OPENSCAD) $(ARGS) -o $@ $< > $(LOG) 2>&1
+#	$(OPENSCAD) $(ARGS) -o $@ $<
+	$(OPENSCAD) $(ARGS) -o $@ $< >> $(LOG) 2>&1
 
 inspectoer.zip: $(STL_FILES)
 	#echo($(STL_FILES))
-	zip -j $@ $^
+	rm inspectoer.zip
+	zip -j $@ $^ >> $(LOG) 2>&1
 
 clean:
 	rm -rf $(BUILD_DIR)
