@@ -1,4 +1,4 @@
 
 include <../planelib/inspectoer.scad>
 
-fuseCoverMid(d=0);
+mirror([0,0,1]) wingMotor();

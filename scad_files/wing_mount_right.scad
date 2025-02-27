@@ -1,4 +1,5 @@
 
 include <../planelib/inspectoer.scad>
 
-fuseMotor(d=0.5, holes=true);
+mirror([0,0,1])
+fuseWingMount(pos=0);

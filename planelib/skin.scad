@@ -91,7 +91,7 @@ module radialSlice( sh=100, sx=100, org=[0,0,0], rot=[0,0,0], mode=0, center=tru
 
 module radialSliceHelper( d, sh, mode=0, center=true )
 {
-    gap = 0.3;  // 0.5 was too loose
+    gap = 0.1;  // 0.5 was too loose
     
     if( mode==0 ){
         cylinder( d=d, h=sh, center=center );
@@ -128,6 +128,21 @@ module radialSliceHelper( d, sh, mode=0, center=true )
                                 cube([cx+gap*2,cy+gap,d],center=false);
                 }
             }
+        }
+}
+
+*rcube( [10,20,30], center=true, round=1 );
+module rcube( size, center=true, round=1 )
+{
+    translate( center==true ? [0,0,0] : size/2 )
+        hull() for (x=[1,-1],y=[1,-1],z=[1,-1]) translate([ x*size.x/2-round, y*size.y/2-round, z*size.z/2-round]) sphere( r=round );
+}
+
+module rcylinder( d=10, h=20, center=true, round=2 )
+{
+    minkowski(){
+        cylinder( d=d-2*round, h=h-2*round, center=center);
+        sphere( r=round );
         }
 }
 
