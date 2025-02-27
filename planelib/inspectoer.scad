@@ -105,6 +105,7 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 *wingConnect();
 *wingElectric();
 *HRuder();
+*sideSolid();
 
 
 // dBar contains 0.4 offset, reduce to 0.2
@@ -243,13 +244,13 @@ module tail()
 module sideSolid(r=0)
 {
     bardist = 130;
-    translate([-420, tailz0+6, -zBoom-3]) 
     difference(){
+        translate([-420, tailz0+6, -zBoom-3]) 
         hull(){
             translate([0,0,0]) rotate([90,0,0]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pSD6060 );
             translate([0,zBoom,0]) rotate([90,0,0]) spant3d( d=0.3, offset=[10,0,0], size=58, r=r, p=pSD6060 );
             }
-        translate([0,2-8,0]) mirror([0,0,1])tubeFlansh(r=0.2);
+        #translate([0,-1+0.2,0]) mirror([0,0,1])tubeFlansh(r=0.2);
     }
 }
 
