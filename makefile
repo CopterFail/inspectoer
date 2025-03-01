@@ -13,7 +13,7 @@ LOG = logfile.txt
 
 SCAD_FILES = $(wildcard $(SRC_DIR)/*.scad)
 STL_FILES = $(patsubst $(SRC_DIR)/%.scad,$(BUILD_DIR)/%.stl,$(SCAD_FILES))
-DOC_FILES = $(patsubst $(DOC_DIR)/%.scad,$(DOC_DIR)/%.png,$(wildcard $(DOC_DIR)/*.scad))
+DOC_FILES = $(patsubst $(DOC_DIR)/%.scad,$(DOC_DIR)/%.png,$(wildcard $(DOC_DIR)/*.scad)) # $(patsubst $(DOC_DIR)/%.scad,$(DOC_DIR)/%.stl,$(wildcard $(DOC_DIR)/*.scad))
 
 all: $(STL_FILES) $(DOC_FILES) inspectoer.zip
 
@@ -22,13 +22,14 @@ $(BUILD_DIR)/%.stl: $(SRC_DIR)/%.scad
 	$(OPENSCAD) $(ARGS) -o $@ $<  > $(LOG) 2>&1
 
 $(DOC_DIR)/%.png : $(DOC_DIR)/%.scad
-#	$(OPENSCAD) $(ARGS) -o $@ $<
 	$(OPENSCAD) $(ARGS) -o $@ $< >> $(LOG) 2>&1
 
-inspectoer.zip: $(STL_FILES)
-	#echo($(STL_FILES))
-	rm inspectoer.zip
-	zip -j $@ $^ >> $(LOG) 2>&1
+$(DOC_DIR)/%.stl : $(DOC_DIR)/%.scad
+	$(OPENSCAD) $(ARGS) -o $@ $< >> $(LOG) 2>&1
+
+inspectoer.zip: $(STL_FILES) $(DOC_FILES)
+	rm -f inspectoer.zip
+	zip -j $@ $< >> $(LOG) 2>&1
 
 clean:
 	rm -rf $(BUILD_DIR)

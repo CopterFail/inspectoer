@@ -1,35 +1,35 @@
-Geometries in cache: 52
-Geometry cache size in bytes: 1123648
-CGAL Polyhedrons in cache: 4
+Geometries in cache: 62
+Geometry cache size in bytes: 1220448
+CGAL Polyhedrons in cache: 8
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.576
+Total rendering time: 0:00:00.634
    Top level object is a 3D object (manifold):
    Status:     NoError
-   Genus:      2
-   Vertices:     1158
-   Facets:       2320
+   Genus:      0
+   Vertices:      228
+   Facets:        452
   adding: body_0.stl (deflated 89%)
   adding: body_1.stl (deflated 87%)
   adding: body_2.stl (deflated 91%)
   adding: body_3.stl (deflated 90%)
+  adding: body_skid.stl (deflated 91%)
+  adding: dupont.stl (deflated 94%)
   adding: hood_front.stl (deflated 91%)
-  adding: hood_mid.stl (deflated 91%)
   adding: hook_1.stl (deflated 94%)
   adding: hook_2.stl (deflated 94%)
   adding: hook_knop.stl (deflated 93%)
-  adding: hruder_0.stl (deflated 90%)
-  adding: hruder_1.stl (deflated 92%)
+  adding: hruder_0.stl (deflated 91%)
+  adding: hruder_1.stl (deflated 93%)
   adding: hruder_connect_left.stl (deflated 88%)
   adding: hruder_connect_right.stl (deflated 88%)
-  adding: motor.stl (deflated 94%)
-  adding: sruder_left.stl (deflated 87%)
-  adding: sruder_right.stl (deflated 87%)
-  adding: tube_connect_6_6_left.stl (deflated 89%)
-  adding: tube_connect_6_6_right.stl (deflated 89%)
-  adding: tube_connect_8_6_left.stl (deflated 89%)
-  adding: tube_connect_8_6_right.stl (deflated 89%)
-  adding: wing_0_left.stl (deflated 88%)
-  adding: wing_0_right.stl (deflated 88%)
+  adding: motor_mount_left.stl (deflated 92%)
+  adding: motor_mount_right.stl (deflated 92%)
+  adding: motor_plate_left.stl (deflated 89%)
+  adding: motor_plate_right.stl (deflated 89%)
+  adding: sruder_left.stl (deflated 89%)
+  adding: sruder_right.stl (deflated 89%)
+  adding: wing_0_left.stl (deflated 89%)
+  adding: wing_0_right.stl (deflated 89%)
   adding: wing_1_left.stl (deflated 87%)
   adding: wing_1_right.stl (deflated 87%)
   adding: wing_2_left.stl (deflated 88%)
@@ -38,4 +38,108 @@ Total rendering time: 0:00:00.576
   adding: wing_3_right.stl (deflated 89%)
   adding: wing_connect_left.stl (deflated 89%)
   adding: wing_connect_right.stl (deflated 89%)
-  adding: wing_mount_0.stl (deflated 93%)
+  adding: wing_mount_left.stl (deflated 93%)
+  adding: wing_mount_right.stl (deflated 93%)
+  adding: body_0.stl (deflated 89%)
+WARNING: Ignoring unknown module 'wingConnectCut' in file ../planelib/document.scad, line 18
+WARNING: Ignoring unknown module 'wingConnectCut' in file ../planelib/document.scad, line 30
+Geometries in cache: 1116
+Geometry cache size in bytes: 54671920
+CGAL Polyhedrons in cache: 256
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:45.076
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      89
+   Vertices:    42460
+   Facets:      85272
+Geometries in cache: 600
+Geometry cache size in bytes: 45846256
+CGAL Polyhedrons in cache: 120
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:33.482
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      29
+   Vertices:    15945
+   Facets:      32002
+WARNING: Ignoring unknown module 'wingConnectCut' in file ../planelib/document.scad, line 85
+Geometries in cache: 1026
+Geometry cache size in bytes: 52255104
+CGAL Polyhedrons in cache: 229
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:40.601
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      41
+   Vertices:    27613
+   Facets:      55386
+  adding: body_0.stl (deflated 89%)
+Compiling design (CSG Products normalization)...
+WARNING: Normalized tree is growing past 100000 elements. Aborting normalization.
+
+WARNING: CSG normalization resulted in an empty tree
+Compiling highlights (3 CSG Trees)...
+Geometries in cache: 949
+Geometry cache size in bytes: 52326432
+CGAL Polyhedrons in cache: 1
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:27.083
+Compiling design (CSG Products normalization)...
+WARNING: Normalized tree is growing past 100000 elements. Aborting normalization.
+
+WARNING: CSG normalization resulted in an empty tree
+Compiling highlights (1 CSG Trees)...
+Geometries in cache: 948
+Geometry cache size in bytes: 52317856
+CGAL Polyhedrons in cache: 1
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:26.400
+Compiling design (CSG Products normalization)...
+WARNING: Normalized tree is growing past 100000 elements. Aborting normalization.
+
+WARNING: CSG normalization resulted in an empty tree
+Compiling highlights (2 CSG Trees)...
+Geometries in cache: 948
+Geometry cache size in bytes: 52317856
+CGAL Polyhedrons in cache: 1
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:26.599
+  adding: body_0.stl (deflated 89%)
+Compiling design (CSG Products normalization)...
+WARNING: Normalized tree is growing past 100000 elements. Aborting normalization.
+
+WARNING: CSG normalization resulted in an empty tree
+Compiling highlights (2 CSG Trees)...
+Geometries in cache: 946
+Geometry cache size in bytes: 52300704
+CGAL Polyhedrons in cache: 1
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:25.930
+Compiling design (CSG Products normalization)...
+Normalized CSG tree has 1984 elements
+Geometries in cache: 537
+Geometry cache size in bytes: 44729456
+CGAL Polyhedrons in cache: 0
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:52.610
+Compiling design (CSG Products normalization)...
+Normalized CSG tree has 3949 elements
+Compiling highlights (1 CSG Trees)...
+Geometries in cache: 948
+Geometry cache size in bytes: 52317856
+CGAL Polyhedrons in cache: 1
+CGAL cache size in bytes: 0
+Total rendering time: 0:01:06.936
+  adding: body_0.stl (deflated 89%)
+Compiling design (CSG Products normalization)...
+WARNING: Normalized tree is growing past 100000 elements. Aborting normalization.
+
+WARNING: CSG normalization resulted in an empty tree
+Compiling highlights (2 CSG Trees)...
+Geometries in cache: 946
+Geometry cache size in bytes: 52300704
+CGAL Polyhedrons in cache: 1
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:25.955
+  adding: body_0.stl (deflated 89%)

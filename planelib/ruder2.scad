@@ -1,7 +1,8 @@
 // Ruder new version, test with small cut, printable?
 
-*cutterObjectAll( ptStart=[0,0,0], dStart=20, ptStop=[-20,0,100], dStop=10, dSpace=1.0 );
+*cutterObjectAll( ptStart=[0,0,0], dStart=20, ptStop=[-20,0,100], dStop=10, dSpace=1.0, rot=45, steps=5, inverse=false );
 *cutterMask( ptStart=[0,0,0], dStart=20+2*1, ptStop=[-20,0,100], dStop=10+2*1 );
+*cutterEnds( pt=[0,0,0], d=20+2*1, dSpace=1.0, axis=false );
 
 function RuderGetSize( z, zStart, zStop, sStart, sStop ) = ( ( sStart + (sStop-sStart)/(zStop-zStart)*(z-zStart) ) );
 function RuderGetHeight( z, zStart, zStop, sStart, sStop, hBase ) = ( RuderGetSize( z, zStart, zStop, sStart, sStop) * hBase );
@@ -22,19 +23,25 @@ module Ruder2( ptStart=[0,0,0], dStart=20, ptStop=[0,0,100], dStop=10, dSpace=1.
         RuderHorn( dbase=dStart, pos = ptStart + [0,0,dSpace/2] );
 }
 
-module RuderHorn( dbase, daxsis=2.2, dwire=2, pos=[0,0,0], h=2, a=18 )
+module RuderHornCut(dbase, daxsis=2.2, dwire=2, pos=[0,0,0], h=2, a=18, diff=0)
+{
+    //scale([1,1,2])
+    cutterEnds( pos, d=dbase, dSpace=0.2, axis=true );
+}
+
+module RuderHorn( dbase, daxsis=2.2, dwire=2, pos=[0,0,0], h=2, a=18, diff=0 )
 {
     b=a;
     translate( pos ) 
         difference(){
             union(){
                 hull(){
-                    translate([0,0,0])  cylinder( d=dbase-2, h=h, center=false );
-                    translate([-a,0,0]) cylinder( d=2, h=h, center=false );
+                    translate([0,0,0])  cylinder( d=dbase-2+diff, h=h, center=false );
+                    translate([-a,0,0]) cylinder( d=2+diff, h=h, center=false );
                     }
                 hull(){
                     translate([-a,0,0]) cube( [10,1,h], center=false );
-                    translate([0,b,0])  cylinder( d=6, h=h, center=false );
+                    translate([0,b,0])  cylinder( d=6+diff, h=h, center=false );
                     }
                 }
             union(){
@@ -74,7 +81,7 @@ module cutterObjectSingle( ptStart, dStart, ptStop, dStop, dSpace, dir=false, ro
                 cutterMask( ptStart, dStart+2*dSpace, ptStop, dStop+2*dSpace, dir, rot=+rot );
                 cutterMask( ptStart, dStart+2*dSpace, ptStop, dStop+2*dSpace, dir, rot=-rot );
             }
-            cutterSpacer( ptStart, dStart+2*dSpace, dSpace );
+            cutterSpacer( ptStart, dStart+2*dSpace, dSpace ); // find a way to not call cutterSpacer at the ends?
             cutterSpacer( ptStop, dStop+2*dSpace, dSpace ); // this partly dublicate
         }
         union()
