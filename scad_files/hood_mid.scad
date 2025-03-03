@@ -1,4 +1,4 @@
 
 include <../planelib/inspectoer.scad>
 
-fuseSkid( r=0 );
+fuseCoverMid(d=0);
