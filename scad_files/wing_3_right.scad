@@ -1,7 +1,8 @@
 
 include <../planelib/inspectoer.scad>
 
-difference(){
+wingBow();
+*difference(){
 Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=5 )
     union(){
         wingSegment( [s[3],s[4]], [o[3],o[4]] ); // was last segment
@@ -11,3 +12,4 @@ Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dSto
         }
 RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0], diff=0.2  ); /*dSpace is 0.8*/         
 }
+

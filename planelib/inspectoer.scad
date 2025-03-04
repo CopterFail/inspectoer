@@ -91,13 +91,15 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
     Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=5 )
         union(){
             *wingSegment( [s[3],s[4]], [o[3],o[4]] ); // was last segment
-            *wingSegment( [s[2],s[3]], [o[2],o[3]] );
-            wingSegment( [s[1],s[2]], [o[1],o[2]] );
-            wingSegment( [s[0],s[1]], [o[0],o[1]] );
+            wingSegment( [s[2],s[3]], [o[2],o[3]] );
+            *wingSegment( [s[1],s[2]], [o[1],o[2]] );
+            *wingSegment( [s[0],s[1]], [o[0],o[1]] );
             }
     RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0], diff=0.2  ); /*dSpace is 0.8*/         
 }
 *RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
+*wingBow();
+
 
 *fuseSolid();  
 *fuseSkin(); 
@@ -136,14 +138,13 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 *xTube( diameter=dBar1, length=lBar1, tubeoffset=tubeOffset1 );
 *xTube( diameter=dBar2, length=lBar2, tubeoffset=tubeOffset2 );
 
-tail();  
+*tail();  
          
 
 *translate([0,-25,0]) color("Red") fuseSkid();
 
 *wingMotor();
 *wingMotorPlate();
-
 
 
 
@@ -200,6 +201,19 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
     }
 }
 
+module wingBow()
+{
+    difference(){
+        translate( o[3] + [ 0, -5.6, 24.85 ] )
+            rotate([0,-90,0])
+                mirror([1,0,0])
+                    scale( 110/133 + 0.02 )
+                        import("OberInspektoerRandbogen.STL");
+        wingPolyLine( d=dPoly, pt=pSD6060[iSD6060_Nose], off=[+2,+0.5] );
+        wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
+        }
+
+}
 
 module wingConnect( d=0 )
 {   
