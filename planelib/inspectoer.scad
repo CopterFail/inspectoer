@@ -2,7 +2,8 @@
 
 $fn=50;
 
-include <profiles.scad> // wing profile polygon definition, ClarkY
+include <profiles.scad> // wing profile polygon definition
+//include <profiles2.scad> // wing profile polygon definition, use this later
 include <skin.scad> // skin funktionen
 include <wing.scad> // spant , segment funktionen, brauchen o[] und s[]
 include <polyline.scad> 
@@ -311,20 +312,20 @@ module HRuder()
                 ptStop=[-ph2.x+oh2,+ph2.y,zh2], 
                 dStop=dh2, dSpace=0.8, steps=5, inverse=true )
             heigtSolid(r=0);
-// to do: Nose hole, servo pos open, servo cable channel, ruder horn in the center.....        
+// to do:  servo cable channel, 
         // ruder horn cutout
-        #translate([-420, yoff+tailz0-3, 0])
-            RuderHornCut( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 12.5+1],diff=0  );
+        *translate([-420, yoff+tailz0-3, 0])
+            RuderHornCut( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 0],diff=0  );
         
-        // ruder horn (doublicate?)
-        #translate([-420, yoff+tailz0-3, 0])
-            RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 12.5],diff=0.2  );
+        // ruder horn, use as separte object with higher density
+        translate([-420, yoff+tailz0-3, 0])
+            RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 0],diff=0.2  );
             
         // servo cutout    
-        #ServoDiff(sx=460,sy=yoff+tailz0-1-2,sz=-3,rot=0);
+        ServoDiff(sx=460-8,sy=yoff+tailz0-5,sz=-3-13,rot=0,yadd=3); // todo: das servo nach unten dicker machen damit es unten durch schaut und es mussweiter hoch
         
         // helper to glue the split ruder
-        translate( [-420 - 120 * ptHRuder.x , tailz0-3 + 120 * ptHRuder.y, 0] + [-20,0,0] ) 
+        translate( [-420 - 120 * ptHRuder.x , tailz0-3 + 120 * ptHRuder.y, 0] ) 
             cylinder( d=dPoly, h=10, center=true ); // glue helper
         
         // horizontal hole to mount ruder
@@ -333,10 +334,10 @@ module HRuder()
             translate( [-420 - 120 * ptHRuder.x , yoff+tailz0-3 + 120 * ptHRuder.y, +zBoom+40] ) sphere(d=dPoly); 
             } // poly for full length
             
-        // to do -  horizontal hole in nose
-        *#hull(){
-            translate( [-420 - 120 * ptHRuder.x , yoff+tailz0-3 + 120 * ptHRuder.y, -zBoom-40] ) sphere(d=dPoly); 
-            translate( [-420 - 120 * ptHRuder.x , yoff+tailz0-3 + 120 * ptHRuder.y, +zBoom+40] ) sphere(d=dPoly); 
+        // horizontal hole in nose
+        hull(){
+            translate( [-420 - 2, yoff+tailz0-3 + 120 * ptHRuder.y, -zBoom-40] ) sphere(d=dPoly); 
+            translate( [-420 - 2, yoff+tailz0-3 + 120 * ptHRuder.y, +zBoom+40] ) sphere(d=dPoly); 
             } // poly for full length
             
         // mount on tube    
@@ -344,23 +345,24 @@ module HRuder()
         mirror([0,0,1])tubeFlansh2(r=0.2);
         
         //servo kable
-        #hull(){
-            translate([-420-53,yoff+10,-15]) cube([12,6,10], center=true ); // servo cable
-            translate([-420-65,yoff+10,-zBoom+9-1]) cube([12,6,10], center=true ); // servo cable too near to the tube, but elese in conflic to the ruder
+        hull(){
+            translate([-420-53+6,yoff+6,-25]) cube([12,6,10], center=true ); // servo cable
+            translate([-420-65,yoff+8,-zBoom+12]) cube([12,6,10], center=true ); // servo cable too near to the tube, but elese in conflic to the ruder
             }
+		translate([-420-65,yoff+3,-zBoom+12]) cube([12,6+10,10], center=true );
         }
         
-        *hull(){ 
+
+
+
+    *hull(){ 
             translate([+20-ptHRuder.x*120, -3+ptHRuder.y*120, -4-dPoly]) sphere(d=dPoly); 
             translate([+20-ptHRuder.x*120, -3+ptHRuder.y*120, +3+dPoly]) sphere(d=dPoly); 
             }
-        *hull(){ 
+    *hull(){ 
             translate([+20-2, -3, -4-dPoly]) sphere(d=dPoly); 
             translate([+20-2, -3, +3+dPoly]) sphere(d=dPoly); 
             }
-
-
-        
     *translate([-420, tailz0-3, 0])
         RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 12.5],diff=0.2  ); // manual adjusted to servo
 
@@ -764,8 +766,8 @@ module fuseSkid2( r=0 )
     translate([180,-15,0]) 
         rotate([90,0,0]) 
             hull(){
-                translate([-l/2,0,0]) cylinder(d=d-r,h=0.6);
-                translate([+l/2,0,0]) cylinder(d=d-r,h=0.6);
+                translate([-l/2,0,0]) cylinder(d=d-2*r,h=0.6);
+                translate([+l/2,0,0]) cylinder(d=d-2*r,h=0.6);
                 }
 }
 

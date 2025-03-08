@@ -17,23 +17,27 @@ module complete()
 
     Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
         union(){
-            wingSegment( [s[3],s[4]], [o[3],o[4]] ); // was last segment
+            *wingSegment( [s[3],s[4]], [o[3],o[4]] ); // was last segment
+            wingBow();
             wingSegment( [s[2],s[3]], [o[2],o[3]] );
             wingSegment( [s[1],s[2]], [o[1],o[2]] );
             wingSegment( [s[0],s[1]], [o[0],o[1]] );
             }
-    RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
+    RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/    
+    wingConnect();     
 
     
     mirror([0,0,1]){
         Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
             union(){
-                wingSegment( [s[3],s[4]], [o[3],o[4]] ); // was last segment
+                *wingSegment( [s[3],s[4]], [o[3],o[4]] ); // was last segment
+                wingBow();
                 wingSegment( [s[2],s[3]], [o[2],o[3]] );
                 wingSegment( [s[1],s[2]], [o[1],o[2]] );
                 wingSegment( [s[0],s[1]], [o[0],o[1]] );
                 }
-        RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
+        RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/      
+        wingConnect();   
         }
         
     fuseSegment( seg=0 );
@@ -49,9 +53,10 @@ module complete()
     mirror([0,0,1]) wingMotor();
     mirror([0,0,1]) wingMotorPlate();
 
-    //color("GhostWhite") fuseCoverMid();
     color("Red") fuseSkid( r=-0.5 );
     color("GhostWhite") fuseCoverFront();
+    color("GhostWhite") fuseCoverMid();
+    color("GhostWhite") fuseCoverBak();
     
     tail(); 
 }
@@ -64,9 +69,10 @@ module exploreFuse()
         union(){
             fuseSegment( seg=1 );
             translate( [0,0,-100]) fuseWingMount();
+            translate( [0,50,0]) color("GhostWhite") fuseCoverBak();
             }
         fuseSegment( seg=2 );
-        *translate( [0,50,0]) color("GhostWhite") fuseCoverMid();
+        translate( [0,50,0]) color("GhostWhite") fuseCoverMid();
         color("Red") translate( [0,-50,0]) fuseSkid( r=-0.5 );
         fuseSegment( seg=3 );
         translate( [0,50,0]) color("GhostWhite") fuseCoverFront();
@@ -92,7 +98,7 @@ module exploreWing()
             translate([tubeOffset2-260,-8,zBoom]) 
                 rotate([0,90,0])  
                     cylinder(d=dBar1, h=440, center=true);
-            tubeFlansh();
+            tubeFlansh2();
             HRuder();
             sideSolid(r=0);
             }
@@ -103,6 +109,7 @@ module exploreWing()
             wingSegment( [s[2],s[3]], [o[2],o[3]] );
             RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
             }
+     fuseWingMount(dx=0);
      Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
         union(){
             wingSegment( [s[1],s[2]], [o[1],o[2]] );
@@ -111,7 +118,8 @@ module exploreWing()
      translate([0,0,80])
      Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
         union(){
-            wingSegment( [s[3],s[4]], [o[3],o[4]] );
+            *wingSegment( [s[3],s[4]], [o[3],o[4]] );
+            wingBow();
             }
         }
         
