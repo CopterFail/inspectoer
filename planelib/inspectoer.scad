@@ -129,10 +129,10 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 *tubeFlansh();
 *wingConnect();
 *wingElectric();
-HRuder();
+*HRuder();
 *sideSolid();
 *tubeFlansh2();
-*tail();  
+tail();  
 
 
 // dBar contains 0.4 offset, reduce to 0.2
@@ -289,7 +289,7 @@ module tail()
 module sideSolid(r=0)
 {
     bardist = 130;
-    yoff=15;
+    yoff=15-2;
     difference(){
         translate([-420, tailz0-2.5+yoff, -zBoom-3+1]) 
         hull(){
@@ -303,7 +303,7 @@ module sideSolid(r=0)
 
 module HRuder()
 {
-    yoff = 15;
+    yoff = 15-2;
     difference()
     {
         // HR wind profile
@@ -325,7 +325,7 @@ module HRuder()
         ServoDiff(sx=460-8,sy=yoff+tailz0-5,sz=-3-13,rot=0,yadd=3); // todo: das servo nach unten dicker machen damit es unten durch schaut und es mussweiter hoch
         
         // helper to glue the split ruder
-        translate( [-420 - 120 * ptHRuder.x , tailz0-3 + 120 * ptHRuder.y, 0] ) 
+        #translate( [-420 - 120 * ptHRuder.x , tailz0-3 + 120 * ptHRuder.y, 0] ) 
             cylinder( d=dPoly, h=10, center=true ); // glue helper
         
         // horizontal hole to mount ruder
@@ -343,6 +343,10 @@ module HRuder()
         // mount on tube    
         tubeFlansh2(r=0.2);
         mirror([0,0,1])tubeFlansh2(r=0.2);
+
+        // boom bars cutout in HR
+        translate([-40, tailz0, +zBoom]) rotate([0,-90,0]) cylinder(d=8+0.2,h=450); // offset as tubeFlansh2()
+        translate([-40, tailz0 ,-zBoom]) rotate([0,-90,0]) cylinder(d=8+0.2,h=450);
         
         //servo kable
         hull(){
