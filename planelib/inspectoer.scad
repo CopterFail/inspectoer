@@ -132,7 +132,7 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 *HRuder();
 *sideSolid();
 *tubeFlansh2();
-tail();  
+*tail();  
 
 
 // dBar contains 0.4 offset, reduce to 0.2
