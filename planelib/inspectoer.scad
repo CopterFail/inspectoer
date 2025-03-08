@@ -130,6 +130,7 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 *wingConnect();
 *wingElectric();
 *HRuder();
+*RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 0] );
 *sideSolid();
 *tubeFlansh2();
 *tail();  
@@ -325,9 +326,9 @@ module HRuder()
         ServoDiff(sx=460-8,sy=yoff+tailz0-5,sz=-3-13,rot=0,yadd=3); // todo: das servo nach unten dicker machen damit es unten durch schaut und es mussweiter hoch
         
         // helper to glue the split ruder
-        #translate( [-420 - 120 * ptHRuder.x , tailz0-3 + 120 * ptHRuder.y, 0] ) 
-            cylinder( d=dPoly, h=10, center=true ); // glue helper
-        
+        #translate( [-420 - 120 * ptHRuder.x ,yoff+tailz0-3 + 120 * ptHRuder.y, 0] ) 
+            cylinder( d=dPoly, h=10, center=true ); // glue helper , missing in RuderHorn() ?
+         
         // horizontal hole to mount ruder
         hull(){
             translate( [-420 - 120 * ptHRuder.x , yoff+tailz0-3 + 120 * ptHRuder.y, -zBoom-40] ) sphere(d=dPoly); 
