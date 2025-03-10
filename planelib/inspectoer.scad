@@ -299,6 +299,8 @@ module sideSolid(r=0)
             }
         heigtSolid();        
         mirror( [0,0,1] )tubeFlansh2(r=0.2);
+		translate([-420, yoff+tailz0-3, 0])
+			heigtSolid(r=0);
     }
 }
 
@@ -568,6 +570,10 @@ module fuseWingMount( pos=0, dx=0 )
             }    
 }
 
+
+#fuseCoverHookKnop2( a=10);
+*#fuseCoverHookBase2();
+
 module fuseCoverHookKnop()
 {
     difference(){
@@ -577,6 +583,28 @@ module fuseCoverHookKnop()
             translate([+10,0,-8])cylinder(d=1,h=5);
             }
         translate([0,0,-10])cylinder(d=6.4,h=10);
+    }
+}
+module fuseCoverHookKnop2( a=10, ha=0.3 )
+{
+    difference(){
+        hull(){
+            translate([-a,0,ha])cylinder(d=1,h=5);
+            translate([0,0, 0])cylinder(d=8,h=8.3);
+            translate([+a,0,ha])cylinder(d=1,h=5);
+            }
+        *translate([0,0,-1])cylinder(d=2.5,h=10);
+        translate([0,0,2])
+			ScrewAndHexNut( m=2,dist=5 ); 
+    }
+}
+
+module fuseCoverHookBase2( a=10, ha=0.3 )
+{
+    difference(){
+		translate([0,0, 0])cylinder(d=12,h=4);
+		translate([0,0,4.5])
+			ScrewAndHexNut( m=2,dist=5 ); 
     }
 }
 
