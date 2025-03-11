@@ -134,6 +134,9 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 *sideSolid();
 *tubeFlansh2();
 *tail();  
+*#fuseCoverHookKnop2( a=10);
+*#fuseCoverHookBase2();
+
 
 
 // dBar contains 0.4 offset, reduce to 0.2
@@ -570,9 +573,6 @@ module fuseWingMount( pos=0, dx=0 )
             }    
 }
 
-
-#fuseCoverHookKnop2( a=10);
-*#fuseCoverHookBase2();
 
 module fuseCoverHookKnop()
 {
