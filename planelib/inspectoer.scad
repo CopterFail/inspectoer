@@ -11,6 +11,7 @@ include <servo.scad>
 include <screw.scad>
 include <ruder2.scad> 
 include <motor.scad>  
+include <vista.scad>
 
 sf= 30/500; // forward = 30mm pro 500mm  (550???)
 o = [   [+sf*0,   0, 50],     
@@ -152,6 +153,7 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 *wingMotor();
 *wingMotorPlate();
 
+*fpvPlate();
 
 
 
@@ -475,11 +477,11 @@ module fuseSkin( fuseSkin = 5 )
 
             fuseCoverMask(x=120, y=63-20+fuseY0, r=fuseWidth-10, h=80, type=3);
             fuseCoverFront(d=0.3);
-            #translate([161,35+10,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
+            translate([161,35+10,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
 
             fuseCoverMask(x=35, y=60-20+fuseY0, r=fuseWidth-10, h=90, type=3);
             fuseCoverMid(d=0.3);
-            #translate([-10,40,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
+            translate([-10,40,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
 
             fuseCoverMask(x=-43, y=60-20+fuseY0, r=fuseWidth-10, h=45, type=3);
             fuseCoverBak(d=0.3);
