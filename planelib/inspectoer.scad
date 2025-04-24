@@ -3,7 +3,7 @@
 $fn=50;
 
 include <profiles.scad> // wing profile polygon definition
-//include <profiles2.scad> // wing profile polygon definition, use this later
+include <profiles2.scad> // wing profile polygon definition, use this later
 include <skin.scad> // skin funktionen
 include <wing.scad> // spant , segment funktionen, brauchen o[] und s[]
 include <polyline.scad> 
@@ -12,6 +12,7 @@ include <screw.scad>
 include <ruder2.scad> 
 include <motor.scad>  
 include <vista.scad>
+include <wingbow.scad>
 
 sf= 30/500; // forward = 30mm pro 500mm  (550???)
 o = [   [+sf*0,   0, 50],     
@@ -43,23 +44,23 @@ tailz0 = +8+4;  // z offset of the tail
 
 
 // Ruder calculations:
-iSD6060_32up    = 9;    // SD6060 profile index 32% upper side
+//iSD6060_32up    = 9;    // SD6060 profile index 32% upper side
 iSD6060_Nose    = 29;   // SD6060 profile index nose
-iSD6060_32down  = 47;   // SD6060 profile index 32% lower side
+//iSD6060_32down  = 47;   // SD6060 profile index 32% lower side
 
-iN0012_35up     = 7;    // Naca0012 profile index 32% upper side
-iN0012_Nose     = 31;   // Naca0012 profile index nose
-iN0012_35down   = 55;   // Naca0012 profile index 32% lower side
+//iN0012_35up     = 7;    // Naca0012 profile index 32% upper side
+//iN0012_Nose     = 31;   // Naca0012 profile index nose
+//iN0012_35down   = 55;   // Naca0012 profile index 32% lower side
 
-ptQRuder = [ pSD6060[iSD6060_32up].x, 
-            (pSD6060[iSD6060_32up].y+pSD6060[iSD6060_32down].y)/2 ];    
-            //note: 9/51(25%) -> 12/48(37%) -> 11/49(32%)
-hQRuder = pSD6060[iSD6060_32up].y - pSD6060[iSD6060_32down].y;
+//ptQRuder = [ pSD6060[iSD6060_32up].x, (pSD6060[iSD6060_32up].y+pSD6060[iSD6060_32down].y)/2 ];    //note: 9/51(25%) -> 12/48(37%) -> 11/49(32%)
+ptQRuder = [1-0.32, ( p(1-0.32, pSD6060) + n(1-0.32, pSD6060) ) /2 ]; // 32% of the SD6060 profile
+//hQRuder = pSD6060[iSD6060_32up].y - pSD6060[iSD6060_32down].y;
+hQRuder = h( 1-0.32, pSD6060 );
 
-ptHRuder = [ pNaca0012[iN0012_35up].x, 
-            (pNaca0012[iN0012_35up].y+pNaca0012[iN0012_35down].y)/2]; 
-            //note: 5/57(25%) -> 7/55(35%)
-hHRuder = pNaca0012[iN0012_35up].y - pNaca0012[iN0012_35down].y;
+//ptHRuder = [ pNaca0012[iN0012_35up].x, (pNaca0012[iN0012_35up].y+pNaca0012[iN0012_35down].y)/2]; //note: 5/57(25%) -> 7/55(35%)
+//hHRuder = pNaca0012[iN0012_35up].y - pNaca0012[iN0012_35down].y;
+ptHRuder = [1-0.35, ( p(1-0.35, pNaca0012) + n(1-0.35, pNaca0012) ) /2 ]; // 35% of the Naca0012 profile
+hHRuder = h( 1-0.35, pNaca0012 );
 
 z1 = 280;
 p1 = RuderGetPoint( z1, zStart=o[0].z , zStop=o[3].z, s[0], s[3], ptQRuder );
@@ -100,8 +101,9 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
     RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0], diff=0.2  ); /*dSpace is 0.8*/         
 }
 *RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
-*wingBow();
 
+*wingBow();
+*wingBow2(); //to be completed	
 
 *fuseSolid();  
 *fuseSkin(); 
@@ -130,7 +132,7 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 *tubeFlansh();
 *wingConnect();
 *wingElectric();
-*HRuder();
+HRuder();
 *RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 0] );
 *sideSolid();
 *tubeFlansh2();
@@ -209,20 +211,6 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
     }
 }
 
-module wingBow()
-{
-    difference(){
-        //translate( o[3] + [ 0, -5.6, 24.85 ] )
-        translate( [ 0.4, 0, -0.6 ] )
-            rotate([0,-90,0])
-                mirror([1,0,0])
-                    scale( 110/133 + 0.02 )
-                        import("Randbogen.stl");
-        wingPolyLine( d=dPoly, pt=pSD6060[iSD6060_Nose], off=[+2,+0.5] );
-        wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
-        }
-
-}
 
 module wingConnect( d=0 )
 {   

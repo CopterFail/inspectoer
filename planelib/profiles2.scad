@@ -33,7 +33,7 @@ sd6060_coords = [
     [0.01879, 0.01913],
     [0.00790, 0.01132],
     [0.00148, 0.00411],
-    [0.00025, -0.00159],
+    [0.00025, -0.00159], 
     [0.00495, -0.00647],
     [0.01525, -0.01148],
     [0.03068, -0.01612],
@@ -50,7 +50,7 @@ sd6060_coords = [
     [0.46614, -0.03159],
     [0.51852, -0.02995],
     [0.57073, -0.02784],
-    [0.62223, -0.02527],
+    [0.62223, -0.02527], 
     [0.67254, -0.02231],
     [0.72116, -0.01906],
     [0.76761, -0.01568],
@@ -65,21 +65,22 @@ sd6060_coords = [
     [1.00000, -0.00000]
 ];
 
+
 function positive(a) = [for (i = a ) if( i.y >= 0 )i ];     
 function negative(a) = [for (i = a ) if( i.y < 0 )i ];
-function p(x) = lookup( x, positive(sd6060_coords) );
-function n(x) = lookup( x, negative(sd6060_coords) );
-function h(x) = p(x) - n(x);
-function find_xmin( xmin=1, hmin ) = ( h(xmin) > hmin ) ? xmin : find_xmin( xmin-0.001, hmin ); 
+function p(x,c=sd6060_coords) = lookup( x, positive(c) );
+function n(x,c=sd6060_coords) = lookup( x, negative(c) );
+function h(x,c=sd6060_coords) = p(x,c) - n(x,c);
+function find_xmin( xmin=1, hmin, c=sd6060_coords ) = ( h( xmin, c ) > hmin ) ? xmin : find_xmin( xmin-0.001, hmin, c ); 
   
+// cut the SD6060 at hmin and rescale to the original size:
 hmin = 0.8 / 170; // 2 layer, 170mm 
-xmin = find_xmin( 1, hmin );
+xmin = find_xmin( 1, hmin, sd6060_coords );
+echo(  h(xmin, sd6060_coords), xmin, p(xmin, sd6060_coords), n(xmin, sd6060_coords) );
 
-echo(  h(xmin), xmin, p(xmin), n(xmin) );
+pSD6060 = (1/xmin) * [ [xmin,p(xmin, sd6060_coords)], for (pt=sd6060_coords) if (pt.x<xmin) pt, [xmin,n(xmin, sd6060_coords)] ];
+*echo( pSD6060 );
 
-sd6060_new = (1/xmin) * [ [xmin,p(xmin)], for (pt=sd6060_coords) if (pt.x<xmin) pt, [xmin,n(xmin)] ];
-echo( sd6060_new );
-
-// 2D polygon
-polygon(points = 170 * sd6060_new);
-translate([0,0,10]) polygon(points = 170 * sd6060_coords);
+// 2D polygon compared to the original:
+*polygon(points = 170 * pSD6060);	// new polygon
+*translate([0,0,10]) polygon(points = 170 * sd6060_coords); // original polygon
