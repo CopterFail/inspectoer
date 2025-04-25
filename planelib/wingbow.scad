@@ -1,22 +1,6 @@
-*wingBow();
-*color("Blue")wingBow2();
 
-
-module wingBow()
-{
-    difference(){
-        //translate( o[3] + [ 0, -5.6, 24.85 ] )
-        translate( [ 0.4, 0, -0.6 ] )
-            rotate([0,-90,0])
-                mirror([1,0,0])
-                    scale( 110/133 + 0.02 )
-                        import("Randbogen.stl");
-        wingPolyLine( d=dPoly, pt=pSD6060[iSD6060_Nose], off=[+2,+0.5] );
-        wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
-        }
-}
-
-module wingBow2()
+// Angle at the lower back side needs some improvement
+module wingBowDraw()
 {
     z0 = 25;
     off = 55;
@@ -31,3 +15,23 @@ module wingBow2()
                 }
                 
 }
+
+module wingBowImport()
+{
+	translate( [ 0.4, 0, -0.6 ] )
+		rotate([0,-90,0])
+			mirror([1,0,0])
+				scale( 110/133 + 0.02 )
+					import("Randbogen.stl");
+}
+
+module wingBow( draw = true )
+{
+    difference(){
+		if( draw ) wingBowDraw();
+		else wingBowImport();
+		wingPolyLine( d=dPoly, pt=ptWingNose, off=[+2,+0.5] );
+        wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
+        }
+}
+

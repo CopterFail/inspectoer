@@ -73,7 +73,7 @@ module wingMotorPlate( diff=0, holes=true )
                     rotate([0,90,0])
                         cylinder(d=8+0.3+4+0.5,h=140,center=true);  // mount for boom 8mm version
                             
-                wingPolyLine( d=dPoly, pt=pSD6060[31], off=[+2,+0.5] );
+                wingPolyLine( d=dPoly, pt=ptWingNose, off=[+2,+0.5] );
                 wingElectric();
                 xTube( diameter=8+0.1, length=1000, tubeoffset=tubeOffset1 );
                 translate( [-xoff+0, yoff-11.2, zBoom ] ) 
@@ -114,7 +114,7 @@ module wingMotor(diff=0, holes=true) //use diff!!!!!
                     color("Black") xTube( diameter=8+0.2, length=1000, tubeoffset=tubeOffset1 );
                     color("Black") xTube( diameter=6+0.2, length=400, tubeoffset=tubeOffset2 );   
                     wingMotorPlate(diff=0.1); 
-                    wingPolyLine( d=dPoly, pt=pSD6060[31], off=[+2,+0.5] );
+                    wingPolyLine( d=dPoly, pt=ptWingNose, off=[+2,+0.5] );
                     *wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
                     wingElectric();
                     translate( [-xoff+0, yoff-11.2, zBoom ] ) 

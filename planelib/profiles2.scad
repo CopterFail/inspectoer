@@ -72,6 +72,7 @@ function p(x,c=sd6060_coords) = lookup( x, positive(c) );
 function n(x,c=sd6060_coords) = lookup( x, negative(c) );
 function h(x,c=sd6060_coords) = p(x,c) - n(x,c);
 function find_xmin( xmin=1, hmin, c=sd6060_coords ) = ( h( xmin, c ) > hmin ) ? xmin : find_xmin( xmin-0.001, hmin, c ); 
+function find_nose( c=sd6060_coords ) = negative(c)[0]; // find the nose of the airfoil, this could also be the last negative, ToDo: use a real search
   
 // cut the SD6060 at hmin and rescale to the original size:
 hmin = 0.8 / 170; // 2 layer, 170mm 

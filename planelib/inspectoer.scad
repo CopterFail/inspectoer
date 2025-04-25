@@ -44,21 +44,9 @@ tailz0 = +8+4;  // z offset of the tail
 
 
 // Ruder calculations:
-//iSD6060_32up    = 9;    // SD6060 profile index 32% upper side
-iSD6060_Nose    = 29;   // SD6060 profile index nose
-//iSD6060_32down  = 47;   // SD6060 profile index 32% lower side
-
-//iN0012_35up     = 7;    // Naca0012 profile index 32% upper side
-//iN0012_Nose     = 31;   // Naca0012 profile index nose
-//iN0012_35down   = 55;   // Naca0012 profile index 32% lower side
-
-//ptQRuder = [ pSD6060[iSD6060_32up].x, (pSD6060[iSD6060_32up].y+pSD6060[iSD6060_32down].y)/2 ];    //note: 9/51(25%) -> 12/48(37%) -> 11/49(32%)
+ptWingNose = find_nose( c=sd6060_coords ); // SD6060 profile nose
 ptQRuder = [1-0.32, ( p(1-0.32, pSD6060) + n(1-0.32, pSD6060) ) /2 ]; // 32% of the SD6060 profile
-//hQRuder = pSD6060[iSD6060_32up].y - pSD6060[iSD6060_32down].y;
 hQRuder = h( 1-0.32, pSD6060 );
-
-//ptHRuder = [ pNaca0012[iN0012_35up].x, (pNaca0012[iN0012_35up].y+pNaca0012[iN0012_35down].y)/2]; //note: 5/57(25%) -> 7/55(35%)
-//hHRuder = pNaca0012[iN0012_35up].y - pNaca0012[iN0012_35down].y;
 ptHRuder = [1-0.35, ( p(1-0.35, pNaca0012) + n(1-0.35, pNaca0012) ) /2 ]; // 35% of the Naca0012 profile
 hHRuder = h( 1-0.35, pNaca0012 );
 
@@ -90,7 +78,7 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 //solid:
 *wingSolid();
 
-*difference(){
+difference(){
     Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=5 )
         union(){
             *wingSegment( [s[3],s[4]], [o[3],o[4]] ); // was last segment, replace with wingBow()
@@ -102,8 +90,8 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 }
 *RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
 
-*wingBow();
-*wingBow2(); //to be completed	
+wingBow( draw=true );
+*translate(v = [0,30,0]) wingBow( draw=false );
 
 *fuseSolid();  
 *fuseSkin(); 
@@ -132,7 +120,7 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 *tubeFlansh();
 *wingConnect();
 *wingElectric();
-HRuder();
+*HRuder();
 *RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 0] );
 *sideSolid();
 *tubeFlansh2();
@@ -186,7 +174,7 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
             xTube( diameter=dBar1, length=lBar1, tubeoffset=tubeOffset1 );
             xTube( diameter=dBar2, length=lBar2, tubeoffset=tubeOffset2 );
 
-            wingPolyLine( d=dPoly, pt=pSD6060[iSD6060_Nose], off=[+2,+0.5] );
+            wingPolyLine( d=dPoly, pt=ptWingNose, off=[+2,+0.5] );
             wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
             wingElectric();
             mirror([0,0,1]) fuseWingMount(dx=0.2);
