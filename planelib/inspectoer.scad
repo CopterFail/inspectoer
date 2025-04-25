@@ -103,7 +103,7 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 *translate([20,35,0]) rotate([90,90,0]) fuseCoverHookKnop();
 *fuseSegment(0);
 *fuseSegment(1);
-*fuseSegment(2);
+fuseSegment(2);
 *fuseSegment(3);
 *translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku
 *fuseCoverFront();
@@ -404,30 +404,16 @@ module fuseSolid( r=0 )
     
 }
 
-module fuseCoverMask( x=0, y=100, r=90, h=400, type = 0 )
+module fuseCoverMask( x=0, y=100, r=90, h=400 )
 {
-    if( type==1 ) 
-        translate([x,y,0]){   // cutout der Haube als Kugel
-            sphere(r=r);
-            }
-    else if( type==2 )
-        translate([x,y,0]){   // cutout der Haube als Cylinder
-            rotate([0,90,0]) cylinder( r=r, h=h );
-            }
-    else if( type==3 )
-        translate([x,y,0]){   // cutout der Haube in klassischer 2 rampen form
-            hull(){
-                translate([x,+r/2,0]) cube([h+2*r,0.1,r], center=true);
-                translate([x,-r/2,0]) cube([h,0.1,r], center=true);
-                }
-            }
-    else
-        translate([x,y,0]){   // cutout der Haube
-            if ( type == 0) sphere(r=r);
-            rotate([0,90,0]) cylinder( r=r, h=h );
-            }
-
+	translate([x,y,0]){   // cutout for classic cover
+		hull(){
+			translate([x,+r/2,0]) cube([h+2*r,0.1,r], center=true);
+			translate([x,-r/2,0]) cube([h,0.1,r], center=true);
+			}
+		}
 }
+
 module fuseFinger( df=25 )
 {
     translate([-30,-58,-45-1])
@@ -448,18 +434,15 @@ module fuseSkin( fuseSkin = 5 )
         union(){
             fuseSolid( r=-fuseSkin );
             
-            //fuseCoverMask(x=120, y=63-20+fuseY0, r=fuseWidth-10, h=100, type=3);
-            //fuseCoverFront(d=0.3);
-
-            fuseCoverMask(x=120, y=63-20+fuseY0, r=fuseWidth-10, h=80, type=3);
+            fuseCoverMask(x=120, y=63-20+fuseY0, r=fuseWidth-10, h=80);
             fuseCoverFront(d=0.3);
             translate([161,35+10,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
 
-            fuseCoverMask(x=35, y=60-20+fuseY0, r=fuseWidth-10, h=90, type=3);
+            #fuseCoverMask(x=35, y=60-20+fuseY0, r=fuseWidth-10+2, h=90);	//ToDo: fix the opening by 2, r will influence the x size ?
             fuseCoverMid(d=0.3);
             translate([-10,40,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
 
-            fuseCoverMask(x=-43, y=60-20+fuseY0, r=fuseWidth-10, h=45, type=3);
+            fuseCoverMask(x=-43, y=60-20+fuseY0, r=fuseWidth-10, h=45);
             fuseCoverBak(d=0.3);
             translate([-128,35-10,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
 
@@ -632,10 +615,7 @@ module fuseCoverFront(d=0.1)
                         translate([0,0,-10])cylinder(d=6.4,h=10);
                 }
             }
-        //fuseCoverMask(x=120, y=63-3-d, r=fuseWidth+20, h=100, type=3);
-        //fuseCoverMask(x=120, y=63-3-d-16+fuseY0, r=fuseWidth-4, h=100, type=3);
-        //fuseCoverMask(x=80, y=63-3-d-20+fuseY0, r=fuseWidth-4, h=100+110, type=3);
-        fuseCoverMask(x=120, y=63-3-d-20+fuseY0, r=fuseWidth-4, h=80, type=3);
+        fuseCoverMask(x=120, y=63-3-d-20+fuseY0, r=fuseWidth-4, h=80);
         fusePoly();
 
         }
@@ -669,10 +649,7 @@ module fuseCoverMid(d=0.1)
                         translate([0,0,-10])cylinder(d=6.4,h=10);
                 }
             }
-        //fuseCoverMask(x=35, y=80-3-d, r=fuseWidth+40, h=80, type=3);
-        //fuseCoverMask(x=35, y=80-3-d-17+fuseY0, r=fuseWidth-4, h=100, type=3);
-        //fuseCoverMask(x=-43, y=60-3-d-20+fuseY0, r=fuseWidth-4, h=45, type=3);
-        fuseCoverMask(x=35, y=60-3-d-20+fuseY0, r=fuseWidth-4, h=90, type=3);
+        fuseCoverMask(x=35, y=60-3-d-20+fuseY0, r=fuseWidth-4, h=90);
         }
     *translate([hx1,hy1,0])
         rotate([90,0,0])
@@ -704,9 +681,7 @@ module fuseCoverBak(d=0.1)
                         translate([0,0,-10])cylinder(d=6.4,h=10);
                 }
             }
-        //fuseCoverMask(x=35, y=80-3-d, r=fuseWidth+40, h=80, type=3);
-        //fuseCoverMask(x=35, y=80-3-d-17+fuseY0, r=fuseWidth-4, h=100, type=3);
-        fuseCoverMask(x=-43, y=60-3-d-20+fuseY0, r=fuseWidth-4, h=45, type=3);
+        fuseCoverMask(x=-43, y=60-3-d-20+fuseY0, r=fuseWidth-4, h=45 );
         }
     *translate([hx1,hy1,0])
         rotate([90,0,0])
@@ -812,7 +787,7 @@ module fusePoly()
             //offsetPolyLine(  d=dPoly, size=605, off=-10, p=pClarkY );
             
             }
-    fusePolyLineQ( d=dPoly, pt=pSD6060[iSD6060_Nose], off=[+2,+0.5] );
+    fusePolyLineQ( d=dPoly, pt=ptWingNose, off=[+2,+0.5] );
     fusePolyLineQ( d=dPoly, pt=ptQRuder, off=[+0,+0] );
 
 }
