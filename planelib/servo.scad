@@ -5,18 +5,33 @@ servo_size_1 = [25.5,12,37];  // mg90s
 servo_size_2 = [33.5,12,3];
 
 *servo_sg90($fn=50);
+*ServoDiff();
+
+module servo_sg90_arm( center=[0,0,3.5+3.5+12], rot=65 )
+{
+	l=20+2;
+	a=7;
+	translate(v = center)
+	{ 
+		hull()
+		for( r=[-rot:5:+rot])
+		{
+			rotate( [0,0,r+180])
+			translate([0,a/2-l/2,0])
+				cube( [a,l,a], center=true );
+		}
+	}
+}
+    
 
 module servo_sg90( yadd=0 )
 {
         cube( servo_size_1 + [0,yadd,0], center=true );
         translate([0,0,3.5]) 
             cube( servo_size_2 + [0,yadd,0], center=true );
-        // servoarm...
-        translate([-5,6,17])
-        resize([60,12,6+1])
-        sphere( d=1 );
+		servo_sg90_arm( );
 }
-    
+
 
 module ServoDiff( sx=100, sy=7, sz=348, rot=0, yadd=0 )
 { 

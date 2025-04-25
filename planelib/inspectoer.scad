@@ -103,7 +103,7 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 *translate([20,35,0]) rotate([90,90,0]) fuseCoverHookKnop();
 *fuseSegment(0);
 *fuseSegment(1);
-fuseSegment(2);
+*fuseSegment(2);
 *fuseSegment(3);
 *translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku
 *fuseCoverFront();
@@ -120,7 +120,7 @@ fuseSegment(2);
 *tubeFlansh();
 *wingConnect();
 *wingElectric();
-*HRuder();
+HRuder();
 *RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 0] );
 *sideSolid();
 *tubeFlansh2();
