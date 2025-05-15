@@ -184,7 +184,12 @@ pClarkY2 = [   //ClarkY
 	]; // store p in separate file
 
     
-    
+pSimpl = [ [1.0,0], 
+		   [0.5,0.5], 
+		   [0.0,0.0], 
+		   [0.5,-0.5], 
+		   [1.0,0] 
+		   ]; // store p in separate file    
     
     
     

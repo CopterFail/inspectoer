@@ -27,7 +27,7 @@ module Ruder3( ptStart=[0,0,0], dStart=20, ptStop=[0,0,100], dStop=10, dSpace=1.
         *cutterEnds( ptStart, dStart, dSpace, axis=false );
         *cutterEnds( ptStop, dStop, dSpace, axis=false );
         }
-		adderObjectAll(  ptStart, dStart, ptStop, dStop, dSpace, rot, steps, !inverse );
+		adderObjectAll(  ptStart, dStart, ptStop, dStop, dSpace, rot, steps, !inverse ); // too long
 	
 
 	// ruder part
@@ -43,7 +43,7 @@ module Ruder3( ptStart=[0,0,0], dStart=20, ptStop=[0,0,100], dStop=10, dSpace=1.
 					//cutterObjectAll
 			}
 		difference(){	
-			adderObjectAll(  ptStart, dStart, ptStop, dStop, dSpace, rot, steps, inverse );
+			adderObjectAll(  ptStart, dStart, ptStop, dStop, dSpace, rot, steps, inverse ); // too long
 			cutterInnerAxis( ptStart, ptStop );
 			}
 	}

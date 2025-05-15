@@ -5,7 +5,7 @@ include <inspectoer.scad>
 //solid:
 *wingSolid();
 
-*difference(){
+difference(){
     Ruder3( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=5 )
         union(){
             *wingSegment( [s[3],s[4]], [o[3],o[4]] ); // was last segment, replace with wingBow()
@@ -17,7 +17,7 @@ include <inspectoer.scad>
 }
 *RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
 
-*wingBow( draw=true );
+wingBow( draw=true );
 *translate(v = [0,30,0]) wingBow( draw=false );
 
 *fuseSolid();  
@@ -51,7 +51,7 @@ include <inspectoer.scad>
 *RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 0] );
 *sideSolid();
 *tubeFlansh2();
-tail();  
+*tail();  
 *#fuseCoverHookKnop2( a=10);
 *#fuseCoverHookBase2();
 
