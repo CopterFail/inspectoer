@@ -17,7 +17,7 @@ include <inspectoer.scad>
 }
 *RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
 
-wingBow( draw=true );
+*wingBow( draw=true );
 *translate(v = [0,30,0]) wingBow( draw=false );
 
 *fuseSolid();  
@@ -29,7 +29,7 @@ wingBow( draw=true );
 *fuseCoverHook( false );
 *translate([20,35,0]) rotate([90,90,0]) fuseCoverHookKnop();
 *fuseSegment(0);
-*fuseSegment(1);
+fuseSegment(1);
 *fuseSegment(2);
 *fuseSegment(3);
 *translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku

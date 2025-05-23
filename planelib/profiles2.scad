@@ -77,7 +77,7 @@ function find_nose( c=sd6060_coords ) = negative(c)[0]; // find the nose of the 
 // cut the SD6060 at hmin and rescale to the original size:
 hmin = 0.8 / 170; // 2 layer, 170mm 
 xmin = find_xmin( 1, hmin, sd6060_coords );
-echo(  h(xmin, sd6060_coords), xmin, p(xmin, sd6060_coords), n(xmin, sd6060_coords) );
+*echo(  h(xmin, sd6060_coords), xmin, p(xmin, sd6060_coords), n(xmin, sd6060_coords) );
 
 pSD6060 = (1/xmin) * [ [xmin,p(xmin, sd6060_coords)], for (pt=sd6060_coords) if (pt.x<xmin) pt, [xmin,n(xmin, sd6060_coords)] ];
 *echo( pSD6060 );
