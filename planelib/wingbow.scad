@@ -15,10 +15,11 @@ module wingBowDraw_old_version( vbase = [2 * sf, 0, 0], p=pSD6060, baseSize=170,
                 
 }
 
+// the following shold be also the base for a complete wing solid
 module wingBowDraw( vbase = [2 * sf, 0, 0], p=pSD6060, baseSize=170, z0=25, offset=[55,0,0], pos=o[3]) 
 {
 	N=len(p)+1; // one additional point will be appended
-	steps = z0/0.5;
+	steps = floor(z0/2);
 	echo( N, steps, N * steps);
 
 	function xysize(cnt) = baseSize * sqrt(1-cnt/steps);
@@ -29,11 +30,14 @@ module wingBowDraw( vbase = [2 * sf, 0, 0], p=pSD6060, baseSize=170, z0=25, offs
 	// fails if p is not closed, so append the first point.
 	p2 = [for(n=[0:len(p)-1]) p[n], p[0]];
 
-	points=[ for(cnt=[0:steps]) for(n=p2)  [( n.x + xoff(cnt)) * xysize(cnt) , (n.y + yoff(cnt)) * xysize(cnt), zsize(cnt)] ];
+	points=[ for(cnt=[0:steps]) for(n=p2)  [( n.x + xoff(cnt)) * xysize(cnt) , (n.y + yoff(cnt)) * xysize(cnt), zsize(cnt)], [0,0,z0] ];
 	faces=[
 		[for(n=[N-1:-1:0]) n],	// bottom, CCW
-		[for(n=[0:1:N-1]) n+N*(steps-1)],  // top, CW
-		for(cnt=[0:steps-2]) for(n=[0:N-2]) [n+cnt*N, (n+1)+cnt*N, (n+1)+(cnt+1)*N, n+(cnt+1)*N], // side, CCW 
+		//[for(n=[0:1:N-1]) n+N*(steps-1)],  // top, CW, flat area
+		//for(n=[0:N-2]) [n+N*(steps-1), (n+1)+N*(steps-1), N*steps], // top, CCW, not longer flat, use triangles to the single top point
+		for(n=[0:N-2]) [n+N*(steps-1), N*steps, (n+1)+N*(steps-1)], // top, CW, not longer flat, use triangles to the single top point
+		//for(cnt=[0:steps-2]) for(n=[0:N-2]) [n+cnt*N, (n+1)+cnt*N, (n+1)+(cnt+1)*N, n+(cnt+1)*N], // side, CCW 
+		for(cnt=[0:steps-2]) for(n=[0:N-2]) [n+cnt*N, n+(cnt+1)*N, (n+1)+(cnt+1)*N, (n+1)+cnt*N], // side, CW 
 	];
 
 	translate(v = -offset + pos ) 
@@ -41,6 +45,7 @@ module wingBowDraw( vbase = [2 * sf, 0, 0], p=pSD6060, baseSize=170, z0=25, offs
 	polyhedron( points, faces, convexity=5 );
 }
  
+// old, first try with an external STL file
 module wingBowImport()
 {
 	translate( [ 0.4, 0, -0.6 ] )
