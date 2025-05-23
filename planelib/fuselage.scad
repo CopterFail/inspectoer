@@ -6,7 +6,7 @@ module fuseSolid( r=0 )
         union(){
             hull()
             {
-                *translate([-(fuseLength1 + r),0,0]) rotate([0,90,0]) cylinder(d=fuseMotorDia+2*r,h=5,center=true); //motor
+                *translate([-(fuseLength1 + r),0,0]) rotate([0,90,0]) cylinder(d=fuseMotorDia+2*r,h=5,center=true); //single motor was removed
                 translate([0,0,-0.15])  spant3d( d=0.3, offset=(o[0]+[0,0,r]),  size=s[0],  r=r, p=pSD6060 );
                 translate([fuseLength0,fuseY0,-0.15]) 
                     spant3d( d=0.3, offset=[0,0,fuseWidth/2+r],    size=fuseInnerSpant,   r=r, p=pClarkY /* pClarkFuse */ );
@@ -18,6 +18,9 @@ module fuseSolid( r=0 )
         union(){
             fuseFinger( df=25-r );  // here r has only the half effect 
             mirror([0,0,1]) fuseFinger(  df=25-r  );
+
+            translate(v = [0,0,o[0].z-3+r]) spant3d( d=5, offset=[0,0,0], size=s[0], r=0.5-r, p=pSD6060 );
+            translate(v = [0,0,-o[0].z-5+3-r]) spant3d( d=5, offset=[0,0,0], size=s[0], r=0.5-r, p=pSD6060 );
         }
      }
     
@@ -91,15 +94,16 @@ module fuseSkin( fuseSkin = 5 )
              wingElectric();
              fuseCamera();
              
-             
+            
              translate([260,-2,+23]) rotate([8,0,0 ]) scale(7) fuseNaca(w=-10);
              translate([260,-2,-23]) rotate([180-8,0,0 ]) scale(7) fuseNaca(w=-10);
              
-             fuseWingMount(dx=0.2);
-             mirror([0,0,1])fuseWingMount(dx=0.2);
-             
-             *fuseFinger();
+             *fuseWingMount(dx=0.2);
+             *mirror([0,0,1])fuseWingMount(dx=0.2);
+			 // as an alternative, move the wing abount 3mm into the fuselage and remove fuseWingMount, see fuseSolid() above
+			 // Do we need a spacer to keep the walls in place?
 
+             *fuseFinger();
             }
         }
        
