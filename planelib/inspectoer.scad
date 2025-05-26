@@ -49,7 +49,6 @@ fuseWidth = 52;    // Rumpfbreite war 50
 fuseLength0 = 325; // Spitze vor dem nullpunkt bei r=0 , war 355
 fuseLength1 = 270; // hinterster Punkt - 5, die Länge in Dirks plan war 605mm,355+270=635,gemessen 640
 fuseY0 = -10; // y offset of inner fuse
-fuseMotorDia = 40;    // Durchmesser am Motor
 fuseInnerSpant = 570;
 
 
@@ -113,7 +112,6 @@ module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
             wingPolyLine( d=dPoly, pt=ptWingNose, off=[+2,+0.5] );
             wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
             wingElectric();
-            mirror([0,0,1]) fuseWingMount(dx=0.2);
              
             wingMotor(diff=0.3, holes=false);
             wingMotorPlate(diff=0.3, holes=false);

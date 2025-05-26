@@ -28,7 +28,7 @@ include <inspectoer.scad>
 *fuseCoverHook( true );
 *fuseCoverHook( false );
 *translate([20,35,0]) rotate([90,90,0]) fuseCoverHookKnop();
-*fuseSegment(0);
+fuseSegment(0);
 fuseSegment(1);
 *fuseSegment(2);
 *fuseSegment(3);
@@ -38,10 +38,6 @@ fuseSegment(1);
 *fuseCoverBak();
 *fuseSkid2( r=0.1 );
 *fuseCoverMount_1()
-
-
-*fuseWingMount(dx=0);
-*mirror([0,0,1])fuseWingMount(dx=0);
 
 *tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
 *tubeFlansh();

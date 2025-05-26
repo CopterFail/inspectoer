@@ -27,7 +27,10 @@ module Ruder3( ptStart=[0,0,0], dStart=20, ptStop=[0,0,100], dStop=10, dSpace=1.
         *cutterEnds( ptStart, dStart, dSpace, axis=false );
         *cutterEnds( ptStop, dStop, dSpace, axis=false );
         }
+	intersection() {
 		adderObjectAll(  ptStart, dStart, ptStop, dStop, dSpace, rot, steps, !inverse ); // too long
+		children();
+		}
 	
 
 	// ruder part
@@ -42,10 +45,13 @@ module Ruder3( ptStart=[0,0,0], dStart=20, ptStop=[0,0,100], dStop=10, dSpace=1.
 					//cutterCylinder( ptStart, dStart+0*dSpace, ptStop, dStop+0*dSpace );
 					//cutterObjectAll
 			}
+	intersection() {
 		difference(){	
 			adderObjectAll(  ptStart, dStart, ptStop, dStop, dSpace, rot, steps, inverse ); // too long
 			cutterInnerAxis( ptStart, ptStop );
 			}
+		children();
+		}
 	}
 
 	if( horn ) 

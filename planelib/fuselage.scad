@@ -6,21 +6,22 @@ module fuseSolid( r=0 )
         union(){
             hull()
             {
-                *translate([-(fuseLength1 + r),0,0]) rotate([0,90,0]) cylinder(d=fuseMotorDia+2*r,h=5,center=true); //single motor was removed
-                translate([0,0,-0.15])  spant3d( d=0.3, offset=(o[0]+[0,0,r]),  size=s[0],  r=r, p=pSD6060 );
+				// outer fuse with SD6060 profiles to connect the wings with 3mm overlap:
+                translate([0,0,-0.15])  spant3d( d=0.3, offset=+(o[0]+[0,0,3+r]), size=s[0],  r=r, p=pSD6060 );
+                translate([0,0,-0.15])  spant3d( d=0.3, offset=-(o[0]+[0,0,3+r]), size=s[0],  r=r, p=pSD6060 );
+				// inner fuse with ClarkY profiles
                 translate([fuseLength0,fuseY0,-0.15]) 
                     spant3d( d=0.3, offset=[0,0,fuseWidth/2+r],    size=fuseInnerSpant,   r=r, p=pClarkY /* pClarkFuse */ );
                 translate([fuseLength0,fuseY0,-0.15]) 
                     spant3d( d=0.3, offset=[0,0,-(fuseWidth/2+r)], size=fuseInnerSpant,   r=r, p=pClarkY /* pClarkFuse */ );
-                translate([0,0,-0.15])  spant3d( d=0.3, offset=-(o[0]+[0,0,r]), size=s[0],  r=r, p=pSD6060 );
             }
         }
         union(){
             fuseFinger( df=25-r );  // here r has only the half effect 
             mirror([0,0,1]) fuseFinger(  df=25-r  );
-
-            translate(v = [0,0,o[0].z-3+r]) spant3d( d=5, offset=[0,0,0], size=s[0], r=0.5-r, p=pSD6060 );
-            translate(v = [0,0,-o[0].z-5+3-r]) spant3d( d=5, offset=[0,0,0], size=s[0], r=0.5-r, p=pSD6060 );
+			// 3mm cutout for wind with SD6060 profile, oversize is 0.5mm:
+            spant3d( d=5, offset=+(o[0]+[0,0,r]), size=s[0], r=0.5-r, p=pSD6060 );
+            spant3d( d=5, offset=-(o[0]+[0,0,r+5]), size=s[0], r=0.5-r, p=pSD6060 ); // spant3d is not centered, so we need to substract 5mm to the offset
         }
      }
     
@@ -69,40 +70,27 @@ module fuseSkin( fuseSkin = 5 )
             translate([-128,35-10,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
 
             *translate([-80,35-10,0]) cube([60,80,36], center=true); // FC           
-            *fuseMotor(d=0, holes=false);
             
             fuseGps();
             fuseElrs();
                 
-            xTube( diameter=dBar1+2, length=100, tubeoffset=tubeOffset1, $fn=50 );
-            mirror([0,0,1]) xTube( diameter=dBar1+2, length=100, tubeoffset=tubeOffset1, $fn=50 );
-            xTube( diameter=dBar2+2, length=100, tubeoffset=tubeOffset2, $fn=50 );
-            mirror([0,0,1]) xTube( diameter=dBar2+2, length=100, tubeoffset=tubeOffset2, $fn=50 );
+            xTube( diameter=dBar1, length=100, tubeoffset=tubeOffset1, $fn=50 );
+            mirror([0,0,1]) xTube( diameter=dBar1, length=100, tubeoffset=tubeOffset1, $fn=50 );
+            xTube( diameter=dBar2, length=100, tubeoffset=tubeOffset2, $fn=50 );
+            mirror([0,0,1]) xTube( diameter=dBar2, length=100, tubeoffset=tubeOffset2, $fn=50 );
             
-            translate([-210,-10,+30])
-                rotate([0,-90,20])
-                    cylinder(d=10,h=40,center=true);
-            translate([-210,-10,-30])
-                rotate([00,-90,20])
-                    cylinder(d=10,h=40,center=true);
-            *translate([-258,+20,0])
-                rotate([00,-90,-20])
-                    cylinder(d=10,h=80,center=true);
-
              fuseSkid();
              fusePoly();
              wingElectric();
              fuseCamera();
              
-            
              translate([260,-2,+23]) rotate([8,0,0 ]) scale(7) fuseNaca(w=-10);
              translate([260,-2,-23]) rotate([180-8,0,0 ]) scale(7) fuseNaca(w=-10);
+             translate([-210,-10,+30+3]) rotate([0,-90,20]) cylinder(d=10+4,h=50,center=true);  // ToFix: collision with inner tube
+             translate([-210,-10,-30-3]) rotate([0,-90,20]) cylinder(d=10+4,h=50,center=true);
              
-             *fuseWingMount(dx=0.2);
-             *mirror([0,0,1])fuseWingMount(dx=0.2);
 			 // as an alternative, move the wing abount 3mm into the fuselage and remove fuseWingMount, see fuseSolid() above
-			 // Do we need a spacer to keep the walls in place?
-
+			 // Do we need a spacer to keep the walls in place? No
              *fuseFinger();
             }
         }
@@ -121,42 +109,6 @@ module fuseSegment( seg=0 )
         fuseSkin( fuseSkin = 5 );
     }
 }
-
-module fuseWingMount( pos=0, dx=0 )
-{
-    h1 = 5+dx;
-    w1 = 8+dx;
-    translate([0,tubeOffsety,-o[0].z-h1/2]) rotate([0,0,180])
-        difference()
-            {
-            union()
-                {
-                translate([tubeOffset1,0,0]) cylinder( d = dBar1+2+2+dx, h = o[0].z+h1/2 );
-                hull()
-                    {
-                    translate([tubeOffset1,0,0]) cylinder( d = 19+dx, h = h1 );
-                    translate([tubeOffset1+0,-w1/2-4,0]) cube( [19,w1,h1]);
-                    }
-
-                translate([tubeOffset2,0,0]) cylinder( d = dBar2+2+2+dx, h = o[0].z+h1/2 );
-                hull()
-                    {
-                    translate([tubeOffset2,0,0]) cylinder( d = 16+dx, h = h1 );
-                    translate([tubeOffset2-16,-w1/2-4,0]) cube( [16,w1,h1]);
-                    }
-                translate([tubeOffset1,-w1/2-4,0]) cube( [tubeOffset2-tubeOffset1,w1,h1]);
-                }
-            union()
-                {
-                if ( dx<=0.0 )
-                {
-                    translate([tubeOffset1,0,-1]) cylinder( d = dBar1, h = o[0].z+h1/2+2 );
-                    translate([tubeOffset2,0,-1]) cylinder( d = dBar2, h = o[0].z+h1/2+2 );
-                    }
-                }
-            }    
-}
-
 
 module fuseCoverHookKnop()
 {
