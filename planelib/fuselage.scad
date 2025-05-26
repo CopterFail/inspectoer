@@ -61,7 +61,7 @@ module fuseSkin( fuseSkin = 5 )
             fuseCoverFront(d=0.3);
             translate([161,35+10,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
 
-            #fuseCoverMask(x=35, y=60-20+fuseY0, r=fuseWidth-10+2, h=90);	//ToDo: fix the opening by 2, r will influence the x size ?
+            fuseCoverMask(x=35, y=60-20+fuseY0, r=fuseWidth-10+2, h=90);	//fuseWith is 52, so at least 44 do we need for 4s21700 battery - use absolut value?
             fuseCoverMid(d=0.3);
             translate([-10,40,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
 
@@ -102,12 +102,14 @@ module fuseSkin( fuseSkin = 5 )
 
 module fuseSegment( seg=0 )
 {
-    length = 170;
-    start = -140+seg*length;
-    radialSlice( sh=length, sx=100, org=[-length+start,0,0], rot=[0,90,0], mode=2, center=false )
-    {
-        fuseSkin( fuseSkin = 5 );
-    }
+	render(convexity = 2){
+		length = 170;
+		start = -140+seg*length;
+		radialSlice( sh=length, sx=100, org=[-length+start,0,0], rot=[0,90,0], mode=2, center=false )
+		{
+			fuseSkin( fuseSkin = 5 );
+		}
+	}
 }
 
 module fuseCoverHookKnop()

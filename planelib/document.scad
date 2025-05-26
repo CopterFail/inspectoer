@@ -15,9 +15,8 @@ module complete()
 
 //view: [ -138.68, -75.77, 45.99 ] [ 142.00, 35.00, 175.90 ] 1754.01 22.50
 
-    Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
+    Ruder3( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
         union(){
-            *wingSegment( [s[3],s[4]], [o[3],o[4]] ); // was last segment
             wingBow();
             wingSegment( [s[2],s[3]], [o[2],o[3]] );
             wingSegment( [s[1],s[2]], [o[1],o[2]] );
@@ -28,9 +27,8 @@ module complete()
 
     
     mirror([0,0,1]){
-        Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
+        Ruder3( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
             union(){
-                *wingSegment( [s[3],s[4]], [o[3],o[4]] ); // was last segment
                 wingBow();
                 wingSegment( [s[2],s[3]], [o[2],o[3]] );
                 wingSegment( [s[1],s[2]], [o[1],o[2]] );
@@ -45,9 +43,6 @@ module complete()
     fuseSegment( seg=2 );
     fuseSegment( seg=3 );
     
-    fuseWingMount(dx=0);
-    mirror([0,0,1]) fuseWingMount(dx=0);
-
     wingMotor();
     wingMotorPlate();
     mirror([0,0,1]) wingMotor();
@@ -68,7 +63,6 @@ module exploreFuse()
         fuseSegment( seg=0 );
         union(){
             fuseSegment( seg=1 );
-            translate( [0,0,-100]) fuseWingMount();
             translate( [0,50,0]) color("GhostWhite") fuseCoverBak();
             }
         fuseSegment( seg=2 );
@@ -84,7 +78,7 @@ module exploreWing()
     show([0,0,20]){
         translate([-20,0,0]) exploreFuse();
     
-        Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
+        Ruder3( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
             union(){
                 wingSegment( [s[0],s[1]], [o[0],o[1]] );
                 }
@@ -104,21 +98,19 @@ module exploreWing()
             }
             
      translate([0,0,80])
-     Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
+     Ruder3( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
         union(){
             wingSegment( [s[2],s[3]], [o[2],o[3]] );
             RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         
             }
-     fuseWingMount(dx=0);
-     Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
+     Ruder3( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
         union(){
             wingSegment( [s[1],s[2]], [o[1],o[2]] );
             }
      
      translate([0,0,80])
-     Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
+     Ruder3( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=7 )
         union(){
-            *wingSegment( [s[3],s[4]], [o[3],o[4]] );
             wingBow();
             }
         }
