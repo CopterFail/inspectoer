@@ -45,7 +45,7 @@ dPoly = 2.0;    // diameter of the polygon tubes
 tailz0 = +8+4;  // z offset of the tail
 
 // fuselage data, see module fuseSolid():
-fuseWidth = 52;    // Rumpfbreite war 50
+fuseWidth = 58;    // Rumpfbreite war 50
 fuseLength0 = 325; // Spitze vor dem nullpunkt bei r=0 , war 355
 fuseLength1 = 270; // hinterster Punkt - 5, die Länge in Dirks plan war 605mm,355+270=635,gemessen 640
 fuseY0 = -10; // y offset of inner fuse

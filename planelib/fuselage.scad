@@ -11,9 +11,9 @@ module fuseSolid( r=0 )
                 translate([0,0,-0.15])  spant3d( d=0.3, offset=-(o[0]+[0,0,3+r]), size=s[0],  r=r, p=pSD6060 );
 				// inner fuse with ClarkY profiles
                 translate([fuseLength0,fuseY0,-0.15]) 
-                    spant3d( d=0.3, offset=[0,0,fuseWidth/2+r],    size=fuseInnerSpant,   r=r, p=pClarkY /* pClarkFuse */ );
+                    spant3d( d=0.3, offset=[0,0,fuseWidth/2+r],    size=fuseInnerSpant,   r=r, p=pSD6060 /*pClarkY*/ );
                 translate([fuseLength0,fuseY0,-0.15]) 
-                    spant3d( d=0.3, offset=[0,0,-(fuseWidth/2+r)], size=fuseInnerSpant,   r=r, p=pClarkY /* pClarkFuse */ );
+                    spant3d( d=0.3, offset=[0,0,-(fuseWidth/2+r)], size=fuseInnerSpant,   r=r, p=pSD6060 /* pClarkY*/ );
             }
         }
         union(){
@@ -57,15 +57,15 @@ module fuseSkin( fuseSkin = 5 )
         union(){
             fuseSolid( r=-fuseSkin );
             
-            fuseCoverMask(x=120, y=63-20+fuseY0, r=fuseWidth-10, h=80);
+            fuseCoverMask(x=120, y=63-20+fuseY0, r=fuseWidth-12, h=80);
             fuseCoverFront(d=0.3);
             translate([161,35+10,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
 
-            fuseCoverMask(x=35, y=60-20+fuseY0, r=fuseWidth-10+2, h=90);	//fuseWith is 52, so at least 44 do we need for 4s21700 battery - use absolut value?
+            fuseCoverMask(x=35, y=60-20+fuseY0, r=fuseWidth-12+2, h=90);	//fuseWith is increased from 50 to 58, so at least 44 do we need for 4s21700 battery
             fuseCoverMid(d=0.3);
             translate([-10,40,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
 
-            fuseCoverMask(x=-43, y=60-20+fuseY0, r=fuseWidth-10, h=45);
+            fuseCoverMask(x=-43, y=60-20+fuseY0, r=fuseWidth-12, h=45);
             fuseCoverBak(d=0.3);
             translate([-128,35-10,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
 
@@ -459,4 +459,14 @@ module tubeFlansh2( d=8, a=0, h=60, w=3, r=0 )
         translate([ -10, -8, -0.5] )                    
             ScrewAndHexNut( m=2,dist=5 );            
         }
+}
+
+module fuseBattery()
+{
+	// 4s21700 battery, 72x44x44mm, critical with SD6060 profile
+	// ToDo: Platte zur Befestigung passt nicht mehr, Schraube bohrt sich in den Akku?
+	// ToDo: Cover lock funktioniert nicht mehr
+	translate([160,0,0]) 
+		rotate([0,0,0])
+			cube( [72,46,45], center=true );
 }
