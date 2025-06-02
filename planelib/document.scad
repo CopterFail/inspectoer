@@ -1,14 +1,9 @@
-
 include<inspectoer.scad>
-
-
 
 // Dokmentation:
 *exploreWing();
 *exploreFuse();
 *complete();
-
-
 
 module complete()
 {
@@ -38,17 +33,13 @@ module complete()
         wingConnect();   
         }
         
-    fuseSegment( seg=0 );
-    fuseSegment( seg=1 );
-    fuseSegment( seg=2 );
-    fuseSegment( seg=3 );
-    
+    fuseSegment( [0,1,2,3] );
     wingMotor();
     wingMotorPlate();
     mirror([0,0,1]) wingMotor();
     mirror([0,0,1]) wingMotorPlate();
 
-    color("Red") fuseSkid( r=-0.5 );
+    color("Red") fuseSkid( r=-0.5 ){ fuseSolid( seg=10, r=0 ); fuseSolid( seg=10, r=SkidWall ); };
     color("GhostWhite") fuseCoverFront();
     color("GhostWhite") fuseCoverMid();
     color("GhostWhite") fuseCoverBak();
@@ -60,15 +51,15 @@ module exploreFuse()
 {
     show([20,0,0]){
         *fuseMotor( d=0.5, holes=true);
-        fuseSegment( seg=0 );
+        fuseSegment( [0] );
         union(){
-            fuseSegment( seg=1 );
+            fuseSegment( [1] );
             translate( [0,50,0]) color("GhostWhite") fuseCoverBak();
             }
-        fuseSegment( seg=2 );
+        fuseSegment( [2] );
         translate( [0,50,0]) color("GhostWhite") fuseCoverMid();
         color("Red") translate( [0,-50,0]) fuseSkid( r=-0.5 );
-        fuseSegment( seg=3 );
+        fuseSegment( [3] );
         translate( [0,50,0]) color("GhostWhite") fuseCoverFront();
     }
 }

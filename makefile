@@ -33,6 +33,8 @@ inspectoer.zip: $(STL_FILES) $(DOC_FILES)
 
 clean:
 	rm -rf $(BUILD_DIR)
+	rm -rf $(DOC_DIR)/*.png
+	rm -rf $(DOC_DIR)/*.stl
 	rm -f inspectoer.zip
 
 .PHONY: all clean

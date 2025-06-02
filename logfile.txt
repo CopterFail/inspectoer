@@ -1,11 +1,83 @@
-Geometries in cache: 13
-Geometry cache size in bytes: 94496
+Geometries in cache: 18
+Geometry cache size in bytes: 129648
 CGAL Polyhedrons in cache: 4
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.062
+Total rendering time: 0:00:00.065
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      2
    Vertices:      358
    Facets:        720
-  adding: body_0.stl (deflated 89%)
+  adding: body_0.stl (deflated 90%)
+WARNING: variable "seg" not specified as parameter in file ../planelib/document.scad, line 41
+WARNING: variable "seg" not specified as parameter in file ../planelib/document.scad, line 42
+WARNING: variable "seg" not specified as parameter in file ../planelib/document.scad, line 43
+WARNING: variable "seg" not specified as parameter in file ../planelib/document.scad, line 44
+WARNING: Children index (0) out of bounds (0 children) in file ../planelib/fuselage.scad, line 283
+WARNING: Children index (1) out of bounds (0 children) in file ../planelib/fuselage.scad, line 284
+Compiling design (CSG Products normalization)...
+Normalized CSG tree has 2600 elements
+Compiling highlights (3 CSG Trees)...
+Geometries in cache: 778
+Geometry cache size in bytes: 36793012
+CGAL Polyhedrons in cache: 73
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:41.723
+WARNING: variable "seg" not specified as parameter in file ../planelib/document.scad, line 63
+WARNING: variable "seg" not specified as parameter in file ../planelib/document.scad, line 65
+WARNING: variable "seg" not specified as parameter in file ../planelib/document.scad, line 68
+WARNING: Children index (0) out of bounds (0 children) in file ../planelib/fuselage.scad, line 283
+WARNING: Children index (1) out of bounds (0 children) in file ../planelib/fuselage.scad, line 284
+WARNING: variable "seg" not specified as parameter in file ../planelib/document.scad, line 71
+Compiling design (CSG Products normalization)...
+Normalized CSG tree has 30 elements
+Geometries in cache: 389
+Geometry cache size in bytes: 29137376
+CGAL Polyhedrons in cache: 71
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:22.697
+WARNING: variable "seg" not specified as parameter in file ../planelib/document.scad, line 63
+WARNING: variable "seg" not specified as parameter in file ../planelib/document.scad, line 65
+WARNING: variable "seg" not specified as parameter in file ../planelib/document.scad, line 68
+WARNING: Children index (0) out of bounds (0 children) in file ../planelib/fuselage.scad, line 283
+WARNING: Children index (1) out of bounds (0 children) in file ../planelib/fuselage.scad, line 284
+WARNING: variable "seg" not specified as parameter in file ../planelib/document.scad, line 71
+Compiling design (CSG Products normalization)...
+Normalized CSG tree has 1394 elements
+Compiling highlights (1 CSG Trees)...
+Geometries in cache: 776
+Geometry cache size in bytes: 36791316
+CGAL Polyhedrons in cache: 73
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:34.673
+  adding: body_0.stl (deflated 90%)
+WARNING: Children index (0) out of bounds (0 children) in file ../planelib/fuselage.scad, line 283
+WARNING: Children index (1) out of bounds (0 children) in file ../planelib/fuselage.scad, line 284
+Compiling design (CSG Products normalization)...
+Normalized CSG tree has 2597 elements
+Compiling highlights (3 CSG Trees)...
+Geometries in cache: 778
+Geometry cache size in bytes: 36793012
+CGAL Polyhedrons in cache: 137
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:44.542
+WARNING: Children index (0) out of bounds (0 children) in file ../planelib/fuselage.scad, line 283
+WARNING: Children index (1) out of bounds (0 children) in file ../planelib/fuselage.scad, line 284
+Compiling design (CSG Products normalization)...
+Normalized CSG tree has 30 elements
+Geometries in cache: 389
+Geometry cache size in bytes: 29137376
+CGAL Polyhedrons in cache: 137
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:25.445
+WARNING: Children index (0) out of bounds (0 children) in file ../planelib/fuselage.scad, line 283
+WARNING: Children index (1) out of bounds (0 children) in file ../planelib/fuselage.scad, line 284
+Compiling design (CSG Products normalization)...
+Normalized CSG tree has 1394 elements
+Compiling highlights (1 CSG Trees)...
+Geometries in cache: 776
+Geometry cache size in bytes: 36791316
+CGAL Polyhedrons in cache: 139
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:37.231
+  adding: body_0.stl (deflated 90%)
