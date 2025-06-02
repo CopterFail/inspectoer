@@ -1,39 +1,72 @@
 
+include <BOSL2/std.scad>
 
-module fuseSolid( r=0 )
+
+pFuseProfile = pSD6060; // use SD6060 profile for the inner fuselage, former alternative was pClarkY
+
+module solidHull( r=0 )
+{
+	hull()
+	{
+		// outer fuse with SD6060 profiles to connect the wings with 3mm overlap:
+		translate([0,0,-0.15])  spant3d( d=0.3, offset=+(o[0]+[0,0,3+r]), size=s[0],  r=r, p=pSD6060 );
+		translate([0,0,-0.15])  spant3d( d=0.3, offset=-(o[0]+[0,0,3+r]), size=s[0],  r=r, p=pSD6060 );
+		// inner fuse with ClarkY profiles
+		translate([fuseLength0,fuseY0,-0.15]) 
+			spant3d( d=0.3, offset=[0,0,fuseWidth/2+r],    size=fuseInnerSpant,   r=r, p=pFuseProfile );
+		translate([fuseLength0,fuseY0,-0.15]) 
+			spant3d( d=0.3, offset=[0,0,-(fuseWidth/2+r)], size=fuseInnerSpant,   r=r, p=pFuseProfile );
+	}
+}
+
+module solidPolyhedron( r=0 )
+{
+	// use BOSL2:
+	p1 = offset( move( [-fuseLength0, fuseY0], pFuseProfile * fuseInnerSpant * 1.13 ), delta=r ); 
+	p2 = offset( pSD6060 * s[0], delta=r ); 
+	//bool1 = is_path( p1 );
+	//bool2 = is_region([p1, p2]);
+	//echo( bool1, bool2 );
+
+	zpos1 = fuseWidth/2+r;
+	zpos2 = o[0].z+3+r;
+
+	mirror([1,0]) 
+	skin( [
+		p2,
+		p1, 
+		p1, 
+		p2], 
+		z=[-zpos2, -zpos1, +zpos1, +zpos2], 
+		slices=0 );
+}
+module fuseSolid( seg=0, r=0 )
 {
     difference(){
         union(){
-            hull()
-            {
-				// outer fuse with SD6060 profiles to connect the wings with 3mm overlap:
-                translate([0,0,-0.15])  spant3d( d=0.3, offset=+(o[0]+[0,0,3+r]), size=s[0],  r=r, p=pSD6060 );
-                translate([0,0,-0.15])  spant3d( d=0.3, offset=-(o[0]+[0,0,3+r]), size=s[0],  r=r, p=pSD6060 );
-				// inner fuse with ClarkY profiles
-                translate([fuseLength0,fuseY0,-0.15]) 
-                    spant3d( d=0.3, offset=[0,0,fuseWidth/2+r],    size=fuseInnerSpant,   r=r, p=pSD6060 /*pClarkY*/ );
-                translate([fuseLength0,fuseY0,-0.15]) 
-                    spant3d( d=0.3, offset=[0,0,-(fuseWidth/2+r)], size=fuseInnerSpant,   r=r, p=pSD6060 /* pClarkY*/ );
-            }
-        }
-        union(){
-            fuseFinger( df=25-r );  // here r has only the half effect 
-            mirror([0,0,1]) fuseFinger(  df=25-r  );
+			length = (seg<4) ? 170 : 4 * 170;
+			start = (seg<4) ? -140+seg*length : -140+3*170;
+			radialSlice( sh=length, sx=100, org=[-length+start,0,0], rot=[0,90,0], mode=2, center=false ){
+				*solidHull(r);
+				solidPolyhedron(r);
+			}
+		}
+		union(){
+			fuseFinger( df=25-r );  // here r has only the half effect 
+			mirror([0,0,1]) fuseFinger(  df=25-r  );
 			// 3mm cutout for wind with SD6060 profile, oversize is 0.5mm:
-            spant3d( d=5, offset=+(o[0]+[0,0,r]), size=s[0], r=0.5-r, p=pSD6060 );
-            spant3d( d=5, offset=-(o[0]+[0,0,r+5]), size=s[0], r=0.5-r, p=pSD6060 ); // spant3d is not centered, so we need to substract 5mm to the offset
+			spant3d( d=5, offset=+(o[0]+[0,0,r]), size=s[0], r=0.5-r, p=pSD6060 );
+			spant3d( d=5, offset=-(o[0]+[0,0,r+5]), size=s[0], r=0.5-r, p=pSD6060 ); // spant3d is not centered, so we need to substract 5mm to the offset
+			translate([-308-r,0,0]) cube([fuseWidth*2,fuseWidth*2,fuseWidth*2], center=true); // cutout for the tail of the fuselage
         }
      }
     
 }
 
-module fuseCoverMask( x=0, y=100, r=90, h=400 )
+module fuseCoverMask( x=0, r=45, h=100 )
 {
-	translate([x,y,0]){   // cutout for classic cover
-		hull(){
-			translate([x,+r/2,0]) cube([h+2*r,0.1,r], center=true);
-			translate([x,-r/2,0]) cube([h,0.1,r], center=true);
-			}
+	translate([x-h/2,30,0]){   // cutout for classic cover, height is fix 60mm
+		cube([h,60,r], center=true);
 		}
 }
 
@@ -48,68 +81,75 @@ module fuseFinger( df=25 )
     }
 }
 
-module fuseSkin( fuseSkin = 5 )
+module fuseSkin()
 {
-    innerSkin(){
-        union(){
-            fuseSolid( r=0 );
-            }
-        union(){
-            fuseSolid( r=-fuseSkin );
-            
-            fuseCoverMask(x=120, y=63-20+fuseY0, r=fuseWidth-12, h=80);
-            fuseCoverFront(d=0.3);
-            translate([161,35+10,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
+    difference(){
+		difference(){
+			children(0);
+			children(1);
+			}
 
-            fuseCoverMask(x=35, y=60-20+fuseY0, r=fuseWidth-12+2, h=90);	//fuseWith is increased from 50 to 58, so at least 44 do we need for 4s21700 battery
-            fuseCoverMid(d=0.3);
-            translate([-10,40,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
+		fuseCoverMask(x=CoverPositionFront-5, r=CoverWidth-6, h=CoverLenthFront-10);
+		fuseCover(){
+			children(0);
+			children(2);
+			fuseCoverMask(x=CoverPositionFront+CoverGap/2, r=CoverWidth+CoverGap, h=CoverLenthFront+CoverGap);
+			}
 
-            fuseCoverMask(x=-43, y=60-20+fuseY0, r=fuseWidth-12, h=45);
-            fuseCoverBak(d=0.3);
-            translate([-128,35-10,0]) rotate([90,90,0]) cylinder(d=2.5, h=20);//fuseCoverHookKnop();
+		fuseCoverMask(x=CoverPositionMid-5, r=CoverWidth-6, h=CoverLenthMid-10);	//fuseWith is increased from 50 to 58, so at least 44 do we need for 4s21700 battery
+		fuseCover(){
+			children(0);
+			children(2);
+			fuseCoverMask(x=CoverPositionMid+CoverGap/2, r=CoverWidth+CoverGap, h=CoverLenthMid+CoverGap);
+			}
 
-            *translate([-80,35-10,0]) cube([60,80,36], center=true); // FC           
-            
-            fuseGps();
-            fuseElrs();
-                
-            xTube( diameter=dBar1, length=100, tubeoffset=tubeOffset1, $fn=50 );
-            mirror([0,0,1]) xTube( diameter=dBar1, length=100, tubeoffset=tubeOffset1, $fn=50 );
-            xTube( diameter=dBar2, length=100, tubeoffset=tubeOffset2, $fn=50 );
-            mirror([0,0,1]) xTube( diameter=dBar2, length=100, tubeoffset=tubeOffset2, $fn=50 );
-            
-             fuseSkid();
-             fusePoly();
-             wingElectric();
-             fuseCamera();
-             
-             translate([260,-2,+23]) rotate([8,0,0 ]) scale(7) fuseNaca(w=-10);
-             translate([260,-2,-23]) rotate([180-8,0,0 ]) scale(7) fuseNaca(w=-10);
-             translate([-210,-10,+30+3]) rotate([0,-90,20]) cylinder(d=10+4,h=50,center=true);  // ToFix: collision with inner tube
-             translate([-210,-10,-30-3]) rotate([0,-90,20]) cylinder(d=10+4,h=50,center=true);
-             
-			 // as an alternative, move the wing abount 3mm into the fuselage and remove fuseWingMount, see fuseSolid() above
-			 // Do we need a spacer to keep the walls in place? No
-             *fuseFinger();
-            }
-        }
-       
-       *fuseMotor(d=0.5, holes=true);
-       *wingSegment( [s[0],s[1]], [o[0],o[1]], do = 2 );
-       *mirror( [0,0,1] ) wingSegment( [s[0],s[1]], [o[0],o[1]], do = 2 );
+		fuseCoverMask(x=CoverPositionBack-5, r=CoverWidth-6, h=CoverLenthBack-10);
+		fuseCover(){
+			children(0);
+			children(2);
+			fuseCoverMask(x=CoverPositionBack+CoverGap/2, r=CoverWidth+CoverGap, h=CoverLenthBack+CoverGap);
+			}
+
+		translate([CoverPositionFront-CoverLenthFront-6,0,0]) rotate([-90,0,0]) cylinder(d=2.5, h=60);//fuseCoverHookKnop();
+		translate([CoverPositionMid-CoverLenthMid-6,0,0]) rotate([-90,0,0]) cylinder(d=2.5, h=60);//fuseCoverHookKnop();
+		translate([CoverPositionBack-CoverLenthBack-6,0,0]) rotate([-90,0,0]) cylinder(d=2.5, h=60);//fuseCoverHookKnop();
+
+		*translate([-80,35-10,0]) cube([60,80,36], center=true); // FC           
+		
+		fuseGps();
+		*fuseElrs();
+			
+		xTube( diameter=dBar1, length=100, tubeoffset=tubeOffset1, $fn=50 );
+		mirror([0,0,1]) xTube( diameter=dBar1, length=100, tubeoffset=tubeOffset1, $fn=50 );
+		xTube( diameter=dBar2, length=100, tubeoffset=tubeOffset2, $fn=50 );
+		mirror([0,0,1]) xTube( diameter=dBar2, length=100, tubeoffset=tubeOffset2, $fn=50 );
+		
+		fuseSkid(){
+			children(0);
+			children(3);
+		};
+		
+		fusePoly();
+		wingElectric();
+		fuseCamera();
+			
+		translate([260-50,-2,+23+6]) rotate([8,0,0 ]) scale(7) fuseNaca(w=-10);
+		translate([260-50,-2,-23-6]) rotate([180-8,0,0 ]) scale(7) fuseNaca(w=-10);
+		translate([-210,-10,+30+3]) rotate([0,-90,20]) cylinder(d=10+4,h=50,center=true);  // ToFix: collision with inner tube
+		translate([-210,-10,-30-3]) rotate([0,-90,20]) cylinder(d=10+4,h=50,center=true);
+	}
 }
 
-module fuseSegment( seg=0 )
+module fuseSegment( vseg=[0] )
 {
-	render(convexity = 2){
-		length = 170;
-		start = -140+seg*length;
-		radialSlice( sh=length, sx=100, org=[-length+start,0,0], rot=[0,90,0], mode=2, center=false )
-		{
-			fuseSkin( fuseSkin = 5 );
-		}
-	}
+	render(convexity = 2)
+		for( seg=vseg )
+			fuseSkin(){
+				fuseSolid( seg, r=0 );	// regular solid
+				fuseSolid( seg, r=-fuseWall );	// 5mm reduced solid for 5 mm walls
+				fuseSolid( seg, r=-CoverWall ); // reduced by the cover skin	
+				fuseSolid( seg, r=-SkidWall ); // reduced by the skid thickness
+				}
 }
 
 module fuseCoverHookKnop()
@@ -171,102 +211,42 @@ module fuseCoverMount_1()
     }
 }
 
-module fuseCoverFront(d=0.1)
+module fuseCover()
 {
-    coverSkin = 1.5;
-    hx1 = 296-4;
-    hy1 = 37;
-    hx2 = 172.5;
-    hy2 = 52.5;
-
-    Slice(){
-        innerSkin(){
-            fuseSolid( r=+d );
-            union(){
-                fuseSolid( r=-coverSkin-d );
-                translate([ hx1, hy1, 0])
-                    rotate([90,0,-12])
-                        translate([0,0,-10])cylinder(d=6.4,h=10);
-                translate([hx2, hy2, 0])
-                    rotate([90,180,0])
-                        translate([0,0,-10])cylinder(d=6.4,h=10);
-                }
-            }
-        fuseCoverMask(x=120, y=63-3-d-20+fuseY0, r=fuseWidth-4, h=80);
-        fusePoly();
-
-        }
-    *translate([hx1,hy1,0])
-        rotate([90,0,-12])
-            fuseCoverHook();
-
-    *translate([hx2,hy2,0])
-        rotate([90,180,0])
-            fuseCoverHook( true );
+	intersection() {
+		difference() {	// build the skin for the cover
+			children(0);
+			children(1);
+		}
+		children(2); // and intersect with the increased cover mask
+	}	
+}
+ 
+module fuseCoverFront()
+{
+	fuseCover(){
+		fuseSolid( 10, r=0 );	// regular solid
+		fuseSolid( 10, r=-1.5 ); // reduced by the cover skin	
+		fuseCoverMask(x=CoverPositionFront, r=CoverWidth, h=CoverLenthFront);
+		}
 }
 
-module fuseCoverMid(d=0.1)
+module fuseCoverMid()
 {
-    coverSkin = 2;
-    hx1 = 122;
-    hy1 = 52.5;
-    hx2 = 22.5;
-    hy2 = 47;
-
-    Slice(){
-        innerSkin(){
-            fuseSolid( r=+d );
-            union(){
-                fuseSolid( r=-coverSkin-d );
-                translate([ hx1, hy1, 0])
-                    rotate([90,0,0])
-                        translate([0,0,-10])cylinder(d=6.4,h=10);
-                translate([hx2, hy2, 0])
-                    rotate([90,180,0])
-                        translate([0,0,-10])cylinder(d=6.4,h=10);
-                }
-            }
-        fuseCoverMask(x=35, y=60-3-d-20+fuseY0, r=fuseWidth-4, h=90);
-        }
-    *translate([hx1,hy1,0])
-        rotate([90,0,0])
-            fuseCoverHook();
-
-    *translate([hx2,hy2,0])
-        rotate([90,180,0])
-            fuseCoverHook( true );
+	fuseCover(){
+		fuseSolid( 10, r=0 );	// regular solid
+		fuseSolid( 10, r=-1.5 ); // reduced by the cover skin	
+		fuseCoverMask(x=CoverPositionMid, r=CoverWidth, h=CoverLenthMid);
+		}
 }
 
-module fuseCoverBak(d=0.1)
+module fuseCoverBak()
 {
-    coverSkin = 2;
-    hx1 = 122;
-    hy1 = 52.5;
-    hx2 = 22.5;
-    hy2 = 47;
-
-    Slice(){
-        innerSkin(){
-            fuseSolid( r=+d );
-            union(){
-                fuseSolid( r=-coverSkin-d );
-                translate([ hx1, hy1, 0])
-                    rotate([90,0,0])
-                        translate([0,0,-10])cylinder(d=6.4,h=10);
-                translate([hx2, hy2, 0])
-                    rotate([90,180,0])
-                        translate([0,0,-10])cylinder(d=6.4,h=10);
-                }
-            }
-        fuseCoverMask(x=-43, y=60-3-d-20+fuseY0, r=fuseWidth-4, h=45 );
-        }
-    *translate([hx1,hy1,0])
-        rotate([90,0,0])
-            fuseCoverHook();
-
-    *translate([hx2,hy2,0])
-        rotate([90,180,0])
-            fuseCoverHook( true );
+	fuseCover(){
+		fuseSolid( 10, r=0 );	// regular solid
+		fuseSolid( 10, r=-1.5 ); // reduced by the cover skin	
+		fuseCoverMask(x=CoverPositionBack, r=CoverWidth, h=CoverLenthBack);
+		}
 }
 
 module fuseGps()
@@ -281,13 +261,6 @@ module fuseElrs()
 
 }
 
-
-
-
-
-
-
-
 module fuseNaca(w=-12)
 {
     module hole(){
@@ -297,34 +270,33 @@ module fuseNaca(w=-12)
     }
     
     translate([0,0,0]) rotate([0,w,0]) hole();
-    // fehlt die Schraegung und der Luftkanal...
 }
+
 
 module fuseSkid( r=0 )
 {
-    // wechselbare Platte für den Boden... 25x5cm, 2 Layer?
-    // Rand ???
-    d = 40;
-    l = 220-d;
-    Slice(){
-        innerSkin(){
-            fuseSolid( r=0 );
-            fuseSolid( r=-0.5 );
-            }
-        translate([180,-15,0]) 
-            rotate([90,0,0]) 
-                hull(){
-                    translate([-l/2,0,0]) cylinder(d=d-r,h=50);
-                    translate([+l/2,0,0]) cylinder(d=d-r,h=50);
-                    }
-        }
+	// wechselbare Platte für den Boden... 25x5cm, 2 Layer
+	d = fuseWidth-8;
+	l = 220-d;
+	Slice(){
+		innerSkin(){
+			children(0);
+			children(1);
+			}
+		translate([180,-15,0]) 
+			rotate([90,0,0]) 
+			hull(){
+				translate([-l/2,0,0]) cylinder(d=d-2*r,h=50);
+				translate([+l/2,0,0]) cylinder(d=d-2*r,h=50);
+				}
+		}
 }
 
-module fuseSkid2( r=0 )
+module fuseSkid2( r=0 ) // is no replacement for fuseSkid(), simplified for flat printing
 {
     // wechselbare Platte für den Boden... 25x5cm, 2 Layer?
     // Rand ???
-    d = 40;
+    d = fuseWidth-8;
     l = 220-d;
     translate([180,-15,0]) 
         rotate([90,0,0]) 
@@ -336,7 +308,7 @@ module fuseSkid2( r=0 )
 
 module fuseCamera()
 {
-    translate([fuseLength0-20,3+fuseY0,0])
+    translate([fuseLength0-20-4,3+fuseY0,0])
         rotate([0,90,0])
             union(){
                 cylinder(d=15, h=30);
@@ -346,82 +318,16 @@ module fuseCamera()
 
 module fusePoly()
 {
-    //translate([fuseLength0-3,0,0])
-    translate([fuseLength0-2.5,fuseY0,-0.15]) 
-        mirror([1,0,0])
-        {
-            //fusePolyLine( d=dPoly, off=[-2.7+fuseWidth/2,-4], size=fuseInnerSpant, p=pClarkFusePolyUp ); 
-            //fusePolyLine( d=dPoly, off=[-2.5+fuseWidth/2,+5], size=fuseInnerSpant, p=pClarkFusePolyDown ); 
-            fusePolyLine(  d=dPoly, off=[-2.7+fuseWidth/2,+2.7], size=fuseInnerSpant, p=pClarkY2 );
-            fusePolyLine(  d=dPoly, off=[-2.5+fuseWidth/2,-2.5], size=fuseInnerSpant, p=pClarkY2 );
-
-            //fusePolyLine( d=dPoly, off=[+2.7-fuseWidth/2,-4], size=fuseInnerSpant, p=pClarkFusePolyUp ); 
-            //fusePolyLine( d=dPoly, off=[+2.5-fuseWidth/2,+5], size=fuseInnerSpant, p=pClarkFusePolyDown ); 
-            fusePolyLine(  d=dPoly, off=[+2.7-fuseWidth/2,+2.7], size=fuseInnerSpant, p=pClarkY2 );
-            fusePolyLine(  d=dPoly, off=[+2.5-fuseWidth/2,-2.5], size=fuseInnerSpant, p=pClarkY2 );
-            
-            //offsetPolyLine(  d=dPoly, size=605, off=0, p=pClarkY );
-            //offsetPolyLine(  d=dPoly, size=605, off=-10, p=pClarkY );
-            
-            }
-    fusePolyLineQ( d=dPoly, pt=ptWingNose, off=[+2,+0.5] );
-    fusePolyLineQ( d=dPoly, pt=ptQRuder, off=[+0,+0] );
+	mirror([1,0,0])
+	{
+		pp = offset( move( [-fuseLength0, fuseY0], pFuseProfile * fuseInnerSpant * 1.13 ), delta=-fuseWall/2 ); 
+		fusePolyLine(  d=dPoly, off=[+fuseWidth/2-fuseWall/2,0], size=1, p=pp );
+		fusePolyLine(  d=dPoly, off=[-fuseWidth/2+fuseWall/2,0], size=1, p=pp );
+	}
+	fusePolyLineQ( d=dPoly, pt=ptWingNose, off=[+2,+0.5] );
+	fusePolyLineQ( d=dPoly, pt=ptQRuder, off=[+0,+0] );
 
 }
-
-module tubeFlansh( d=8, a=0, h=60, w=3, r=0 )
-{
-    offh = +(d+w)/2+1;
-    translate([-420, tailz0, +zBoom])
-    translate([-20,0,0])
-    difference(){
-        union(){
-            hull()
-                {
-                translate([0,-a,0]) rotate([0,-90,0]) cylinder(d=d+w, h=h, center = false );   
-                translate([20,+offh,3]) rotate([90,0,0]) 
-                    mirror([0,1,0])
-                        spant3d( d=0.3, offset=[0,0,0], size=120, r=0, p=pSD6060 );
-                translate([20,-3,-offh]) 
-                    spant3d( d=0.3, offset=[0,0,0], size=120, r=0, p=pNaca0012 );
-                }
-            hull() // to sruder
-                {
-                translate([-2,offh,1]) rotate([-90,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
-                translate([-42,offh,1]) rotate([-90,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
-                }
-            hull() // to hruder
-                {
-                translate([+5,-3,-1.5]) rotate([180,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
-                translate([-30,-3,-1.5]) rotate([180,0,0]) cylinder(d1=d+r, d2=1+r, h=20, center = false );
-                }
-            hull()
-                {
-                translate([-15,-5,-1.5]) rotate([180,0,0]) cylinder(d=20, h=2, center = false );
-                translate([-50,-5,-1.5]) rotate([180,0,0]) cylinder(d=20, h=2, center = false );
-                }
-            
-            }
-        translate([-2*h,-a,0]) rotate([0,90,0]) cylinder(d=d+0.2, h=h*3, center = false );
-        translate([8,-a,0]) rotate([0,90,0]) cylinder(d1=d+0.2,d2=d+1, h=12, center = false );
-        
-        translate([0-2*h,-a, 0] )
-            rotate( [45+90,0,0] )
-                cube([h*3,h*3,1], center = false );    // cut a 1mm gap
-
-        hull(){ 
-            translate([+20-ptHRuder.x*120, -3+ptHRuder.y*120, -4-dPoly]) sphere(d=dPoly); 
-            translate([+20-ptHRuder.x*120, -3+ptHRuder.y*120, +3+dPoly]) sphere(d=dPoly); 
-            }
-        hull(){ 
-            translate([+20-2, -3, -4-dPoly]) sphere(d=dPoly); 
-            translate([+20-2, -3, +3+dPoly]) sphere(d=dPoly); 
-            }
-        translate([-45,-2,-8]) cube([12,6,10], center=true ); // servo cable - bad
-
-        }
-}
-
 module tubeFlansh2( d=8, a=0, h=60, w=3, r=0 )
 {
     offh = +(d+w)/2+1;

@@ -23,20 +23,19 @@ include <inspectoer.scad>
 *fuseSolid();  
 *fuseBattery();
 *fuseSkin(); 
+
 *fusePoly();
 *translate([335,0,50]) spant3d( d=0.3, offset=[0,0,0],    size=605,   r=0, p=pClarkFuse );
 *fuseCoverFront(d=0);
 *fuseCoverHook( true );
 *fuseCoverHook( false );
 *translate([20,35,0]) rotate([90,90,0]) fuseCoverHookKnop();
-*fuseSegment(0);
-*fuseSegment(1);
-*fuseSegment(2);
-*fuseSegment(3);
+*fuseSegment([0,3]);
+*fuseSegment([0,1,2,3]);
 *translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku
-*fuseCoverFront();
-*fuseCoverMid();
-*fuseCoverBak();
+*color("Green") fuseCoverFront();
+*color("Green") fuseCoverMid();
+*color("Green") fuseCoverBak();
 *fuseSkid2( r=0.1 );
 *fuseCoverMount_1()
 

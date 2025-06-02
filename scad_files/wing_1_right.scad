@@ -2,7 +2,7 @@
 include <../planelib/inspectoer.scad>
 
 difference(){
-Ruder2( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=5 )
+Ruder3( ptStart=[-p1.x+o1,+p1.y,z1], dStart=d1, ptStop=[-p2.x+o2,+p2.y,z2], dStop=d2, dSpace=0.8, steps=5 )
     union(){
         *wingSegment( [s[3],s[4]], [o[3],o[4]] ); // was last segment
         *wingSegment( [s[2],s[3]], [o[2],o[3]] );

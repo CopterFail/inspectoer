@@ -50,6 +50,18 @@ fuseLength0 = 325; // Spitze vor dem nullpunkt bei r=0 , war 355
 fuseLength1 = 270; // hinterster Punkt - 5, die Länge in Dirks plan war 605mm,355+270=635,gemessen 640
 fuseY0 = -10; // y offset of inner fuse
 fuseInnerSpant = 570;
+fuseWall = 5; // fuselage wall thickness
+CoverWall = 1.5; // cover thickness
+SkidWall = 0.5;	// skid thickness
+CoverWidth = 52; // cover width
+CoverPositionFront = fuseLength0-32;
+CoverPositionMid = fuseLength0-174;
+CoverPositionBack =fuseLength0-361;
+CoverLenthFront = 127;
+CoverLenthMid = 155;
+CoverLenthBack = 85;
+CoverGap = 0.5;
+
 
 
 // Ruder calculations:

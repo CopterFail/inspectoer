@@ -1,4 +1,4 @@
 
 include <../planelib/inspectoer.scad>
 
-fuseSegment(2);
+fuseSegment([2]);
