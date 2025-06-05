@@ -13,19 +13,21 @@ include <inspectoer.scad>
     RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0], diff=0.2  ); /*dSpace is 0.8*/         
 }
 
+*wingSegment( [s[0],s[3]], [o[0],o[3]] ); // complete wing in one call
+
 tp1 = [-p1.x+o1,+p1.y,z1]; // z1 is start of ruder , 280
 tp4 = [-p2.x+o2,+p2.y,z2]; // z2 is end of ruder , 530
 tp2 = (tp4-tp1)*0.25 + tp1; // todo: sync with cut , 350 -> 460
 tp3 = (tp4-tp1)*0.75 + tp1;
 RuderWingCut( pts=[tp1,tp2,tp3,tp4], hgt=[d1,d1-0.25*(d1-d2),d1-0.75*(d1-d2),d2], dSpace=0.4, positiv=true ){
-	*wingSegment( [s[0],s[3]], [o[0],o[3]] );
-	wingSegment( [s[1],s[2]], [o[1],o[2]] );
+	wingSegment( [s[0],s[3]], [o[0],o[3]] );
+	*wingSegment( [s[1],s[2]], [o[1],o[2]] );
 }
 
-left(20)
+left(60)
 RuderCut( pts=[tp1,tp2,tp3,tp4], hgt=[d1,d1-0.25*(d1-d2),d1-0.75*(d1-d2),d2], dSpace=0.4, positiv=true ){
-	*wingSegment( [s[0],s[3]], [o[0],o[3]] );
-	wingSegment( [s[1],s[2]], [o[1],o[2]] );
+	wingSegment( [s[0],s[3]], [o[0],o[3]] );
+	*wingSegment( [s[1],s[2]], [o[1],o[2]] );
 }
 
 *RuderHorn( dbase=d1, pos = o[2] + [-ptQRuder.x*s[2], +ptQRuder.y*s[2], 0]  ); /*dSpace is 0.8*/         

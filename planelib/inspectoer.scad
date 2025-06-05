@@ -24,6 +24,12 @@ o = [   [+sf*0,   0, 50],
         ]; //offset: x,y,z 
 s = [ 250, 234, 202, 170 ]; //dsize is -32mm/200mm * dz
 
+function o(z) = [
+	sf * (z-50),
+	0,
+	z];
+function s(z) = 250 - (z-50) / 500 * (250-170);
+
 tubeOffset1 = 40; 
 tubeOffset2 = tubeOffset1 + 80;
 tubeOffsety = 3.5;
@@ -62,9 +68,9 @@ CoverGap = 0.5;
 
 // Ruder calculations:
 ptWingNose = find_nose( c=sd6060_coords ); // SD6060 profile nose
-ptQRuder = [1-0.32, ( p(1-0.32, pSD6060) + n(1-0.32, pSD6060) ) /2 ]; // 32% of the SD6060 profile
+ptQRuder = [1-0.32, ( p(1-0.32, pSD6060) + n(1-0.32, pSD6060) ) /2 ]; // lower 32% of the SD6060 profile
 hQRuder = h( 1-0.32, pSD6060 );
-ptHRuder = [1-0.35, ( p(1-0.35, pNaca0012) + n(1-0.35, pNaca0012) ) /2 ]; // 35% of the Naca0012 profile
+ptHRuder = [1-0.35, ( p(1-0.35, pNaca0012) + n(1-0.35, pNaca0012) ) /2 ]; // lower 35% of the Naca0012 profile
 hHRuder = h( 1-0.35, pNaca0012 );
 
 z1 = 280; // lower z of ruder

@@ -66,11 +66,11 @@ sd6060_coords = [
 ];
 
 
-function positive(a) = [for (i = a ) if( i.y >= 0 )i ];     
-function negative(a) = [for (i = a ) if( i.y < 0 )i ];
-function p(x,c=sd6060_coords) = lookup( x, positive(c) );
-function n(x,c=sd6060_coords) = lookup( x, negative(c) );
-function h(x,c=sd6060_coords) = p(x,c) - n(x,c);
+function positive(a) = [for (i = a ) if( i.y >= 0 )i ]; // get the positive part of the profile
+function negative(a) = [for (i = a ) if( i.y < 0 )i ]; // get the negative part of the profile
+function p(x,c=sd6060_coords) = lookup( x, positive(c) ); // get the positive y value for a given x value
+function n(x,c=sd6060_coords) = lookup( x, negative(c) ); // get the negative y value for a given x value
+function h(x,c=sd6060_coords) = p(x,c) - n(x,c); // get the height of the airfoil at x
 function find_xmin( xmin=1, hmin, c=sd6060_coords ) = ( h( xmin, c ) > hmin ) ? xmin : find_xmin( xmin-0.001, hmin, c ); 
 function find_nose( c=sd6060_coords ) = negative(c)[0]; // find the nose of the airfoil, this could also be the last negative, ToDo: use a real search
   

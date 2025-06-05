@@ -70,8 +70,8 @@ module RuderCut(
 					rneg(pts[idx], hgt[idx], pts[idx+1], hgt[idx+1], dSpace, dir=true);
 				}
 			}
+		}
 	}
-  }
 }
 
 //wing
@@ -93,6 +93,11 @@ module RuderWingCut(
 					rneg(pts[idx], hgt[idx], pts[idx+1], hgt[idx+1], dSpace, dir=false);
 				}
 			}
+		}
 	}
-  }
+
+	difference(){
+		children();
+		translate(pts[0]+[-300,-30,0]) cube([600,60,pts[len(pts)-1].z- pts[0].z], center=false); 
+	}
 }
