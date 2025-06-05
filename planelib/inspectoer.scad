@@ -9,7 +9,7 @@ include <wing.scad> // spant , segment funktionen, brauchen o[] und s[]
 include <polyline.scad> 
 include <servo.scad>
 include <screw.scad>
-include <ruder3.scad> 
+include <ruder4.scad>
 include <motor.scad>  
 include <vista.scad>
 include <wingbow.scad> // wingbow functions and experiments with polyhedron, rotated profiles profilen etc
@@ -20,17 +20,13 @@ sf= 30/500; // forward = 30mm pro 500mm  (550???)
 o = [   [+sf*0,   0, 50],     
         [+sf*100, 0, 150],
         [+sf*300, 0, 350],
-        [+sf*500, 0, 550], 
-        [+sf*530, 0, 580] // gerade Randbogen als verlängerung? 
+        [+sf*500, 0, 550]
         ]; //offset: x,y,z 
-s = [ 250, 234, 202, 170, 170-32/200*30 ]; //dsize is -32mm/200mm * dz
+s = [ 250, 234, 202, 170 ]; //dsize is -32mm/200mm * dz
 
 tubeOffset1 = 40; 
 tubeOffset2 = tubeOffset1 + 80;
 tubeOffsety = 3.5;
-tubeAng1 = atan2( (o[3]-o[0]).z, -o[3].x - tubeOffset1*(s[0]-s[3]) ) - 90;
-tubeAng2 = atan2( (o[3]-o[0]).z, -o[3].x - tubeOffset2*(s[0]-s[3]) ) - 90;
-//tubeAng = (tubeAng1 + tubeAng2) / 2;    // different angles will make problems
 tubeAng = 0;
 
 dBar1 = 8.4;    // diameter of the front tube
@@ -71,13 +67,13 @@ hQRuder = h( 1-0.32, pSD6060 );
 ptHRuder = [1-0.35, ( p(1-0.35, pNaca0012) + n(1-0.35, pNaca0012) ) /2 ]; // 35% of the Naca0012 profile
 hHRuder = h( 1-0.35, pNaca0012 );
 
-z1 = 280;
+z1 = 280; // lower z of ruder
 p1 = RuderGetPoint( z1, zStart=o[0].z , zStop=o[3].z, s[0], s[3], ptQRuder );
 o1 = RuderGetXOffset( z1, zStart=o[0].z , zStop=o[3].z, o[0].x, o[3].x );
 d1 = RuderGetHeight( z1, zStart=o[0].z , zStop=o[3].z, s[0], s[3], hQRuder );
 //echo( z1, p1, o1, d1);
 
-z2 = 530;
+z2 = 530; // upper z of ruder
 p2 = RuderGetPoint( z2, zStart=o[0].z , zStop=o[3].z, s[0], s[3], ptQRuder );
 o2 = RuderGetXOffset( z2, zStart=o[0].z , zStop=o[3].z, o[0].x, o[3].x );
 d2 = RuderGetHeight( z2, zStart=o[0].z , zStop=o[3].z, s[0], s[3], hQRuder );

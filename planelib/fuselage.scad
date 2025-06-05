@@ -131,7 +131,7 @@ module fuseSkin()
 		
 		fusePoly();
 		wingElectric();
-		fuseCamera();
+		#fuseCamera();
 			
 		translate([260-50,-2,+23+6]) rotate([8,0,0 ]) scale(7) fuseNaca(w=-10);
 		translate([260-50,-2,-23-6]) rotate([180-8,0,0 ]) scale(7) fuseNaca(w=-10);
@@ -306,7 +306,7 @@ module fuseSkid2( r=0 ) // is no replacement for fuseSkid(), simplified for flat
                 }
 }
 
-module fuseCamera()
+module fuseCamera1()
 {
     translate([fuseLength0-20-4,3+fuseY0,0])
         rotate([0,90,0])
@@ -315,7 +315,33 @@ module fuseCamera()
                 cube([21,21,15], center=true);
                 }
 }
-
+module fuseCamera2()
+{
+	O=6;
+	//translate([fuseLength0-20-4,3+fuseY0,0])
+		rotate([0,90,0])
+			union(){
+				translate([0,0,12+12+O]) 
+					cylinder(d1=15, d2=100,h=20);
+				translate([0,0,12+O]) 
+					cylinder(d=15, h=12);
+				translate([0,0,6+O]) 				
+					cube([21,21,12], center=true);
+                }
+}
+module fuseCamera()
+{
+	translate([fuseLength0-40,1.5+fuseY0,0])
+	for( w=[-90:1:90] ) 
+	{
+		rotate([0,w,0])
+			fuseCamera2();
+	}
+	*translate([fuseLength0-40,1.5+fuseY0,0]){
+		fuseCamera2();
+		rotate([0,90,0]) fuseCamera2();
+	}
+}
 module fusePoly()
 {
 	mirror([1,0,0])
