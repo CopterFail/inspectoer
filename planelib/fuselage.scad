@@ -346,7 +346,8 @@ module fuseCamera()
 		}
 		fuseCamera2();
 		*rotate([0,90,0]) fuseCamera2();
-		rotate([90,0,0]) cylinder(d=4.5, h=70, center=true); // camera mount
+		rotate([-90,0,0]) cylinder(d=4.5, h=70, center=true); // camera mount
+		rotate([-90,0,0]) cylinder(d=20, h=21, center=true); // remove rotation fragments
 	}
 }
 module fusePoly()
