@@ -40,6 +40,7 @@ module solidPolyhedron( r=0 )
 		z=[-zpos2, -zpos1, +zpos1, +zpos2], 
 		slices=0 );
 }
+
 module fuseSolid( seg=0, r=0 )
 {
     difference(){
@@ -66,7 +67,7 @@ module fuseSolid( seg=0, r=0 )
 module fuseCoverMask( x=0, r=45, h=100 )
 {
 	translate([x-h/2,30,0]){   // cutout for classic cover, height is fix 60mm
-		cube([h,60,r], center=true);
+		cuboid([h,60,r], rounding=8 ); // center=true is implicid for cuboid
 		}
 }
 
@@ -131,10 +132,10 @@ module fuseSkin()
 		
 		fusePoly();
 		wingElectric();
-		#fuseCamera();
+		fuseCamera();
 			
-		translate([260-50,-2,+23+6]) rotate([8,0,0 ]) scale(7) fuseNaca(w=-10);
-		translate([260-50,-2,-23-6]) rotate([180-8,0,0 ]) scale(7) fuseNaca(w=-10);
+		translate([260-40,-2,+23+6]) rotate([8,0,0 ]) scale(7) fuseNaca(w=-10);
+		translate([260-40,-2,-23-6]) rotate([180-8,0,0 ]) scale(7) fuseNaca(w=-10);
 		translate([-210,-10,+30+3]) rotate([0,-90,20]) cylinder(d=10+4,h=50,center=true);  // ToFix: collision with inner tube
 		translate([-210,-10,-30-3]) rotate([0,-90,20]) cylinder(d=10+4,h=50,center=true);
 	}
@@ -146,7 +147,10 @@ module fuseSegment( vseg=[0] )
 		for( seg=vseg )
 			fuseSkin(){
 				fuseSolid( seg, r=0 );	// regular solid
-				fuseSolid( seg, r=-fuseWall );	// 5mm reduced solid for 5 mm walls
+				difference(){ 
+					fuseSolid( seg, r=-fuseWall ); // 5mm reduced solid for 5 mm walls, cut the front to make the fuse solid solid
+					translate([300+5,0,0]) cube([40,50,50],center=true); 
+					}	
 				fuseSolid( seg, r=-CoverWall ); // reduced by the cover skin	
 				fuseSolid( seg, r=-SkidWall ); // reduced by the skid thickness
 				}
@@ -315,14 +319,17 @@ module fuseCamera1()
                 cube([21,21,15], center=true);
                 }
 }
-module fuseCamera2()
+module fuseCamera2( ang=0, open=true )
 {
 	O=6;
 	//translate([fuseLength0-20-4,3+fuseY0,0])
-		rotate([0,90,0])
+		rotate([0,90+ang,0])
 			union(){
-				translate([0,0,12+12+O]) 
-					cylinder(d1=15, d2=100,h=20);
+				if( open == true )
+				{
+					translate([0,0,12+12+O]) 
+						cylinder(d1=15, d2=100,h=20);
+				}
 				translate([0,0,12+O]) 
 					cylinder(d=15, h=12);
 				translate([0,0,6+O]) 				
@@ -331,15 +338,15 @@ module fuseCamera2()
 }
 module fuseCamera()
 {
-	translate([fuseLength0-40,1.5+fuseY0,0])
-	for( w=[-90:1:90] ) 
-	{
-		rotate([0,w,0])
-			fuseCamera2();
-	}
-	*translate([fuseLength0-40,1.5+fuseY0,0]){
+	translate([fuseLength0-40,1.5+fuseY0,0]){
+		for( w=[-90:1:90] ) 
+		{
+			rotate([0,w,0])
+				fuseCamera2();
+		}
 		fuseCamera2();
-		rotate([0,90,0]) fuseCamera2();
+		*rotate([0,90,0]) fuseCamera2();
+		rotate([90,0,0]) cylinder(d=4.5, h=70, center=true); // camera mount
 	}
 }
 module fusePoly()

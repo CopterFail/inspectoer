@@ -19,12 +19,12 @@ tp1 = [-p1.x+o1,+p1.y,z1]; // z1 is start of ruder , 280
 tp4 = [-p2.x+o2,+p2.y,z2]; // z2 is end of ruder , 530
 tp2 = (tp4-tp1)*0.25 + tp1; // todo: sync with cut , 350 -> 460
 tp3 = (tp4-tp1)*0.75 + tp1;
-RuderWingCut( pts=[tp1,tp2,tp3,tp4], hgt=[d1,d1-0.25*(d1-d2),d1-0.75*(d1-d2),d2], dSpace=0.4, positiv=true ){
+*RuderWingCut( pts=[tp1,tp2,tp3,tp4], hgt=[d1,d1-0.25*(d1-d2),d1-0.75*(d1-d2),d2], dSpace=0.4, positiv=true ){
 	wingSegment( [s[0],s[3]], [o[0],o[3]] );
 	*wingSegment( [s[1],s[2]], [o[1],o[2]] );
 }
 
-left(60)
+*left(60)
 RuderCut( pts=[tp1,tp2,tp3,tp4], hgt=[d1,d1-0.25*(d1-d2),d1-0.75*(d1-d2),d2], dSpace=0.4, positiv=true ){
 	wingSegment( [s[0],s[3]], [o[0],o[3]] );
 	*wingSegment( [s[1],s[2]], [o[1],o[2]] );
@@ -37,7 +37,7 @@ RuderCut( pts=[tp1,tp2,tp3,tp4], hgt=[d1,d1-0.25*(d1-d2),d1-0.75*(d1-d2),d2], dS
 
 *fuseSolid();  
 *fuseBattery();
-*fuseSkin(); 
+translate([fuseLength0-40,1.5+fuseY0,0]) fuseCamera2( open=false );
 
 *fusePoly();
 *translate([335,0,50]) spant3d( d=0.3, offset=[0,0,0],    size=605,   r=0, p=pClarkFuse );
@@ -45,7 +45,7 @@ RuderCut( pts=[tp1,tp2,tp3,tp4], hgt=[d1,d1-0.25*(d1-d2),d1-0.75*(d1-d2),d2], dS
 *fuseCoverHook( true );
 *fuseCoverHook( false );
 *translate([20,35,0]) rotate([90,90,0]) fuseCoverHookKnop();
-*fuseSegment([3]);
+fuseSegment([3]);
 *fuseSegment([0,1,2,3]);
 *translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku
 *color("Green") fuseCoverFront();

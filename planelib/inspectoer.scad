@@ -101,7 +101,7 @@ dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
 module wingSolid(r=0)
 {
     for(i=[0:len(o)-2]) 
-        segment(s=[s[i],s[i+1]], o=[o[i],o[i+1]], r=0);
+        segment(size=[s[i],s[i+1]], pos=[o[i],o[i+1]], r=0);
 }
 
 module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )

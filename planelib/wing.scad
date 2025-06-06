@@ -1,21 +1,23 @@
 
 
-module segment( s, o, r=0, p=pSD6060 )
+module segment( size=[1,1], pos=[[0,0,0],[0,0,100]], r=0, p=pSD6060 )
 {
-    factor = ( s[1] ) / ( s[0] );
-    height = ( o[1].z - o[0].z );
-    sx = ( o[1].x - o[0].x ) / height;
-    sy = ( o[1].y - o[0].y ) / height;
+    factor = ( size[1] ) / ( size[0] );
+    height = ( pos[1].z - pos[0].z );
+    sx = ( pos[1].x - pos[0].x ) / height;
+    sy = ( pos[1].y - pos[0].y ) / height;
     
     m=[ [ 1, 0,  sx, 0],
         [ 0, 1,  sy, 0],
         [ 0, 0,  1,  0],
         [ 0, 0,  0,  1] ];
     
-    translate(o[0])
+    translate(pos[0])
         multmatrix(m)
             linear_extrude( height=height, scale=factor, convexity=10 ) 
-                spant2d( s=s[0], r=r, p=p );
+                spant2d( s=size[0], r=r, p=p );
+				
+	// is skin() from bosl2 an alternative?
 }
 
 
