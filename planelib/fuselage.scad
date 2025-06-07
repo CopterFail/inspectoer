@@ -410,3 +410,29 @@ module fuseBattery()
 		rotate([0,0,0])
 			cube( [72,46,45], center=true );
 }
+
+module CamPan()
+{
+	// 3d printed camera pan,
+	translate([fuseLength0-40,1.5+fuseY0,0])
+	rotate([-90,0,0])
+		difference() {
+			union(){
+				cylinder(d=47+6, h=14.5, center=true );
+				cylinder(d=41, h=20.5, center=true );
+			}
+			union() {
+			cylinder(d=4.5, h=70, center=true); // camera mount
+			rotate([0,90,0]) cylinder(d=11, h=70, center=true); // camera mount
+			translate([-1,0,0])
+			rotate([0,90,0]){
+				translate([0,0,12+6]) 
+					cylinder(d=15.5, h=12);
+				translate([0,0,6+6]) 				
+					cube([21.5,21.5,12], center=true);
+			}
+			translate([22,0,15/2]) cube(15.5, center=true); 
+			translate([0,5,15/2]) cube([50,2,15], center=true); 
+			}	
+		}
+}

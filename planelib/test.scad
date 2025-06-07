@@ -37,7 +37,8 @@ RuderCut( pts=[tp1,tp2,tp3,tp4], hgt=[d1,d1-0.25*(d1-d2),d1-0.75*(d1-d2),d2], dS
 
 *fuseSolid();  
 *fuseBattery();
-translate([fuseLength0-40,1.5+fuseY0,0]) fuseCamera2( ang=45, open=false );
+translate([fuseLength0-40,1.5+fuseY0,0]) fuseCamera2( ang=0, open=false );
+CamPan()
 
 *fusePoly();
 *translate([335,0,50]) spant3d( d=0.3, offset=[0,0,0],    size=605,   r=0, p=pClarkFuse );
