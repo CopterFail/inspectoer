@@ -3,12 +3,7 @@
 
 module wingPolyLine( d=3, pt=[0,0], off=[0,0]  )
 {
-    *echo(pt);
-    l = len(s)-1; 
-    poly = [         [o[0].x - s[0]*pt.x - off.x , o[0].y + s[0]*pt.y + off.y,  o[0].z - 20 ],
-        for(i=[0:l]) [o[i].x - s[i]*pt.x - off.x , o[i].y + s[i]*pt.y + off.y,  o[i].z ],
-                     [o[l].x - s[l]*pt.x - off.x , o[l].y + s[l]*pt.y + off.y,  o[l].z + 20 ] ];
-    *echo( poly);
+    poly = [ for( z=[-20,zTip+20] ) [ o(z=-20).x - s(z=-20)*pt.x - off.x , o(z).y + s(z)*pt.y + off.y, z ] ];   
     for( i=[0:(len(poly)-2)] ){
         hull(){
             translate(poly[i]) 

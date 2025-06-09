@@ -17,19 +17,18 @@ include <fuselage.scad> // fuselage functions
 
 // inspectoer wing data:
 sf= 30/500; // forward = 30mm pro 500mm  (550???)
-o = [   [+sf*0,   0, 50],     
-        [+sf*100, 0, 150],
-        [+sf*300, 0, 350],
-        [+sf*500, 0, 550]
-        ]; //offset: x,y,z 
-s = [ 250, 234, 202, 170 ]; //dsize is -32mm/200mm * dz
-
-function o(z) = [
-	sf * (z-50),
-	0,
-	z];
+function o(z) = [ sf * (z-50), 0, z];
 function s(z) = 250 - (z-50) / 500 * (250-170);
+zBase   = 50;  // position of the fuselage/wing 
+zBoom   = 150; // motor mount
+zRuder1 = 280; // start of the ruder
+zHorn   = 350; // position of the ruder horn 
+zRuder2 = 530; // end of the ruder
+zBow    = 550; // randbogen
+zTip    = 575; // the outer limit of the wing  
 
+
+// tube data:
 tubeOffset1 = 40; 
 tubeOffset2 = tubeOffset1 + 80;
 tubeOffsety = 3.5;
@@ -40,7 +39,6 @@ lBar1 = 1005;   // length for front tube
 dBar2 = 6.4;    // diameter of the rear tube
 lBar2 = 400;    // length for rear tube, abs max length is 780 
 
-zBoom = 150; //130+13;
 wall = 0.5;
 
 dPoly = 2.0;    // diameter of the polygon tubes
@@ -73,45 +71,41 @@ hQRuder = h( 1-0.32, pSD6060 );
 ptHRuder = [1-0.35, ( p(1-0.35, pNaca0012) + n(1-0.35, pNaca0012) ) /2 ]; // lower 35% of the Naca0012 profile
 hHRuder = h( 1-0.35, pNaca0012 );
 
-z1 = 280; // lower z of ruder
-p1 = RuderGetPoint( z1, zStart=o[0].z , zStop=o[3].z, s[0], s[3], ptQRuder );
-o1 = RuderGetXOffset( z1, zStart=o[0].z , zStop=o[3].z, o[0].x, o[3].x );
-d1 = RuderGetHeight( z1, zStart=o[0].z , zStop=o[3].z, s[0], s[3], hQRuder );
-//echo( z1, p1, o1, d1);
+p1 = ptQRuder * s(zRuder1);
+o1 = o(zRuder1);
+d1 = hQRuder * s(zRuder1);
+echo( zRuder1, p1, o1, d1);
 
-z2 = 530; // upper z of ruder
-p2 = RuderGetPoint( z2, zStart=o[0].z , zStop=o[3].z, s[0], s[3], ptQRuder );
-o2 = RuderGetXOffset( z2, zStart=o[0].z , zStop=o[3].z, o[0].x, o[3].x );
-d2 = RuderGetHeight( z2, zStart=o[0].z , zStop=o[3].z, s[0], s[3], hQRuder );
+p2 = ptQRuder * s(zRuder2);
+o2 = o(zRuder2);
+d2 = hQRuder * s(zRuder2);
 //echo( z2, p2, o2, d2);
 
 zh1 = 20-zBoom;
-ph1 = RuderGetPoint( zh1, zStart=0 , zStop=zBoom, 120, 120, ptHRuder );
-oh1 = RuderGetXOffset( zh1, zStart=0 , zStop=zBoom, 0, 0 );
-dh1 = RuderGetHeight( zh1, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
+ph1 = ptHRuder * 120;
+oh1 = 0;
+dh1 = hHRuder * 120;
 //echo( zh1, ph1, oh1, dh1);
 
 zh2 = zBoom-20;
-ph2 = RuderGetPoint( zh2, zStart=0 , zStop=zBoom, 120, 120, ptHRuder );
-oh2 = RuderGetXOffset( zh2, zStart=0 , zStop=zBoom, 0, 0 );
-dh2 = RuderGetHeight( zh2, zStart=0 , zStop=zBoom, 120, 120, hHRuder );
+ph2 = ph1;
+oh2 = oh1;
+dh2 = dh1;
 //echo( zh2, ph2, oh2, dh2);
 
 
 module wingSolid(r=0)
 {
-    for(i=[0:len(o)-2]) 
-        segment(size=[s[i],s[i+1]], pos=[o[i],o[i+1]], r=0);
+    segment(size=[s(zBase),s(zBow)], pos=[o(zBase),o(zBow)], r=0);
 }
 
-module wingSegment( s=[s[0],s[1]], o=[o[0],o[1]] )
+module wingSegment( s=[s(zBase),s(zBoom)], o=[o(zBase),o(zBoom)] )
 {
-    
     difference(){
         union(){
             linearSlice( sx=s[0], sh=o[1].z-o[0].z, org=o[0], center=true ){
                 union(){
-                    segment(s, o, r=0);
+                    segment(size=s, pos=o, r=0);
                     wingMotorCoverSolid();
                     }
                 }
@@ -155,11 +149,11 @@ module wingConnect( d=0 )
         intersection()
         {
             wingSolid(r=0);
-            translate( [-tubeOffset1-70+10,-20,o[2].z] ) cube([70+d,40+d,12+d], center= false ); //body
+            translate( [-tubeOffset1-70+10,-20,zHorn] ) cube([70+d,40+d,12+d], center= false ); //body
         }
        
         if( d==0 ){
-        #translate( [-tubeOffset1-17+10-3, 3, o[2].z] ) cube([17+3,1,12], center= false ); //cut
+        #translate( [-tubeOffset1-17+10-3, 3, zHorn] ) cube([17+3,1,12], center= false ); //cut
         xTube( diameter=8, length=lBar1, tubeoffset=tubeOffset1 );  //tube 8mm,dBar1 will not work
         mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(350+17),rot=0);   // servo, what about the electric connection?
         
@@ -181,10 +175,10 @@ module wingElectric()
 {
     off1 = (tubeOffset1+tubeOffset2)/2;
     l1 = 770;
-    translate([-off1 + o[0].x-8,-2-2,0])  // based of the 1st segment
+    translate([-off1 + o(zBase).x-8,-2-2,0])  // based of the 1st segment
         translate([0,4,0]) cube( [12,6,l1],center=true);
     l2= 290-2;
-    translate( [ o[0].x-8, 5,0 ] )
+    translate( [ o(zBase).x-8, 5,0 ] )
         hull(){
             translate([-2,-2,0]) cylinder(d=4,h=l2,center=true );
             translate([-18,-3,0]) cylinder(d=4,h=l2,center=true );

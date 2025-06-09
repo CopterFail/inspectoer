@@ -51,14 +51,25 @@ module rneg(p1, h1, p2, h2, d=0.4, dir=false )
   );
 }
 
+function RuderPoints( zs, ptRuder ) = [
+    for(z=zs)[ -ptRuder.x * s(z) + o(z).x, +ptRuder.y * s(z) , z],
+    ];
+    
+function RuderHeights( zs, hRuder ) = [
+    for(z=zs) (hRuder * s(z)),
+    ];
+    
 //ruder
 module RuderCut(
-	pts,	// points of the ruder begins with start and ends with stop 
-	hgt,	// height of the ruder for each point
+    zList=[],
+    ptRuder=ptQRuder,
+    hRuder=hQRuder,
 	dSpace=0.4,	// z gap
 	positiv=true	// orientation at start
 )
 {
+    pts = RuderPoints( zList, ptRuder );
+    hgt = RuderHeights( zList, hRuder );
 	intersection() {
 		children();
 		union() {
@@ -76,12 +87,15 @@ module RuderCut(
 
 //wing
 module RuderWingCut(
-	pts,	// points of the ruder begins with start and ends with stop 
-	hgt,	// height of the ruder for each point
+    zList=[],
+    ptRuder=ptQRuder,
+    hRuder=hQRuder,
 	dSpace=0.4,	// z gap
 	positiv=true	// orientation at start
 )
 {
+    pts = RuderPoints( zList, ptRuder );
+    hgt = RuderHeights( zList, hRuder );
 	intersection() {
 		children();
 		union() {

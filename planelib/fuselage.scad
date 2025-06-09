@@ -418,7 +418,7 @@ module CamPan()
 	rotate([-90,0,0])
 		difference() {
 			union(){
-				cylinder(d=47+6, h=14.5, center=true );
+				cylinder(d=47+6+6, h=14.5, center=true );
 				cylinder(d=41, h=20.5, center=true );
 			}
 			union() {
@@ -432,7 +432,7 @@ module CamPan()
 					cube([21.5,21.5,12], center=true);
 			}
 			translate([22,0,15/2]) cube(15.5, center=true); 
-			translate([0,5,15/2]) cube([50,2,15], center=true); 
+			translate([0,5,15/2]) cube([60,2,15], center=true); 
 			}	
 		}
 }
