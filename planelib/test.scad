@@ -2,11 +2,18 @@ include <inspectoer.scad>
 
 //solid:
 *wingSolid();
-*wingSegment( [s(zBoom),s(zTip)], [o(zBase),o(zTip)] ); // complete wing in one call (no ruder)
 
-zQList=[zRuder1,zRuder1+50,zRuder2-50,zRuder2];
+//the right wing in 4 parts + ruder in 2 parts:
+wingSegment( [s(zBase),s(zBoom)], [o(zBase),o(zBoom)] ); // complete wing in one call (no ruder)
+wingSegment( [s(zRuder2),s(zBow)], [o(zRuder2),o(zBow)] ); // complete wing in one call (no ruder)
+wingBow( draw=true );
+
+zQList=[zRuder1,zRuder1+90,zRuder2-90,zRuder2];
 RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
-	wingSegment( [s(zBoom),s(zRuder2)], [o(zBoom),o(zRuder2)] );
+	wingSegment( [s(zBoom),s(zRuder1+90)], [o(zBoom),o(zRuder1+90)] );
+}
+RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+	wingSegment( [s(zRuder1+90),s(zRuder2)], [o(zRuder1+90),o(zRuder2)] );
 }
 
 left(60)

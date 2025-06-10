@@ -3,8 +3,8 @@
 
 module wingPolyLine( d=3, pt=[0,0], off=[0,0]  )
 {
-    poly = [ for( z=[-20,zTip+20] ) [ o(z=-20).x - s(z=-20)*pt.x - off.x , o(z).y + s(z)*pt.y + off.y, z ] ];   
-    for( i=[0:(len(poly)-2)] ){
+    poly = [ for( z=[-20,zTip+20] ) [ o(z).x - s(z)*pt.x - off.x , o(z).y + s(z)*pt.y + off.y, z ] ];   
+    #for( i=[0:(len(poly)-2)] ){
         hull(){
             translate(poly[i]) 
                 sphere( d=d );
