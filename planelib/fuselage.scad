@@ -23,13 +23,13 @@ module solidPolyhedron( r=0 )
 {
 	// use BOSL2:
 	p1 = offset( move( [-fuseLength0, fuseY0], pFuseProfile * fuseInnerSpant * 1.13 ), delta=r ); 
-	p2 = offset( pSD6060 * s[0], delta=r ); 
+	p2 = offset( pSD6060 * s(zBase), delta=r ); 
 	//bool1 = is_path( p1 );
 	//bool2 = is_region([p1, p2]);
 	//echo( bool1, bool2 );
 
 	zpos1 = fuseWidth/2+r;
-	zpos2 = o[0].z+3+r;
+	zpos2 = o(zBase).z+3+r;
 
 	mirror([1,0]) 
 	skin( [
@@ -56,8 +56,8 @@ module fuseSolid( seg=0, r=0 )
 			fuseFinger( df=25-r );  // here r has only the half effect 
 			mirror([0,0,1]) fuseFinger(  df=25-r  );
 			// 3mm cutout for wind with SD6060 profile, oversize is 0.5mm:
-			spant3d( d=5, offset=+(o[0]+[0,0,r]), size=s[0], r=0.5-r, p=pSD6060 );
-			spant3d( d=5, offset=-(o[0]+[0,0,r+5]), size=s[0], r=0.5-r, p=pSD6060 ); // spant3d is not centered, so we need to substract 5mm to the offset
+			spant3d( d=5, offset=+(o(zBase)+[0,0,r]), size=s(zBase), r=0.5-r, p=pSD6060 );
+			spant3d( d=5, offset=-(o(zBase)+[0,0,r+5]), size=s(zBase), r=0.5-r, p=pSD6060 ); // spant3d is not centered, so we need to substract 5mm to the offset
 			translate([-308-r,0,0]) cube([fuseWidth*2,fuseWidth*2,fuseWidth*2], center=true); // cutout for the tail of the fuselage
         }
      }

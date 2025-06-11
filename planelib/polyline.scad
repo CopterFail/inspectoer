@@ -30,10 +30,10 @@ module fusePolyLine( d=3, size=605, off=[0,0], p=pClarkFusePolyUp )
 module fusePolyLineQ( d=3, size=605, pt=[0,0], off=[0,0] )
 {
     poly = [        
-                    [o[1].x - s[1]*pt.x - off.x , o[1].y + s[1]*pt.y + off.y,  +o[1].z ],
-                    [o[0].x - s[0]*pt.x - off.x , o[0].y + s[0]*pt.y + off.y,  +o[0].z ],
-                    [o[0].x - s[0]*pt.x - off.x , o[0].y + s[0]*pt.y + off.y,  -o[0].z ], 
-                    [o[1].x - s[1]*pt.x - off.x , o[1].y + s[1]*pt.y + off.y,  -o[1].z ]
+                    [o(zBoom).x - s(zBoom)*pt.x - off.x , o(zBoom).y + s(zBoom)*pt.y + off.y,  +o(zBoom).z ],
+                    [o(zBase).x - s(zBase)*pt.x - off.x , o(zBase).y + s(zBase)*pt.y + off.y,  +o(zBase).z ],
+                    [o(zBase).x - s(zBase)*pt.x - off.x , o(zBase).y + s(zBase)*pt.y + off.y,  -o(zBase).z ], 
+                    [o(zBoom).x - s(zBoom)*pt.x - off.x , o(zBoom).y + s(zBoom)*pt.y + off.y,  -o(zBoom).z ]
                     ];
                     
         for( i=[0:(len(poly)-2)] ){

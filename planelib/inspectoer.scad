@@ -26,6 +26,7 @@ zHorn   = 350; // position of the ruder horn
 zRuder2 = 530; // end of the ruder
 zBow    = 550; // randbogen
 zTip    = 575; // the outer limit of the wing  
+zQList=[zRuder1,zRuder1+90,zRuder2-90,zRuder2]; // QR description
 
 
 // tube data:

@@ -4,15 +4,14 @@ include <inspectoer.scad>
 *wingSolid();
 
 //the right wing in 4 parts + ruder in 2 parts:
-wingSegment( [s(zBase),s(zBoom)], [o(zBase),o(zBoom)] ); // complete wing in one call (no ruder)
-wingSegment( [s(zRuder2),s(zBow)], [o(zRuder2),o(zBow)] ); // complete wing in one call (no ruder)
-wingBow( draw=true );
+*wingSegment( [s(zBase),s(zBoom)], [o(zBase),o(zBoom)] ); // (no ruder)
+*wingSegment( [s(zRuder2),s(zBow)], [o(zRuder2),o(zBow)] ); // (no ruder)
+*wingBow( draw=true );
 
-zQList=[zRuder1,zRuder1+90,zRuder2-90,zRuder2];
-RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+*RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
 	wingSegment( [s(zBoom),s(zRuder1+90)], [o(zBoom),o(zRuder1+90)] );
 }
-RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+*RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
 	wingSegment( [s(zRuder1+90),s(zRuder2)], [o(zRuder1+90),o(zRuder2)] );
 }
 
@@ -37,7 +36,7 @@ RuderCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=tr
 *fuseCoverHook( true );
 *fuseCoverHook( false );
 *translate([20,35,0]) rotate([90,90,0]) fuseCoverHookKnop();
-*fuseSegment([3]);
+fuseSegment([3]);
 *fuseSegment([0,1,2,3]);
 *import("../stl_files/body_3.stl");
 *translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku
