@@ -51,12 +51,20 @@ module rneg(p1, h1, p2, h2, d=0.4, dir=false )
   );
 }
 
-function RuderPoints( zs, ptRuder ) = [
+function QRPoints( zs, ptRuder ) = [
     for(z=zs)[ -ptRuder.x * s(z) + o(z).x, +ptRuder.y * s(z) , z],
     ];
     
-function RuderHeights( zs, hRuder ) = [
+function QRHeights( zs, hRuder ) = [
     for(z=zs) (hRuder * s(z)),
+    ];
+    
+function HRPoints( zs, ptRuder ) = [
+    for(z=zs)[ -ptRuder.x * hs(z) + ho(z).x, +ptRuder.y * hs(z) , z],
+    ];
+    
+function HRHeights( zs, hRuder ) = [
+    for(z=zs) (hRuder * hs(z)),
     ];
     
 //ruder
@@ -64,12 +72,13 @@ module RuderCut(
     zList=[],
     ptRuder=ptQRuder,
     hRuder=hQRuder,
-	dSpace=0.4,	// z gap
-	positiv=true	// orientation at start
+    RuderIsH=false,
+	  dSpace=0.4,	// z gap
+	  positiv=true	// orientation at start
 )
 {
-    pts = RuderPoints( zList, ptRuder );
-    hgt = RuderHeights( zList, hRuder );
+  pts = RuderIsH ? HRPoints( zList, ptRuder ) : QRPoints( zList, ptRuder );
+  hgt = RuderIsH ? HRHeights( zList, hRuder ) : QRHeights( zList, hRuder );
 	intersection() {
 		children();
 		union() {
@@ -90,12 +99,13 @@ module RuderWingCut(
     zList=[],
     ptRuder=ptQRuder,
     hRuder=hQRuder,
-	dSpace=0.4,	// z gap
-	positiv=true	// orientation at start
+    RuderIsH=false,
+	  dSpace=0.4,	// z gap
+	  positiv=true	// orientation at start
 )
 {
-    pts = RuderPoints( zList, ptRuder );
-    hgt = RuderHeights( zList, hRuder );
+  pts = RuderIsH ? HRPoints( zList, ptRuder ) : QRPoints( zList, ptRuder );
+  hgt = RuderIsH ? HRHeights( zList, hRuder ) : QRHeights( zList, hRuder );
 	intersection() {
 		children();
 		union() {
@@ -115,3 +125,27 @@ module RuderWingCut(
 		translate(pts[0]+[-300,-30,0]) cube([600,60,pts[len(pts)-1].z- pts[0].z], center=false); 
 	}
 }
+
+// copied from ruder3.scad, to be improved
+module RuderHorn( dbase, daxsis=2.2, dwire=2, pos=[0,0,0], h=2, a=18, dSpace=0.4 )
+{
+    b=a;
+    translate( pos+[0,0,dSpace] ) 
+        difference(){
+            union(){
+                hull(){
+                    translate([0,0,0])  cylinder( d=dbase-2, h=h, center=false );
+                    translate([-a,0,0]) cylinder( d=2, h=h, center=false );
+                    }
+                hull(){
+                    translate([-a,0,0]) cube( [10,1,h], center=false );
+                    translate([0,b,0])  cylinder( d=6, h=h, center=false );
+                    }
+                }
+            union(){
+                translate([0,0,0])  cylinder( d=daxsis, h=h, center=false );
+                translate([0,b,0])  cylinder( d=dwire, h=h, center=false ); 
+            }
+    }
+}
+

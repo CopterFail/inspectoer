@@ -27,6 +27,9 @@ zRuder2 = 530; // end of the ruder
 zBow    = 550; // randbogen
 zTip    = 575; // the outer limit of the wing  
 zQList=[zRuder1,zRuder1+90,zRuder2-90,zRuder2]; // QR description
+function ho(z) = [0,0,z];   /* for the inspectoer the HR offset is 0 */
+function hs(z) = 120;       /* for the inspectoer the size is fix 120 and does not depend on z */ 
+zHList=[-zBoom+20,-30,+30,+zBoom-20]; // HR description
 
 
 // tube data:
@@ -249,10 +252,11 @@ module HRuder()
     {
         // HR wind profile
         translate([-420, yoff+tailz0-3, 0])
-        Ruder3( ptStart=[-ph1.x+oh1,+ph1.y,zh1], dStart=dh1, 
-                ptStop=[-ph2.x+oh2,+ph2.y,zh2], 
-                dStop=dh2, dSpace=0.8, steps=5, inverse=true )
-            heigtSolid(r=0);
+            RuderWingCut( zList=zHList, ptRuder=ptHRuder, hRuder=hHRuder, RuderIsH=true, dSpace=0.4, positiv=true ){
+                heigtSolid(r=0);
+                }
+            
+            
 // to do:  servo cable channel, 
         // ruder horn cutout
         *translate([-420, yoff+tailz0-3, 0])
@@ -260,7 +264,7 @@ module HRuder()
         
         // ruder horn, use as separte object with higher density
         translate([-420, yoff+tailz0-3, 0])
-            RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 0],diff=0.2  );
+            RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 0] );
             
         // servo cutout    
         ServoDiff(sx=460-8,sy=yoff+tailz0-5,sz=-3-13,rot=0,yadd=3); // todo: das servo nach unten dicker machen damit es unten durch schaut und es mussweiter hoch
@@ -310,6 +314,20 @@ module HRuder()
             }
     *translate([-420, tailz0-3, 0])
         RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 12.5],diff=0.2  ); // manual adjusted to servo
+
+
+    translate([-0,0,0]) 
+    difference() {
+        translate([-420, yoff+tailz0-3, 0])
+            RuderCut( zList=zHList, ptRuder=ptHRuder, hRuder=hHRuder, RuderIsH=true, dSpace=0.4, positiv=true ){
+                heigtSolid(r=0);
+                }
+        // horizontal hole to mount ruder
+        hull(){
+            translate( [-420 - 120 * ptHRuder.x , yoff+tailz0-3 + 120 * ptHRuder.y, -zBoom-40] ) sphere(d=dPoly); 
+            translate( [-420 - 120 * ptHRuder.x , yoff+tailz0-3 + 120 * ptHRuder.y, +zBoom+40] ) sphere(d=dPoly); 
+            } // poly for full length
+        }
 
 }
 
