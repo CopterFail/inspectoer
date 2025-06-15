@@ -199,7 +199,8 @@ module xTube( diameter=6, length=1200, tubeoffset=tubeOffset1 )
 
 module tail() 
 {
-    HRuder();
+    HRuder1();
+    HRuder2();
     
     mirror([0,0,1]) sideSolid();
     sideSolid();
@@ -207,14 +208,10 @@ module tail()
     tubeFlansh2();
     mirror([0,0,1]) tubeFlansh2();
 
-	*wingBowDraw( vbase = [0, 0, 0], p=pNaca0012, baseSize=120, z0=20, offset=[38, 0, 0], pos=[-420, 15-2++tailz0-3, zBoom+10] ); 
-	*mirror([0,0,1]) wingBowDraw( vbase = [0, 0, 0], p=pNaca0012, baseSize=120, z0=20, offset=[38, 0, 0], pos=[-420, 15-2++tailz0-3, zBoom+10] ); 
-    
     //if($preview){
     color( "BLACK") translate([-40, tailz0, +zBoom]) rotate([0,-90,0]) cylinder(d=8,h=450);
     color( "BLACK") translate([-40, tailz0 ,-zBoom]) rotate([0,-90,0]) cylinder(d=8,h=450);
     //}
-
 }
 
 module sideSolid(r=0)
@@ -258,7 +255,7 @@ module HRuder1()
                 }
             
         // servo cutout    
-        ServoDiff(sx=460-8,sy=yoff+tailz0-5,sz=-3-13,rot=0,yadd=3); // todo: das servo nach unten dicker machen damit es unten durch schaut und es mussweiter hoch
+        ServoDiff(sx=460-8,sy=yoff+tailz0-5,sz=-3-13+(30-5.5),rot=0,yadd=3); // todo: das servo nach unten dicker machen damit es unten durch schaut und es mussweiter hoch
         
         // helper to glue the split ruder
         #translate( [-420 - 120 * ptHRuder.x ,yoff+tailz0-3 + 120 * ptHRuder.y, 0] ) 
@@ -296,29 +293,32 @@ module HRuder1()
 module HRuder2()
 {
     yoff = 15-2;
+
     // add ruder
-    translate([-0,0,0]) 
-    difference() {
-        translate([-420, yoff+tailz0-3, 0])
+    translate([-420, yoff+tailz0-3, 0]) {
+        difference() {
             RuderCut( zList=zHList, ptRuder=ptHRuder, hRuder=hHRuder, RuderIsH=true, dSpace=0.4, positiv=true ){
                 heigtSolid(r=0);
                 }
-        // horizontal hole to mount ruder
-        hull(){
-            translate( [-420 - 120 * ptHRuder.x , yoff+tailz0-3 + 120 * ptHRuder.y, -zBoom-40] ) sphere(d=dPoly); 
-            translate( [-420 - 120 * ptHRuder.x , yoff+tailz0-3 + 120 * ptHRuder.y, +zBoom+40] ) sphere(d=dPoly); 
-            } // poly for full length
-        }
-    
+            // horizontal hole to mount ruder
+            hull(){
+                translate( [-120 * ptHRuder.x , +120 * ptHRuder.y, -zBoom-40] ) sphere(d=dPoly); 
+                translate( [-120 * ptHRuder.x , +120 * ptHRuder.y, +zBoom+40] ) sphere(d=dPoly); 
+                } // poly for full length
+            hull(){
+                translate( [-120 * ptHRuder.x - 20, +120 * ptHRuder.y, -zBoom-40] ) sphere(d=dPoly); 
+                translate( [-120 * ptHRuder.x - 20, +120 * ptHRuder.y, +zBoom+40] ) sphere(d=dPoly); 
+                } // another poly 20mm beyond
+            }
 
-    // add ruder horn
-    translate([-420, yoff+tailz0-3, 0])
+        // add ruder horn
         RuderHorn( 
             dbase=0,
             pos = [-ptHRuder.x*hs(zHHorn), +ptHRuder.y*hs(zHHorn), 0] + ho(zHHorn),
             dSpace=0.4,
             h=2
             );
+        }
 }
 
 

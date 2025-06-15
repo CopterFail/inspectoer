@@ -52,10 +52,10 @@ include <inspectoer.scad>
 *wingElectric();
 
 *HRuder1();
-HRuder2();
+*HRuder2();
 *sideSolid();
 *tubeFlansh2();
-*tail();  
+tail();  
 *#fuseCoverHookKnop2( a=10);
 *#fuseCoverHookBase2();
 

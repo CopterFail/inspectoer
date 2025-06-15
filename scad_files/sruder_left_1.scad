@@ -3,5 +3,5 @@ include <../planelib/inspectoer.scad>
 
 Slice(){
     sideSolid();
-    translate([-420-130,150,-200]) cube([150,200,400]); 
+    translate([-420-130,150-200,-200]) cube([150,200,400]); 
     }
