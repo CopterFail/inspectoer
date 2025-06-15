@@ -30,6 +30,7 @@ zQList=[zRuder1,zRuder1+90,zRuder2-90,zRuder2]; // QR description
 function ho(z) = [0,0,z];   /* for the inspectoer the HR offset is 0 */
 function hs(z) = 120;       /* for the inspectoer the size is fix 120 and does not depend on z */ 
 zHList=[-zBoom+20,-30,+30,+zBoom-20]; // HR description
+zHHorn=+30; //5.5mm zoffset to servo?
 
 
 // tube data:
@@ -245,26 +246,16 @@ module sideSolidB()
 
 }
 
-module HRuder()
+module HRuder1()
 {
     yoff = 15-2;
     difference()
     {
-        // HR wind profile
+        // HR wing profile and cut holes for tube, servo, SR and mounting
         translate([-420, yoff+tailz0-3, 0])
             RuderWingCut( zList=zHList, ptRuder=ptHRuder, hRuder=hHRuder, RuderIsH=true, dSpace=0.4, positiv=true ){
                 heigtSolid(r=0);
                 }
-            
-            
-// to do:  servo cable channel, 
-        // ruder horn cutout
-        *translate([-420, yoff+tailz0-3, 0])
-            RuderHornCut( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 0],diff=0  );
-        
-        // ruder horn, use as separte object with higher density
-        translate([-420, yoff+tailz0-3, 0])
-            RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 0] );
             
         // servo cutout    
         ServoDiff(sx=460-8,sy=yoff+tailz0-5,sz=-3-13,rot=0,yadd=3); // todo: das servo nach unten dicker machen damit es unten durch schaut und es mussweiter hoch
@@ -300,22 +291,12 @@ module HRuder()
             }
 		translate([-420-65,yoff+3,-zBoom+12]) cube([12,6+10,10], center=true );
         }
-        
+}
 
-
-
-    *hull(){ 
-            translate([+20-ptHRuder.x*120, -3+ptHRuder.y*120, -4-dPoly]) sphere(d=dPoly); 
-            translate([+20-ptHRuder.x*120, -3+ptHRuder.y*120, +3+dPoly]) sphere(d=dPoly); 
-            }
-    *hull(){ 
-            translate([+20-2, -3, -4-dPoly]) sphere(d=dPoly); 
-            translate([+20-2, -3, +3+dPoly]) sphere(d=dPoly); 
-            }
-    *translate([-420, tailz0-3, 0])
-        RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 12.5],diff=0.2  ); // manual adjusted to servo
-
-
+module HRuder2()
+{
+    yoff = 15-2;
+    // add ruder
     translate([-0,0,0]) 
     difference() {
         translate([-420, yoff+tailz0-3, 0])
@@ -328,7 +309,16 @@ module HRuder()
             translate( [-420 - 120 * ptHRuder.x , yoff+tailz0-3 + 120 * ptHRuder.y, +zBoom+40] ) sphere(d=dPoly); 
             } // poly for full length
         }
+    
 
+    // add ruder horn
+    translate([-420, yoff+tailz0-3, 0])
+        RuderHorn( 
+            dbase=0,
+            pos = [-ptHRuder.x*hs(zHHorn), +ptHRuder.y*hs(zHHorn), 0] + ho(zHHorn),
+            dSpace=0.4,
+            h=2
+            );
 }
 
 

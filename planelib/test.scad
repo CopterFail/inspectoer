@@ -51,8 +51,8 @@ include <inspectoer.scad>
 *wingConnect();
 *wingElectric();
 
-HRuder();
-*RuderHorn( dh1, pos = [-ptHRuder.x*120, +ptHRuder.y*120, 0] );
+*HRuder1();
+HRuder2();
 *sideSolid();
 *tubeFlansh2();
 *tail();  
