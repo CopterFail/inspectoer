@@ -7,7 +7,7 @@ servo_size_2 = [33.5,12,3];
 *servo_sg90($fn=50);
 *ServoDiff();
 
-module servo_sg90_arm( center=[0,0,3.5+3.5+12], rot=65 )
+module servo_sg90_arm( center=[0-5,0+1.5,3.5+3.5+12-2], rot=65 ) // mod during HR work: arm is not x centered in servo -5mm, arm touch cutout z-2, cutout too deep y+1.5
 {
 	l=20+2;
 	a=7;

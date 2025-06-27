@@ -218,15 +218,21 @@ module sideSolid(r=0)
 {
     bardist = 130;
     yoff=15-2;
+
+	sideSizeY1 = 10;
+	sideSizeY0 = 150-sideSizeY1; // 150 was original height
+	sideSizeX0 = 120;
+	sideSizeX1 = 58+(120-58)/150*10; 
+	
     difference(){
         translate([-420, tailz0-2.5+yoff, -zBoom-3+1]) 
 		union(){
 			hull(){
-				translate([0,0,0]) rotate([90,0,0]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pSD6060 );
-				translate([0,zBoom,0]) rotate([90,0,0]) spant3d( d=0.3, offset=[10,0,0], size=58, r=r, p=pSD6060 );
+				translate([0,0,0]) rotate([90,0,0]) spant3d( d=0.3, offset=[0,0,0], size=sideSizeX0, r=r, p=pSD6060 );
+				translate([0,sideSizeY0]) rotate([90,0,0]) spant3d( d=0.3, offset=[10,0,0], size=sideSizeX1, r=r, p=pSD6060 );
 				}
-				// nice, but how can this be printed? separate!
-				translate([10,zBoom,0]) sideSolidB();
+				// nice, but how can this be printed? separate! Weight is increased, size  is z0=10mm bigger
+				translate([10,sideSizeY0,0]) sideSolidB(z0=sideSizeY1, Size=sideSizeX1);
 			}
         heigtSolid();        
         mirror( [0,0,1] )tubeFlansh2(r=0.2);
@@ -235,11 +241,11 @@ module sideSolid(r=0)
     }
 }
 
-module sideSolidB()
+module sideSolidB( z0=10, Size=58 )
 {
 	rotate([90,0,0]) 
 		mirror([0,0,1])
-		wingBowDraw( vbase = [0, 0, 0], p=pSD6060, baseSize=58, z0=10, offset=[19, 0, 0], pos=[0,0,0] );
+		wingBowDraw( vbase = [0, 0, 0], p=pSD6060, baseSize=Size, z0=z0, offset=[19, 0, 0], pos=[0,0,0] );
 
 }
 
@@ -255,7 +261,7 @@ module HRuder1()
                 }
             
         // servo cutout    
-        ServoDiff(sx=460-8,sy=yoff+tailz0-5,sz=-3-13+(30-5.5),rot=0,yadd=3); // todo: das servo nach unten dicker machen damit es unten durch schaut und es mussweiter hoch
+        ServoDiff(sx=460-8,sy=yoff+tailz0-5,sz=-3-13+(30-5.5+1),rot=0,yadd=3); // todo: das servo nach unten dicker machen damit es unten durch schaut und es mussweiter hoch
         
         // helper to glue the split ruder
         #translate( [-420 - 120 * ptHRuder.x ,yoff+tailz0-3 + 120 * ptHRuder.y, 0] ) 
@@ -283,7 +289,7 @@ module HRuder1()
         
         //servo kable
         hull(){
-            translate([-420-53+6,yoff+6,-25]) cube([12,6,10], center=true ); // servo cable
+            translate([-420-53+6,yoff+6,-25+25]) cube([12,6,10], center=true ); // servo cable
             translate([-420-65,yoff+8,-zBoom+12]) cube([12,6,10], center=true ); // servo cable too near to the tube, but elese in conflic to the ruder
             }
 		translate([-420-65,yoff+3,-zBoom+12]) cube([12,6+10,10], center=true );
@@ -324,13 +330,13 @@ module HRuder2()
 
 module heigtSolid(r=0)
 {
-    br = zBoom+10;
+    br = zBoom+5;//+10;
     hull(){
         translate([0,0,-br]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pNaca0012 );
         translate([0,0,+br-0.3]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pNaca0012 );  // 0.3 is the spantsize, has to considderd on positive side
         }
-	wingBowDraw( vbase = [0, 0, 0], p=pNaca0012, baseSize=120, z0=20, offset=[38, 0, 0], pos=[0,0,br] ); 
-	mirror([0,0,1]) wingBowDraw( vbase = [0, 0, 0], p=pNaca0012, baseSize=120, z0=20, offset=[38, 0, 0], pos=[0,0,br] ); 
+	wingBowDraw( vbase = [0, 0, 0], p=pNaca0012, baseSize=120, z0=10, offset=[38, 0, 0], pos=[0,0,br] ); // z0 reduced from 20 to 10
+	mirror([0,0,1]) wingBowDraw( vbase = [0, 0, 0], p=pNaca0012, baseSize=120, z0=10, offset=[38, 0, 0], pos=[0,0,br] ); 
 		
 }
 
