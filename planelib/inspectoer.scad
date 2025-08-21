@@ -17,16 +17,18 @@ include <fuselage.scad> // fuselage functions
 
 // inspectoer wing data:
 sf= 30/500; // forward = 30mm pro 500mm  (550???)
-function o(z) = [ sf * (z-50), 0, z];
-function s(z) = 250 - (z-50) / 500 * (250-170);
+function o(z) = [ sf * (z-50), 0, z]; // calculate the x offset of the wing profile at z
+function s(z) = 250 - (z-50) / 500 * (250-170);	// calculate the size of the wing profile at z
+// Define some specific z values:
 zBase   = 50;  // position of the fuselage/wing 
 zBoom   = 150; // motor mount
 zRuder1 = 280; // start of the ruder
-zHorn   = 350; // position of the ruder horn 
+zRuderDist = 90; // size of the 1st and the 3rd ruder mount
+zHorn   = zRuder1+zRuderDist; // position of the ruder horn 
 zRuder2 = 530; // end of the ruder
 zBow    = 550; // randbogen
 zTip    = 575; // the outer limit of the wing  
-zQList=[zRuder1,zRuder1+90,zRuder2-90,zRuder2]; // QR description
+zQList=[zRuder1,zRuder1+zRuderDist,zRuder2-zRuderDist,zRuder2]; // QR description
 function ho(z) = [0,0,z];   /* for the inspectoer the HR offset is 0 */
 function hs(z) = 120;       /* for the inspectoer the size is fix 120 and does not depend on z */ 
 zHList=[-zBoom+20,-30,+30,+zBoom-20]; // HR description
@@ -116,7 +118,8 @@ module wingSegment( s=[s(zBase),s(zBoom)], o=[o(zBase),o(zBoom)] )
                 }
             }
         union(){    
-            mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(350+17),rot=0);
+            //mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(350+17),rot=0);
+            mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(zRuder1+zRuderDist+2+5),rot=0);
 
             wingBoom();
             xTube( diameter=dBar1, length=lBar1, tubeoffset=tubeOffset1 );
@@ -149,6 +152,7 @@ module wingSegment( s=[s(zBase),s(zBoom)], o=[o(zBase),o(zBoom)] )
 
 module wingConnect( d=0 )
 {   
+	mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(zRuder1+zRuderDist+2+5),rot=0);
     difference()
     {
         intersection()
@@ -162,13 +166,13 @@ module wingConnect( d=0 )
         xTube( diameter=8, length=lBar1, tubeoffset=tubeOffset1 );  //tube 8mm,dBar1 will not work
         mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(350+17),rot=0);   // servo, what about the electric connection?
         
-        translate( [-tubeOffset1+6.5, +3, o[2].z+12/2 ] ) 
+        translate( [-tubeOffset1+6.5, +3, zHorn+12/2 ] ) 
             rotate([-90,0,0])
                 ScrewAndHexNut( m=2 );
         
-        translate( [-tubeOffset1-16.3, 6+0.5, o[2].z+4 ] ) 
+        translate( [-tubeOffset1-16.3, 6+0.5, zHorn+4 ] ) 
             ScrewServo( dist=10 );
-        translate( [-tubeOffset1-16.3-27.5, 6-0.5 , o[2].z+4 ] ) 
+        translate( [-tubeOffset1-16.3-27.5, 6-0.5 , zHorn+4 ] ) 
             ScrewServo( dist=10 );
             
         wingElectric();
@@ -245,7 +249,7 @@ module sideSolidB( z0=10, Size=58 )
 {
 	rotate([90,0,0]) 
 		mirror([0,0,1])
-		wingBowDraw( vbase = [0, 0, 0], p=pSD6060, baseSize=Size, z0=z0, offset=[19, 0, 0], pos=[0,0,0] );
+		wingBowDraw( vbase = [0, 0, 0], p=pSD6060, baseSize=Size, z0=z0, res=15, offset=[19, 0, 0], pos=[0,0,0] );
 
 }
 
@@ -256,7 +260,7 @@ module HRuder1()
     {
         // HR wing profile and cut holes for tube, servo, SR and mounting
         translate([-420, yoff+tailz0-3, 0])
-            RuderWingCut( zList=zHList, ptRuder=ptHRuder, hRuder=hHRuder, RuderIsH=true, dSpace=0.4, positiv=true ){
+            RuderWingCut( zList=zHList, ptRuder=ptHRuder, hRuder=hHRuder, RuderIsH=true, dSpace=0.0, positiv=true ){ //dSpace=0.4 was reduced to 0.0 to get a better print result
                 heigtSolid(r=0);
                 }
             
@@ -335,8 +339,8 @@ module heigtSolid(r=0)
         translate([0,0,-br]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pNaca0012 );
         translate([0,0,+br-0.3]) spant3d( d=0.3, offset=[0,0,0], size=120, r=r, p=pNaca0012 );  // 0.3 is the spantsize, has to considderd on positive side
         }
-	wingBowDraw( vbase = [0, 0, 0], p=pNaca0012, baseSize=120, z0=10, offset=[38, 0, 0], pos=[0,0,br] ); // z0 reduced from 20 to 10
-	mirror([0,0,1]) wingBowDraw( vbase = [0, 0, 0], p=pNaca0012, baseSize=120, z0=10, offset=[38, 0, 0], pos=[0,0,br] ); 
+	wingBowDraw( vbase = [0, 0, 0], p=pNaca0012, baseSize=120, z0=10, res=20, offset=[38, 0, 0], pos=[0,0,br] ); // z0 reduced from 20 to 10
+	mirror([0,0,1]) wingBowDraw( vbase = [0, 0, 0], p=pNaca0012, baseSize=120, z0=10, res=20, offset=[38, 0, 0], pos=[0,0,br] ); 
 		
 }
 

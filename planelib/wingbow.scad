@@ -1,9 +1,9 @@
 
 // the following shold be also the base for a complete wing solid, in combination with the algorithm for free 2D polynom placement in 3D
-module wingBowDraw( vbase = [2 * sf, 0, 0], p=pSD6060, baseSize=s(zBow), z0=25, offset=[55,0,0], pos=o(zBow)) 
+module wingBowDraw( vbase = [2 * sf, 0, 0], p=pSD6060, baseSize=s(zBow), z0=25, res=0, offset=[55,0,0], pos=o(zBow)) 
 {
 	N=len(p)+1; // one additional point will be appended
-	steps = floor(z0/2);
+	steps = (res == 0) ? floor(z0/2) : res;
 	//echo( N, steps, N * steps);
 
 	function xysize(cnt) = baseSize * sqrt(1-cnt/steps);

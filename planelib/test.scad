@@ -8,19 +8,22 @@ include <inspectoer.scad>
 *wingSegment( [s(zRuder2),s(zBow)], [o(zRuder2),o(zBow)] ); // (no ruder)
 *wingBow( draw=true );
 
-*RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
-	wingSegment( [s(zBoom),s(zRuder1+90)], [o(zBoom),o(zRuder1+90)] );
+RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+	wingSegment( [s(zBoom),s(zRuder1+zRuderDist)], [o(zBoom),o(zRuder1+zRuderDist)] );
 }
 *RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
-	wingSegment( [s(zRuder1+90),s(zRuder2)], [o(zRuder1+90),o(zRuder2)] );
+	wingSegment( [s(zRuder1+zRuderDist),s(zRuder2)], [o(zRuder1+zRuderDist),o(zRuder2)] );
 }
 
-*RuderCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
-	wingSegment( [s(zRuder1),s(zRuder2)], [o(zRuder1),o(zRuder2)] );
+RuderCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+	wingSegment( [s(zRuder1),s(zRuder1+zRuderDist)], [o(zRuder1),o(zRuder1+zRuderDist)] );
 }
-*RuderHorn( 
+*RuderCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+	wingSegment( [s(zRuder1+zRuderDist),s(zRuder2)], [o(zRuder1+zRuderDist),o(zRuder2)] );
+}
+RuderHorn( 
         dbase=hQRuder * s(zQList[1]),
-        pos = o(zQList[1]) + [-ptQRuder.x*s(zQList[1]), +ptQRuder.y*s(zQList[1]), 1],
+        pos = o(zQList[1]) + [-ptQRuder.x*s(zQList[1]), +ptQRuder.y*s(zQList[1]), -2-0.4],
         h=2
         );
 
@@ -36,7 +39,7 @@ include <inspectoer.scad>
 *fuseCoverHook( true );
 *fuseCoverHook( false );
 *translate([20,35,0]) rotate([90,90,0]) fuseCoverHookKnop();
-*fuseSegment([3]);
+*fuseSegment([0]);
 *fuseSegment([0,1,2,3]);
 *import("../stl_files/body_3.stl");
 *translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku
@@ -48,14 +51,14 @@ include <inspectoer.scad>
 
 *tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
 *tubeFlansh();
-*wingConnect();
+wingConnect();
 *wingElectric();
 
 *HRuder1();
 *HRuder2();
 *sideSolid();
 *tubeFlansh2();
-tail();  
+*tail();  
 *#fuseCoverHookKnop2( a=10);
 *#fuseCoverHookBase2();
 
