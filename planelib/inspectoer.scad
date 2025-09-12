@@ -33,7 +33,8 @@ function ho(z) = [0,0,z];   /* for the inspectoer the HR offset is 0 */
 function hs(z) = 120;       /* for the inspectoer the size is fix 120 and does not depend on z */ 
 zHList=[-zBoom+20,-30,+30,+zBoom-20]; // HR description
 zHHorn=+30; //5.5mm zoffset to servo?
-
+wingservopos= [ -70, 6+2.2, -(zRuder1+zRuderDist+2+5+3) ]; // wing servo position sx,sy,sz
+wingservorot= [-0.5, 0, +2.7]; // wing servo rotation
 
 // tube data:
 tubeOffset1 = 40; 
@@ -118,8 +119,7 @@ module wingSegment( s=[s(zBase),s(zBoom)], o=[o(zBase),o(zBoom)] )
                 }
             }
         union(){    
-            //mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(350+17),rot=0);
-            mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(zRuder1+zRuderDist+2+5),rot=0);
+            mirror([0,0,1]) ServoDiff(pos=wingservopos, rot=wingservorot );
 
             wingBoom();
             xTube( diameter=dBar1, length=lBar1, tubeoffset=tubeOffset1 );
@@ -152,27 +152,27 @@ module wingSegment( s=[s(zBase),s(zBoom)], o=[o(zBase),o(zBoom)] )
 
 module wingConnect( d=0 )
 {   
-	mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(zRuder1+zRuderDist+2+5),rot=0);
     difference()
     {
         intersection()
         {
             wingSolid(r=0);
+            //translate( [-tubeOffset1-70+10,-20,zHorn] ) cube([70+d,40+d,12+d], center= false ); //body
             translate( [-tubeOffset1-70+10,-20,zHorn] ) cube([70+d,40+d,12+d], center= false ); //body
         }
        
         if( d==0 ){
         #translate( [-tubeOffset1-17+10-3, 3, zHorn] ) cube([17+3,1,12], center= false ); //cut
         xTube( diameter=8, length=lBar1, tubeoffset=tubeOffset1 );  //tube 8mm,dBar1 will not work
-        mirror([0,0,1]) ServoDiff(sx=70,sy=6,sz=-(350+17),rot=0);   // servo, what about the electric connection?
+        mirror([0,0,1]) ServoDiff(pos=wingservopos,rot=wingservorot);   // servo, what about the electric connection?
         
         translate( [-tubeOffset1+6.5, +3, zHorn+12/2 ] ) 
             rotate([-90,0,0])
                 ScrewAndHexNut( m=2 );
         
-        translate( [-tubeOffset1-16.3, 6+0.5, zHorn+4 ] ) 
+        *translate( [-tubeOffset1-16.3, 6+0.5, zHorn+4 ] ) 
             ScrewServo( dist=10 );
-        translate( [-tubeOffset1-16.3-27.5, 6-0.5 , zHorn+4 ] ) 
+        *translate( [-tubeOffset1-16.3-27.5, 6-0.5 , zHorn+4 ] ) 
             ScrewServo( dist=10 );
             
         wingElectric();
@@ -182,10 +182,14 @@ module wingConnect( d=0 )
 
 module wingElectric()
 {
+	// tunnel for wing servos
     off1 = (tubeOffset1+tubeOffset2)/2;
-    l1 = 770;
-    translate([-off1 + o(zBase).x-8,-2-2,0])  // based of the 1st segment
+    l1 = 770+27;
+    //translate([-off1 + o(zBase).x-8,-2-2,0])  // based of the 1st segment
+    translate([-off1 + o(zBase).x-8,-2-2+4,0])  // based of the 1st segment - todo: check the change
         translate([0,4,0]) cube( [12,6,l1],center=true);
+
+	// Tunnel for motor cable and hservo	
     l2= 290-2;
     translate( [ o(zBase).x-8, 5,0 ] )
         hull(){
@@ -265,7 +269,7 @@ module HRuder1()
                 }
             
         // servo cutout    
-        ServoDiff(sx=460-8,sy=yoff+tailz0-5,sz=-3-13+(30-5.5+1),rot=0,yadd=3); // todo: das servo nach unten dicker machen damit es unten durch schaut und es mussweiter hoch
+        #ServoDiff(pos=[-460+8,yoff+tailz0-5,-3-13+(30-5.5+1)],yadd=3); // todo: das servo nach unten dicker machen damit es unten durch schaut und es mussweiter hoch
         
         // helper to glue the split ruder
         #translate( [-420 - 120 * ptHRuder.x ,yoff+tailz0-3 + 120 * ptHRuder.y, 0] ) 
