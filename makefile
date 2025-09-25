@@ -19,12 +19,15 @@ all: $(STL_FILES) $(DOC_FILES) inspectoer.zip
 
 $(BUILD_DIR)/%.stl: $(SRC_DIR)/%.scad
 	@mkdir -p $(BUILD_DIR)
-	$(OPENSCAD) $(ARGS) -o $@ $<  > $(LOG) 2>&1
+	echo "Rendering $< to $@" >> $(LOG) 2>&1
+	$(OPENSCAD) $(ARGS) -o $@ $<  >> $(LOG) 2>&1
 
 $(DOC_DIR)/%.png : $(DOC_DIR)/%.scad
+	echo "Rendering $< to $@" >> $(LOG) 2>&1
 	$(OPENSCAD) $(ARGS) -o $@ $< >> $(LOG) 2>&1
 
 $(DOC_DIR)/%.stl : $(DOC_DIR)/%.scad
+	echo "Rendering $< to $@" >> $(LOG) 2>&1
 	$(OPENSCAD) $(ARGS) -o $@ $< >> $(LOG) 2>&1
 
 inspectoer.zip: $(STL_FILES) $(DOC_FILES)
@@ -36,5 +39,6 @@ clean:
 	rm -rf $(DOC_DIR)/*.png
 	rm -rf $(DOC_DIR)/*.stl
 	rm -f inspectoer.zip
+	rm -f $(LOG)
 
 .PHONY: all clean
