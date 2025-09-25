@@ -1,4 +1,4 @@
 
 include <../planelib/inspectoer.scad>
 
-fuseCoverMid(d=0);
+fuseCoverMid(); // parameter d=0 removed

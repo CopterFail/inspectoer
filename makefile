@@ -31,14 +31,17 @@ $(DOC_DIR)/%.stl : $(DOC_DIR)/%.scad
 	$(OPENSCAD) $(ARGS) -o $@ $< >> $(LOG) 2>&1
 
 inspectoer.zip: $(STL_FILES) $(DOC_FILES)
+	echo "zip $< to $@" >> $(LOG) 2>&1
+#	zip -j $(BUILD_DIR)/*.stl inspectoer.zip >> $(LOG) 2>&1
+#	zip $(DOC_DIR)/*.png inspectoer.zip >> $(LOG) 2>&1
 	rm -f inspectoer.zip
-	zip -j $@ $< >> $(LOG) 2>&1
+	zip inspectoer.zip $(STL_FILES) $(DOC_FILES)
 
 clean:
 	rm -rf $(BUILD_DIR)
 	rm -rf $(DOC_DIR)/*.png
 	rm -rf $(DOC_DIR)/*.stl
-	rm -f inspectoer.zip
+#	rm -f inspectoer.zip
 	rm -f $(LOG)
 
 .PHONY: all clean
