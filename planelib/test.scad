@@ -11,11 +11,11 @@ include <inspectoer.scad>
 *RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
 	wingSegment( [s(zBoom),s(zRuder1+zRuderDist)], [o(zBoom),o(zRuder1+zRuderDist)] );
 }
-RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+*RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
 	wingSegment( [s(zRuder1+zRuderDist),s(zRuder2)], [o(zRuder1+zRuderDist),o(zRuder2)] );
 }
 
-*RuderCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+RuderCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
 	wingSegment( [s(zRuder1),s(zRuder1+zRuderDist)], [o(zRuder1),o(zRuder1+zRuderDist)] );
 }
 *RuderCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
@@ -51,7 +51,7 @@ RuderHorn(
 
 *tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
 *tubeFlansh();
-wingConnect();
+*wingConnect();
 *wingElectric();
 
 *HRuder1();
