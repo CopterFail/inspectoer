@@ -132,7 +132,8 @@ module fuseSkin()
 		
 		fusePoly();
 		wingElectric();
-		fuseCamera();
+		*fuseCamera();
+		fuseCamera1();
 			
 		translate([260-40,-2,+23+6]) rotate([8,0,0 ]) scale(7) fuseNaca(w=-10);
 		translate([260-40,-2,-23-6]) rotate([180-8,0,0 ]) scale(7) fuseNaca(w=-10);
@@ -149,7 +150,8 @@ module fuseSegment( vseg=[0] )
 				fuseSolid( seg, r=0 );	// regular solid
 				difference(){ 
 					fuseSolid( seg, r=-fuseWall ); // 5mm reduced solid for 5 mm walls, cut the front to make the fuse solid solid
-					translate([300+5,0,0]) cube([40,50,50],center=true); 
+					*translate([300+5,0,0]) cube([40,50,50],center=true); 
+					;
 					}	
 				fuseSolid( seg, r=-CoverWall ); // reduced by the cover skin	
 				fuseSolid( seg, r=-SkidWall ); // reduced by the skid thickness
@@ -255,7 +257,7 @@ module fuseCoverBak()
 
 module fuseGps()
 {
-    translate([-160,13,0]) rotate([0,0,7]) cube( [26,8,26], center=true ); // BZ 251
+    translate([-160,13+7-fuseWall/2,0]) rotate([0,0,7]) cube( [26,8,26], center=true ); // BZ 251
     translate([-150,13,0]) rotate([0,0,7]) cube( [6,30,10], center=true );
 }
 
@@ -312,7 +314,7 @@ module fuseSkid2( r=0 ) // is no replacement for fuseSkid(), simplified for flat
 
 module fuseCamera1()
 {
-    translate([fuseLength0-20-4,3+fuseY0,0])
+    translate([fuseLength0-20-4,3+fuseY0+0.5,0]) // add 0.5mm to cam position in smaller fuselage
         rotate([0,90,0])
             union(){
                 cylinder(d=15, h=30);

@@ -635,3 +635,52 @@ CGAL Polyhedrons in cache: 1
 CGAL cache size in bytes: 0
 Total rendering time: 0:00:03.552
 zip stl_files/body_0.stl to inspectoer.zip
+Rendering scad_files/body_0.scad to stl_files/body_0.stl
+ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
+Geometries in cache: 377
+Geometry cache size in bytes: 29272784
+CGAL Polyhedrons in cache: 90
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:21.453
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      12
+   Vertices:     2616
+   Facets:       5276
+Rendering scad_files/body_1.scad to stl_files/body_1.stl
+ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
+Geometries in cache: 377
+Geometry cache size in bytes: 29272784
+CGAL Polyhedrons in cache: 90
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:21.790
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      17
+   Vertices:     5954
+   Facets:      11972
+Rendering scad_files/body_2.scad to stl_files/body_2.stl
+ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
+Geometries in cache: 377
+Geometry cache size in bytes: 29272784
+CGAL Polyhedrons in cache: 90
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:21.354
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      6
+   Vertices:     3106
+   Facets:       6232
+Rendering scad_files/body_3.scad to stl_files/body_3.stl
+ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
+Geometries in cache: 377
+Geometry cache size in bytes: 29272784
+CGAL Polyhedrons in cache: 90
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:21.291
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      5
+   Vertices:     4979
+   Facets:       9974
+zip stl_files/body_0.stl to inspectoer.zip
