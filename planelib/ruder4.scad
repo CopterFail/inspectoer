@@ -1,9 +1,10 @@
 
-function RuderGetSize( z, zStart, zStop, sStart, sStop ) = ( ( sStart + (sStop-sStart)/(zStop-zStart)*(z-zStart) ) );
-function RuderGetHeight( z, zStart, zStop, sStart, sStop, hBase ) = ( RuderGetSize( z, zStart, zStop, sStart, sStop) * hBase );
-function RuderGetPoint( z, zStart, zStop, sStart, sStop, ptBase ) = ( RuderGetSize( z, zStart, zStop, sStart, sStop) * ptBase );
-function RuderGetXOffset( z, zStart, zStop, oStart, oStop ) = ( ( oStart + (oStop-oStart)/(zStop-zStart)*(z-zStart) ) );
+function RuderGetSize( z, zStart, zStop, sStart, sStop ) = ( ( sStart + (sStop-sStart)/(zStop-zStart)*(z-zStart) ) ); // calculate size factor at position z
+function RuderGetHeight( z, zStart, zStop, sStart, sStop, hBase ) = ( RuderGetSize( z, zStart, zStop, sStart, sStop) * hBase ); // calculate height at position z
+function RuderGetPoint( z, zStart, zStop, sStart, sStop, ptBase ) = ( RuderGetSize( z, zStart, zStop, sStart, sStop) * ptBase ); // calculate ruder axis point at position z
+function RuderGetXOffset( z, zStart, zStop, oStart, oStop ) = ( ( oStart + (oStop-oStart)/(zStop-zStart)*(z-zStart) ) ); // claculate x offset at position z
 
+// create a 2D mask for positive ruder part
 function rpos2d(s = 1, ang = 30 ) =
   (
     let (y = 5 * cos(ang), x = 5 * sin(ang))
@@ -13,6 +14,7 @@ function rpos2d(s = 1, ang = 30 ) =
     )
   );
 
+// create a 2D mask for negative ruder part
 function rneg2d(s = 1, ang = 30 ) =
   (
     let (y = 5 * cos(ang), x = 5 * sin(ang))
@@ -22,10 +24,12 @@ function rneg2d(s = 1, ang = 30 ) =
     )
   );
 
-*stroke(rpos2d(), 0.2);
+*stroke(rpos2d(), 0.2); // draw the masks for debugging
 *mirror([1, 0, 0]) stroke(rneg2d(), 0.2);
 
-// positive tube part, begins at p1 with h1 and ends at p2 with h2, the z gap is negative d.
+//Bug: the axis needs to be cut 90 degree to the axis, to avoid stucking parts
+
+// create the positive 3D ruder mask  part from the 2D masks above, begins at p1 with h1 and ends at p2 with h2, the z gap is negative d.
 module rpos(p1, h1, p2, h2, d=0.4, dir=false)
 {
   skin(
@@ -38,7 +42,7 @@ module rpos(p1, h1, p2, h2, d=0.4, dir=false)
   );
 }
 
-// negativ tube part, begins at p1 with h1 and ends at p2 with h2, the z gap is positive d.
+// // create the negative 3D ruder mask  part from the 2D masks above, begins at p1 with h1 and ends at p2 with h2, the z gap is positive d.
 module rneg(p1, h1, p2, h2, d=0.4, dir=false )
 {
   skin(
@@ -51,6 +55,7 @@ module rneg(p1, h1, p2, h2, d=0.4, dir=false )
   );
 }
 
+// calculate ruder points and heights along z axis. this is done by separate functions for HR and QR
 function QRPoints( zs, ptRuder ) = [
     for(z=zs)[ -ptRuder.x * s(z) + o(z).x, +ptRuder.y * s(z) , z],
     ];
@@ -67,7 +72,7 @@ function HRHeights( zs, hRuder ) = [
     for(z=zs) (hRuder * hs(z)),
     ];
     
-//ruder
+// cut the ruder - part from the children object. 
 module RuderCut(
     zList=[],
     ptRuder=ptQRuder,
@@ -82,7 +87,7 @@ module RuderCut(
 	intersection() {
 		children();
 		union() {
-			for( idx= [0:1:len(pts)-2]) {
+			for( idx= [0:1:lSen(pts)-2]) {
 				pos = (idx % 2 == 0) ? positiv : !positiv;
 				if (pos) {
 					rpos(pts[idx], hgt[idx], pts[idx+1], hgt[idx+1], dSpace, dir=true);
@@ -94,7 +99,7 @@ module RuderCut(
 	}
 }
 
-//wing
+// cut the wing - part from the children object
 module RuderWingCut(
     zList=[],
     ptRuder=ptQRuder,
@@ -126,7 +131,7 @@ module RuderWingCut(
 	}
 }
 
-// copied from ruder3.scad, to be improved
+// draw the ruder horn at position pos with base diameter dbase, axis diameter daxsis, wire diameter dwire, height h, arm a and distance dSpace from the ruder surface
 module RuderHorn( dbase, daxsis=2.2, dwire=2, pos=[0,0,0], h=2, a=18, dSpace=0.4 )
 {
     b=a;
