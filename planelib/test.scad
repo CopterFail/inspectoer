@@ -23,8 +23,8 @@ include <inspectoer.scad>
         wingSegment( [s(zRuder1),s(zBow)], [o(zRuder1),o(zBow)] );
         RuderCutBox( p1 = QRPoints(zRuder1+zRuderDist, ptQRuder)[0], p2 = QRPoints(zRuder2, ptQRuder)[0] ); // cut lower and upper side
         }
-	//wingSegment( [s(zRuder1+zRuderDist),s(zBow)], [o(zRuder1+zRuderDist),o(zBow)] );
 }
+
 RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
     intersection(){
         wingSegment( [s(zRuder1),s(zRuder2)], [o(zRuder1),o(zRuder2)] ); // the complete ruder part
@@ -38,7 +38,6 @@ RuderCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=tr
 		wingSegment( [s(zRuder1),s(zRuder2)], [o(zRuder1),o(zRuder2)] ); // the complete ruder part
         RuderCutBox( p1 = QRPoints(zBase, ptQRuder)[0], p2 = QRPoints(zRuder1+zRuderDist, ptQRuder)[0] ); // cut upper side only
         }
-	//wingSegment( [s(zRuder1),s(zRuder1+zRuderDist)], [o(zRuder1),o(zRuder1+zRuderDist)] );
 }
 
 //down(10)
