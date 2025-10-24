@@ -5,25 +5,54 @@ include <inspectoer.scad>
 
 //the right wing in 4 parts + ruder in 2 parts:
 *wingSegment( [s(zBase),s(zBoom)], [o(zBase),o(zBoom)] ); // (no ruder)
-*wingSegment( [s(zRuder2),s(zBow)], [o(zRuder2),o(zBow)] ); // (no ruder)
-*wingBow( draw=true );
 
+//up(10)
 *RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
-	wingSegment( [s(zBoom),s(zRuder1+zRuderDist)], [o(zBoom),o(zRuder1+zRuderDist)] );
+    intersection(){
+        union(){
+            wingBow( draw=true );
+            wingSegment( [s(zRuder1+zRuderDist),s(zBow)], [o(zRuder1+zRuderDist),o(zBow)] );
+            }
+        RuderCutBox( p1 = QRPoints(zRuder2, ptQRuder)[0], p2 = QRPoints(zBow+100, ptQRuder)[0] ); // cut lower side only
+        }
+    }
+
+//left(10) 
+*RuderCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+    intersection(){
+        wingSegment( [s(zRuder1),s(zBow)], [o(zRuder1),o(zBow)] );
+        RuderCutBox( p1 = QRPoints(zRuder1+zRuderDist, ptQRuder)[0], p2 = QRPoints(zRuder2, ptQRuder)[0] ); // cut lower and upper side
+        }
+	//wingSegment( [s(zRuder1+zRuderDist),s(zBow)], [o(zRuder1+zRuderDist),o(zBow)] );
 }
-*RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
-	wingSegment( [s(zRuder1+zRuderDist),s(zRuder2)], [o(zRuder1+zRuderDist),o(zRuder2)] );
+RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+    intersection(){
+        wingSegment( [s(zRuder1),s(zRuder2)], [o(zRuder1),o(zRuder2)] ); // the complete ruder part
+        RuderCutBox( p1 = QRPoints(zRuder1+zRuderDist, ptQRuder)[0], p2 = QRPoints(zRuder2, ptQRuder)[0] ); // cut lower and upper side
+        }
 }
 
-*RuderCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
-	wingSegment( [s(zRuder1),s(zRuder1+zRuderDist)], [o(zRuder1),o(zRuder1+zRuderDist)] );
+//down(10) left(10)
+RuderCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+    intersection(){
+		wingSegment( [s(zRuder1),s(zRuder2)], [o(zRuder1),o(zRuder2)] ); // the complete ruder part
+        RuderCutBox( p1 = QRPoints(zBase, ptQRuder)[0], p2 = QRPoints(zRuder1+zRuderDist, ptQRuder)[0] ); // cut upper side only
+        }
+	//wingSegment( [s(zRuder1),s(zRuder1+zRuderDist)], [o(zRuder1),o(zRuder1+zRuderDist)] );
 }
-*RuderCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
-	wingSegment( [s(zRuder1+zRuderDist),s(zRuder2)], [o(zRuder1+zRuderDist),o(zRuder2)] );
+
+//down(10)
+*RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+    intersection(){
+		wingSegment( [s(zBoom),s(zRuder2)], [o(zBoom),o(zRuder2)] );
+        RuderCutBox( p1 = QRPoints(zBase, ptQRuder)[0], p2 = QRPoints(zRuder1+zRuderDist, ptQRuder)[0] ); // cut upper side only
+        }
 }
-*RuderHorn( 
+
+RuderHorn( 
         dbase=hQRuder * s(zQList[1]),
         pos = o(zQList[1]) + [-ptQRuder.x*s(zQList[1]), +ptQRuder.y*s(zQList[1]), -2-0.4],
+		rot = [0,+9.58,0],
         h=2
         );
 *mirror([0,0,1]) ServoDiff(pos=wingservopos+[150,0,0],rot=wingservorot);
@@ -40,7 +69,7 @@ include <inspectoer.scad>
 *fuseCoverHook( false );
 *translate([20,35,0]) rotate([90,90,0]) fuseCoverHookKnop();
 *fuseSegment([0]);
-fuseSegment([0,1,2,3]);
+*fuseSegment([0,1,2,3]);
 *import("../stl_files/body_3.stl");
 *translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku
 *color("Green") fuseCoverFront();
