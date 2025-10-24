@@ -132,8 +132,10 @@ module fuseSkin()
 		
 		fusePoly();
 		wingElectric();
+
 		*fuseCamera();
-		fuseCamera1();
+		*fuseCamera1();
+		translate([296,4,0]) rotate([-90,180,-12]) servo_sg90( yadd=0 ); // cam on servo with usual arm
 			
 		translate([260-40,-2,+23+6]) rotate([8,0,0 ]) scale(7) fuseNaca(w=-10);
 		translate([260-40,-2,-23-6]) rotate([180-8,0,0 ]) scale(7) fuseNaca(w=-10);
@@ -212,7 +214,7 @@ module fuseCoverMount_1()
 {
     difference(){
         cube( [10,7,20], center=false );
-        cube([5,3.5,20], center=false);
+        cube([5,3.5+0.7,20], center=false);
         
     }
 }
@@ -235,6 +237,7 @@ module fuseCoverFront()
 		fuseSolid( 10, r=-1.5 ); // reduced by the cover skin	
 		fuseCoverMask(x=CoverPositionFront, r=CoverWidth, h=CoverLenthFront);
 		}
+	translate([CoverPositionFront,15,-10]) rotate([0,0,160]) fuseCoverMount_1();
 }
 
 module fuseCoverMid()
@@ -244,6 +247,7 @@ module fuseCoverMid()
 		fuseSolid( 10, r=-1.5 ); // reduced by the cover skin	
 		fuseCoverMask(x=CoverPositionMid, r=CoverWidth, h=CoverLenthMid);
 		}
+	translate([CoverPositionMid,33.5,-10]) rotate([0,0,175]) fuseCoverMount_1();
 }
 
 module fuseCoverBak()
@@ -253,6 +257,7 @@ module fuseCoverBak()
 		fuseSolid( 10, r=-1.5 ); // reduced by the cover skin	
 		fuseCoverMask(x=CoverPositionBack, r=CoverWidth, h=CoverLenthBack);
 		}
+	translate([CoverPositionBack,29.5,-10]) rotate([0,0,185]) fuseCoverMount_1();
 }
 
 module fuseGps()

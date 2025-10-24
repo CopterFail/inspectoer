@@ -33,7 +33,7 @@ function ho(z) = [0,0,z];   /* for the inspectoer the HR offset is 0 */
 function hs(z) = 120;       /* for the inspectoer the size is fix 120 and does not depend on z */ 
 zHList=[-zBoom+20,-30,+30,+zBoom-20]; // HR description
 zHHorn=+30; //5.5mm zoffset to servo?
-wingservopos= [ -70, 6+2.2, -(zRuder1+zRuderDist+2+5+3) ]; // wing servo position sx,sy,sz
+wingservopos= [ -70+3, 6+2.2+0.2, -(zRuder1+zRuderDist+2+5+3)+7 ]; // wing servo position sx,sy,sz ; adjusted to new ruder position
 wingservorot= [-0.5, 0-9.58, +2.7]; // wing servo rotation
 
 // tube data:
