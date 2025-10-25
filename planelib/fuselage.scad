@@ -214,7 +214,7 @@ module fuseCoverMount_1()
 {
     difference(){
         cube( [10,7,20], center=false );
-        cube([5,3.5+0.7,20], center=false);
+        cube([6,3.5+0.7,20], center=false);
         
     }
 }

@@ -1,51 +1,51 @@
 Rendering scad_files/body_0.scad to stl_files/body_0.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 391
-Geometry cache size in bytes: 29361936
-CGAL Polyhedrons in cache: 273
+Geometries in cache: 406
+Geometry cache size in bytes: 29304672
+CGAL Polyhedrons in cache: 91
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:30.035
+Total rendering time: 0:00:21.100
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      12
-   Vertices:     2610
-   Facets:       5264
+   Vertices:     2640
+   Facets:       5324
 Rendering scad_files/body_1.scad to stl_files/body_1.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 391
-Geometry cache size in bytes: 29361936
-CGAL Polyhedrons in cache: 273
+Geometries in cache: 406
+Geometry cache size in bytes: 29304672
+CGAL Polyhedrons in cache: 91
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:30.548
+Total rendering time: 0:00:21.584
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      17
-   Vertices:     5955
-   Facets:      11974
+   Vertices:     5952
+   Facets:      11968
 Rendering scad_files/body_2.scad to stl_files/body_2.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 391
-Geometry cache size in bytes: 29361936
-CGAL Polyhedrons in cache: 273
+Geometries in cache: 406
+Geometry cache size in bytes: 29304672
+CGAL Polyhedrons in cache: 91
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:29.986
+Total rendering time: 0:00:21.174
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      6
-   Vertices:     3103
-   Facets:       6226
+   Vertices:     3104
+   Facets:       6228
 Rendering scad_files/body_3.scad to stl_files/body_3.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 391
-Geometry cache size in bytes: 29361936
-CGAL Polyhedrons in cache: 273
+Geometries in cache: 406
+Geometry cache size in bytes: 29304672
+CGAL Polyhedrons in cache: 91
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:30.292
+Total rendering time: 0:00:21.122
    Top level object is a 3D object (manifold):
    Status:     NoError
-   Genus:      9
-   Vertices:     8813
-   Facets:      17658
+   Genus:      5
+   Vertices:     4885
+   Facets:       9786
 Rendering scad_files/body_skid.scad to stl_files/body_skid.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
 Geometries in cache: 7
@@ -62,7 +62,7 @@ Geometries in cache: 12
 Geometry cache size in bytes: 80736
 CGAL Polyhedrons in cache: 3
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.039
+Total rendering time: 0:00:00.036
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      1
@@ -85,7 +85,7 @@ Geometries in cache: 32
 Geometry cache size in bytes: 255472
 CGAL Polyhedrons in cache: 17
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.268
+Total rendering time: 0:00:00.265
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      4
@@ -97,7 +97,7 @@ Geometries in cache: 17
 Geometry cache size in bytes: 132832
 CGAL Polyhedrons in cache: 3
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.076
+Total rendering time: 0:00:00.075
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      1
@@ -105,47 +105,47 @@ Total rendering time: 0:00:00.076
    Facets:        768
 Rendering scad_files/hood_bak.scad to stl_files/hood_bak.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 59
-Geometry cache size in bytes: 1120080
-CGAL Polyhedrons in cache: 30
+Geometries in cache: 63
+Geometry cache size in bytes: 1123472
+CGAL Polyhedrons in cache: 34
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:00.922
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      0
+   Vertices:      132
+   Facets:        260
+Rendering scad_files/hood_front.scad to stl_files/hood_front.stl
+ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
+Geometries in cache: 63
+Geometry cache size in bytes: 1123472
+CGAL Polyhedrons in cache: 34
 CGAL cache size in bytes: 0
 Total rendering time: 0:00:00.924
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      0
-   Vertices:      120
-   Facets:        236
-Rendering scad_files/hood_front.scad to stl_files/hood_front.stl
-ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 59
-Geometry cache size in bytes: 1120080
-CGAL Polyhedrons in cache: 30
-CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.914
-   Top level object is a 3D object (manifold):
-   Status:     NoError
-   Genus:      0
-   Vertices:      132
-   Facets:        260
+   Vertices:      144
+   Facets:        284
 Rendering scad_files/hood_mid.scad to stl_files/hood_mid.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 59
-Geometry cache size in bytes: 1120080
-CGAL Polyhedrons in cache: 30
+Geometries in cache: 63
+Geometry cache size in bytes: 1123472
+CGAL Polyhedrons in cache: 34
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.936
+Total rendering time: 0:00:00.932
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      0
-   Vertices:      132
-   Facets:        260
+   Vertices:      144
+   Facets:        284
 Rendering scad_files/hook_1.scad to stl_files/hook_1.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
 Geometries in cache: 10
 Geometry cache size in bytes: 86912
 CGAL Polyhedrons in cache: 1
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.051
+Total rendering time: 0:00:00.050
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      0
@@ -157,7 +157,7 @@ Geometries in cache: 10
 Geometry cache size in bytes: 86912
 CGAL Polyhedrons in cache: 1
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.049
+Total rendering time: 0:00:00.050
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      0
@@ -165,23 +165,27 @@ Total rendering time: 0:00:00.049
    Facets:        698
 Rendering scad_files/hook_knop.scad to stl_files/hook_knop.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 11
-Geometry cache size in bytes: 103552
-CGAL Polyhedrons in cache: 1
+Geometries in cache: 17
+Geometry cache size in bytes: 132832
+CGAL Polyhedrons in cache: 3
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.053
+Total rendering time: 0:00:00.075
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      1
-   Vertices:      284
-   Facets:        568
+   Vertices:      384
+   Facets:        768
 Rendering scad_files/hruder_0.scad to stl_files/hruder_0.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 123
-Geometry cache size in bytes: 1851152
+ECHO: "rneg", [-78, 0, -130], [-78, 0, -30], [0, 0, 100], 0
+ECHO: "rpos", [-78, 0, -30], [-78, 0, 30], [0, 0, 60], 0
+ECHO: "rneg", [-78, 0, 30], [-78, 0, 130], [0, 0, 100], 0
+ECHO: [-78, 0, -130], [-78, 0, 130]
+Geometries in cache: 125
+Geometry cache size in bytes: 1859040
 CGAL Polyhedrons in cache: 20
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:01.231
+Total rendering time: 0:00:01.209
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      1
@@ -189,11 +193,15 @@ Total rendering time: 0:00:01.231
    Facets:        494
 Rendering scad_files/hruder_1.scad to stl_files/hruder_1.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 123
-Geometry cache size in bytes: 1851152
+ECHO: "rneg", [-78, 0, -130], [-78, 0, -30], [0, 0, 100], 0
+ECHO: "rpos", [-78, 0, -30], [-78, 0, 30], [0, 0, 60], 0
+ECHO: "rneg", [-78, 0, 30], [-78, 0, 130], [0, 0, 100], 0
+ECHO: [-78, 0, -130], [-78, 0, 130]
+Geometries in cache: 125
+Geometry cache size in bytes: 1859040
 CGAL Polyhedrons in cache: 20
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:01.244
+Total rendering time: 0:00:01.199
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      4
@@ -201,11 +209,14 @@ Total rendering time: 0:00:01.244
    Facets:       1048
 Rendering scad_files/hruder_2.scad to stl_files/hruder_2.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 48
-Geometry cache size in bytes: 1584384
-CGAL Polyhedrons in cache: 12
+ECHO: "rpos", [-78, 0, -130], [-78, 0, -30], [0, 0, 100], 0
+ECHO: "rneg", [-78, 0, -30], [-78, 0, 30], [0, 0, 60], 0
+ECHO: "rpos", [-78, 0, 30], [-78, 0, 130], [0, 0, 100], 0
+Geometries in cache: 49
+Geometry cache size in bytes: 1588608
+CGAL Polyhedrons in cache: 13
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.682
+Total rendering time: 0:00:00.684
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      3
@@ -213,23 +224,30 @@ Total rendering time: 0:00:00.682
    Facets:        950
 Rendering scad_files/hruder_3.scad to stl_files/hruder_3.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 48
-Geometry cache size in bytes: 1584384
-CGAL Polyhedrons in cache: 12
+ECHO: "rpos", [-78, 0, -130], [-78, 0, -30], [0, 0, 100], 0
+ECHO: "rneg", [-78, 0, -30], [-78, 0, 30], [0, 0, 60], 0
+ECHO: "rpos", [-78, 0, 30], [-78, 0, 130], [0, 0, 100], 0
+Geometries in cache: 49
+Geometry cache size in bytes: 1588608
+CGAL Polyhedrons in cache: 13
 CGAL cache size in bytes: 0
 Total rendering time: 0:00:00.676
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      2
-   Vertices:      338
-   Facets:        680
+   Vertices:      460
+   Facets:        924
 Rendering scad_files/hruder_4.scad to stl_files/hruder_4.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 123
-Geometry cache size in bytes: 1851152
+ECHO: "rneg", [-78, 0, -130], [-78, 0, -30], [0, 0, 100], 0
+ECHO: "rpos", [-78, 0, -30], [-78, 0, 30], [0, 0, 60], 0
+ECHO: "rneg", [-78, 0, 30], [-78, 0, 130], [0, 0, 100], 0
+ECHO: [-78, 0, -130], [-78, 0, 130]
+Geometries in cache: 125
+Geometry cache size in bytes: 1859040
 CGAL Polyhedrons in cache: 20
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:01.265
+Total rendering time: 0:00:01.236
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      3
@@ -237,11 +255,15 @@ Total rendering time: 0:00:01.265
    Facets:       3538
 Rendering scad_files/hruder_5.scad to stl_files/hruder_5.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 123
-Geometry cache size in bytes: 1851152
+ECHO: "rneg", [-78, 0, -130], [-78, 0, -30], [0, 0, 100], 0
+ECHO: "rpos", [-78, 0, -30], [-78, 0, 30], [0, 0, 60], 0
+ECHO: "rneg", [-78, 0, 30], [-78, 0, 130], [0, 0, 100], 0
+ECHO: [-78, 0, -130], [-78, 0, 130]
+Geometries in cache: 125
+Geometry cache size in bytes: 1859040
 CGAL Polyhedrons in cache: 20
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:01.250
+Total rendering time: 0:00:01.242
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      4
@@ -253,7 +275,7 @@ Geometries in cache: 41
 Geometry cache size in bytes: 247168
 CGAL Polyhedrons in cache: 7
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.181
+Total rendering time: 0:00:00.169
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      2
@@ -265,7 +287,7 @@ Geometries in cache: 41
 Geometry cache size in bytes: 247168
 CGAL Polyhedrons in cache: 6
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.175
+Total rendering time: 0:00:00.169
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      2
@@ -273,11 +295,11 @@ Total rendering time: 0:00:00.175
    Facets:       1336
 Rendering scad_files/motor_mount_left.scad to stl_files/motor_mount_left.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 133
-Geometry cache size in bytes: 3106736
+Geometries in cache: 132
+Geometry cache size in bytes: 2981808
 CGAL Polyhedrons in cache: 27
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:01.958
+Total rendering time: 0:00:01.957
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      7
@@ -285,11 +307,11 @@ Total rendering time: 0:00:01.958
    Facets:       2714
 Rendering scad_files/motor_mount_right.scad to stl_files/motor_mount_right.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 133
-Geometry cache size in bytes: 3106736
+Geometries in cache: 132
+Geometry cache size in bytes: 2981808
 CGAL Polyhedrons in cache: 26
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:01.946
+Total rendering time: 0:00:01.936
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      7
@@ -297,11 +319,11 @@ Total rendering time: 0:00:01.946
    Facets:       2714
 Rendering scad_files/motor_plate_left.scad to stl_files/motor_plate_left.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 69
-Geometry cache size in bytes: 1169296
+Geometries in cache: 68
+Geometry cache size in bytes: 1044368
 CGAL Polyhedrons in cache: 17
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.591
+Total rendering time: 0:00:00.604
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      11
@@ -309,11 +331,11 @@ Total rendering time: 0:00:00.591
    Facets:       3542
 Rendering scad_files/motor_plate_right.scad to stl_files/motor_plate_right.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 69
-Geometry cache size in bytes: 1169296
+Geometries in cache: 68
+Geometry cache size in bytes: 1044368
 CGAL Polyhedrons in cache: 16
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.605
+Total rendering time: 0:00:00.588
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      11
@@ -321,95 +343,75 @@ Total rendering time: 0:00:00.605
    Facets:       3542
 Rendering scad_files/qruder_0_left.scad to stl_files/qruder_0_left.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 139
-Geometry cache size in bytes: 1839296
-CGAL Polyhedrons in cache: 24
+ECHO: [-115.984, 2.61158, 370], [-88.976, 2.27528, 530]
+ECHO: "rpos", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rneg", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rpos", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+Geometries in cache: 148
+Geometry cache size in bytes: 1629904
+CGAL Polyhedrons in cache: 25
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.867
+Total rendering time: 0:00:00.913
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      1
-   Vertices:      359
-   Facets:        718
+   Vertices:      258
+   Facets:        516
 Rendering scad_files/qruder_0_right.scad to stl_files/qruder_0_right.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 139
-Geometry cache size in bytes: 1839296
-CGAL Polyhedrons in cache: 23
+ECHO: [-115.984, 2.61158, 370], [-88.976, 2.27528, 530]
+ECHO: "rpos", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rneg", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rpos", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+Geometries in cache: 148
+Geometry cache size in bytes: 1629904
+CGAL Polyhedrons in cache: 24
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.881
+Total rendering time: 0:00:00.910
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      1
-   Vertices:      359
-   Facets:        718
+   Vertices:      258
+   Facets:        516
 Rendering scad_files/qruder_1_left.scad to stl_files/qruder_1_left.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-WARNING: undefined operation (vector - number) in file ../planelib/inspectoer.scad, line 20
-WARNING: undefined operation (number * undefined) in file ../planelib/inspectoer.scad, line 20
-WARNING: undefined operation (vector - number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (undefined / number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (undefined * number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (number - undefined) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (number * undefined) in file ../planelib/ruder4.scad, line 55
-WARNING: undefined operation (undefined + undefined) in file ../planelib/ruder4.scad, line 55
-WARNING: undefined operation (vector - number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (undefined / number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (undefined * number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (number - undefined) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (number * undefined) in file ../planelib/ruder4.scad, line 55
-WARNING: undefined operation (vector - number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (undefined / number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (undefined * number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (number - undefined) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (number * undefined) in file ../planelib/ruder4.scad, line 59
-Geometries in cache: 153
-Geometry cache size in bytes: 1932336
-CGAL Polyhedrons in cache: 25
+ECHO: [-170, 3.28417, 50], [-115.984, 2.61158, 370]
+ECHO: "rpos", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rneg", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rpos", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+Geometries in cache: 166
+Geometry cache size in bytes: 1759552
+CGAL Polyhedrons in cache: 30
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.882
+Total rendering time: 0:00:00.997
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      2
-   Vertices:      358
-   Facets:        720
+   Vertices:      663
+   Facets:       1330
 Rendering scad_files/qruder_1_right.scad to stl_files/qruder_1_right.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-WARNING: undefined operation (vector - number) in file ../planelib/inspectoer.scad, line 20
-WARNING: undefined operation (number * undefined) in file ../planelib/inspectoer.scad, line 20
-WARNING: undefined operation (vector - number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (undefined / number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (undefined * number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (number - undefined) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (number * undefined) in file ../planelib/ruder4.scad, line 55
-WARNING: undefined operation (undefined + undefined) in file ../planelib/ruder4.scad, line 55
-WARNING: undefined operation (vector - number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (undefined / number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (undefined * number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (number - undefined) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (number * undefined) in file ../planelib/ruder4.scad, line 55
-WARNING: undefined operation (vector - number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (undefined / number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (undefined * number) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (number - undefined) in file ../planelib/inspectoer.scad, line 21
-WARNING: undefined operation (number * undefined) in file ../planelib/ruder4.scad, line 59
-Geometries in cache: 153
-Geometry cache size in bytes: 1932336
-CGAL Polyhedrons in cache: 25
+ECHO: [-170, 3.28417, 50], [-115.984, 2.61158, 370]
+ECHO: "rpos", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rneg", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rpos", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+Geometries in cache: 166
+Geometry cache size in bytes: 1759552
+CGAL Polyhedrons in cache: 30
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.864
+Total rendering time: 0:00:00.989
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      2
-   Vertices:      358
-   Facets:        720
+   Vertices:      663
+   Facets:       1330
 Rendering scad_files/sruder_left_1.scad to stl_files/sruder_left_1.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
 Geometries in cache: 78
 Geometry cache size in bytes: 1354696
 CGAL Polyhedrons in cache: 13
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.914
+Total rendering time: 0:00:00.902
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      0
@@ -421,7 +423,7 @@ Geometries in cache: 78
 Geometry cache size in bytes: 1354696
 CGAL Polyhedrons in cache: 13
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.938
+Total rendering time: 0:00:00.910
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      0
@@ -433,7 +435,7 @@ Geometries in cache: 78
 Geometry cache size in bytes: 1354696
 CGAL Polyhedrons in cache: 14
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.923
+Total rendering time: 0:00:00.897
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      0
@@ -445,7 +447,7 @@ Geometries in cache: 78
 Geometry cache size in bytes: 1354696
 CGAL Polyhedrons in cache: 14
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.942
+Total rendering time: 0:00:00.913
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      0
@@ -453,11 +455,11 @@ Total rendering time: 0:00:00.942
    Facets:       1984
 Rendering scad_files/wing_0_left.scad to stl_files/wing_0_left.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 131
-Geometry cache size in bytes: 1800768
+Geometries in cache: 129
+Geometry cache size in bytes: 1550528
 CGAL Polyhedrons in cache: 21
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.847
+Total rendering time: 0:00:00.845
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      6
@@ -465,11 +467,11 @@ Total rendering time: 0:00:00.847
    Facets:       2208
 Rendering scad_files/wing_0_right.scad to stl_files/wing_0_right.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 131
-Geometry cache size in bytes: 1800768
+Geometries in cache: 129
+Geometry cache size in bytes: 1550528
 CGAL Polyhedrons in cache: 20
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.832
+Total rendering time: 0:00:00.844
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      6
@@ -477,210 +479,214 @@ Total rendering time: 0:00:00.832
    Facets:       2208
 Rendering scad_files/wing_1_left.scad to stl_files/wing_1_left.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 142
-Geometry cache size in bytes: 1836208
-CGAL Polyhedrons in cache: 26
+ECHO: [-170, 3.28417, 50], [-115.984, 2.61158, 370]
+ECHO: "rneg", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rneg", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: [-170, 3.28417, 50], [-115.984, 2.61158, 370]
+ECHO: [-131.176, 2.80074, 280], [-88.976, 2.27528, 530]
+Geometries in cache: 153
+Geometry cache size in bytes: 1622880
+CGAL Polyhedrons in cache: 27
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.955
+Total rendering time: 0:00:01.002
    Top level object is a 3D object (manifold):
    Status:     NoError
-   Genus:      4
-   Vertices:     1066
-   Facets:       2144
+   Genus:      5
+   Vertices:     1080
+   Facets:       2176
 Rendering scad_files/wing_1_right.scad to stl_files/wing_1_right.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 142
-Geometry cache size in bytes: 1836208
-CGAL Polyhedrons in cache: 25
-CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.974
-   Top level object is a 3D object (manifold):
-   Status:     NoError
-   Genus:      4
-   Vertices:     1066
-   Facets:       2144
-Rendering scad_files/wing_2_left.scad to stl_files/wing_2_left.stl
-ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 142
-Geometry cache size in bytes: 1836208
+ECHO: [-170, 3.28417, 50], [-115.984, 2.61158, 370]
+ECHO: "rneg", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rneg", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: [-170, 3.28417, 50], [-115.984, 2.61158, 370]
+ECHO: [-131.176, 2.80074, 280], [-88.976, 2.27528, 530]
+Geometries in cache: 153
+Geometry cache size in bytes: 1622880
 CGAL Polyhedrons in cache: 26
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.891
+Total rendering time: 0:00:00.993
    Top level object is a 3D object (manifold):
    Status:     NoError
-   Genus:      2
-   Vertices:      591
-   Facets:       1186
+   Genus:      5
+   Vertices:     1080
+   Facets:       2176
+Rendering scad_files/wing_2_left.scad to stl_files/wing_2_left.stl
+ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
+ECHO: [-115.984, 2.61158, 370], [-88.976, 2.27528, 530]
+ECHO: "rneg", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rneg", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: [-115.984, 2.61158, 370], [-88.976, 2.27528, 530]
+ECHO: [-131.176, 2.80074, 280], [-88.976, 2.27528, 530]
+Geometries in cache: 153
+Geometry cache size in bytes: 1622880
+CGAL Polyhedrons in cache: 27
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:00.958
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      8
+   Vertices:     1006
+   Facets:       2040
 Rendering scad_files/wing_2_right.scad to stl_files/wing_2_right.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 142
-Geometry cache size in bytes: 1836208
-CGAL Polyhedrons in cache: 25
+ECHO: [-115.984, 2.61158, 370], [-88.976, 2.27528, 530]
+ECHO: "rneg", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rneg", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: [-115.984, 2.61158, 370], [-88.976, 2.27528, 530]
+ECHO: [-131.176, 2.80074, 280], [-88.976, 2.27528, 530]
+Geometries in cache: 153
+Geometry cache size in bytes: 1622880
+CGAL Polyhedrons in cache: 26
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.878
+Total rendering time: 0:00:00.937
    Top level object is a 3D object (manifold):
    Status:     NoError
-   Genus:      2
-   Vertices:      591
-   Facets:       1186
+   Genus:      8
+   Vertices:     1006
+   Facets:       2040
 Rendering scad_files/wing_3_left.scad to stl_files/wing_3_left.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 136
-Geometry cache size in bytes: 1992372
-CGAL Polyhedrons in cache: 22
+ECHO: [-88.976, 2.27528, 530], [-68.72, 2.02305, 650]
+ECHO: "rneg", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rneg", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: [-88.976, 2.27528, 530], [-68.72, 2.02305, 650]
+ECHO: [-131.176, 2.80074, 280], [-88.976, 2.27528, 530]
+Geometries in cache: 156
+Geometry cache size in bytes: 2077812
+CGAL Polyhedrons in cache: 29
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:01.014
+Total rendering time: 0:00:01.329
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      1
-   Vertices:     1200
-   Facets:       2400
+   Vertices:     2308
+   Facets:       4616
 Rendering scad_files/wing_3_right.scad to stl_files/wing_3_right.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 136
-Geometry cache size in bytes: 1992372
-CGAL Polyhedrons in cache: 22
+ECHO: [-88.976, 2.27528, 530], [-68.72, 2.02305, 650]
+ECHO: "rneg", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rneg", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: [-88.976, 2.27528, 530], [-68.72, 2.02305, 650]
+ECHO: [-131.176, 2.80074, 280], [-88.976, 2.27528, 530]
+Geometries in cache: 156
+Geometry cache size in bytes: 2077812
+CGAL Polyhedrons in cache: 28
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:01.013
+Total rendering time: 0:00:01.315
    Top level object is a 3D object (manifold):
    Status:     NoError
    Genus:      1
-   Vertices:     1200
-   Facets:       2400
+   Vertices:     2308
+   Facets:       4616
 Rendering scad_files/wing_connect_left.scad to stl_files/wing_connect_left.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
 Geometries in cache: 69
 Geometry cache size in bytes: 239344
 CGAL Polyhedrons in cache: 13
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.235
+Total rendering time: 0:00:00.233
    Top level object is a 3D object (manifold):
    Status:     NoError
-   Genus:      2
-   Vertices:      495
-   Facets:        994
+   Genus:      4
+   Vertices:      492
+   Facets:        996
 Rendering scad_files/wing_connect_right.scad to stl_files/wing_connect_right.stl
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
 Geometries in cache: 69
 Geometry cache size in bytes: 239344
 CGAL Polyhedrons in cache: 12
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.242
+Total rendering time: 0:00:00.232
    Top level object is a 3D object (manifold):
    Status:     NoError
-   Genus:      2
-   Vertices:      495
-   Facets:        994
+   Genus:      4
+   Vertices:      492
+   Facets:        996
 Rendering doc_files/complete_plane.scad to doc_files/complete_plane.png
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
+ECHO: "rneg", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rneg", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: [-131.176, 2.80074, 280], [-88.976, 2.27528, 530]
+ECHO: "rpos", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rneg", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rpos", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rneg", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rpos", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rneg", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rneg", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: [-131.176, 2.80074, 280], [-88.976, 2.27528, 530]
+ECHO: "rneg", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rneg", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: [-131.176, 2.80074, 280], [-88.976, 2.27528, 530]
+ECHO: "rpos", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rneg", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rpos", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rneg", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rpos", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rneg", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rneg", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: [-131.176, 2.80074, 280], [-88.976, 2.27528, 530]
+ECHO: "rneg", [-78, 0, -130], [-78, 0, -30], [0, 0, 100], 0
+ECHO: "rpos", [-78, 0, -30], [-78, 0, 30], [0, 0, 60], 0
+ECHO: "rneg", [-78, 0, 30], [-78, 0, 130], [0, 0, 100], 0
+ECHO: [-78, 0, -130], [-78, 0, 130]
+ECHO: "rpos", [-78, 0, -130], [-78, 0, -30], [0, 0, 100], 0
+ECHO: "rneg", [-78, 0, -30], [-78, 0, 30], [0, 0, 60], 0
+ECHO: "rpos", [-78, 0, 30], [-78, 0, 130], [0, 0, 100], 0
 Compiling design (CSG Products normalization)...
-Normalized CSG tree has 1709 elements
-Compiling highlights (46 CSG Trees)...
-Unable to create GLX context using glXCreateContextAttribsARB()
-Unable to create GLX context using glXCreateNewContext()
-Segmentation fault (core dumped)
-Rendering scad_files/qruder_1_left.scad to stl_files/qruder_1_left.stl
-ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 157
-Geometry cache size in bytes: 1968944
-CGAL Polyhedrons in cache: 28
+Normalized CSG tree has 2361 elements
+Compiling highlights (4 CSG Trees)...
+Geometries in cache: 621
+Geometry cache size in bytes: 34133780
+CGAL Polyhedrons in cache: 162
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.984
-   Top level object is a 3D object (manifold):
-   Status:     NoError
-   Genus:      2
-   Vertices:      758
-   Facets:       1520
-Rendering scad_files/qruder_1_right.scad to stl_files/qruder_1_right.stl
-ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 157
-Geometry cache size in bytes: 1968944
-CGAL Polyhedrons in cache: 28
-CGAL cache size in bytes: 0
-Total rendering time: 0:00:00.994
-   Top level object is a 3D object (manifold):
-   Status:     NoError
-   Genus:      2
-   Vertices:      758
-   Facets:       1520
-Rendering doc_files/complete_plane.scad to doc_files/complete_plane.png
-ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Compiling design (CSG Products normalization)...
-Normalized CSG tree has 1709 elements
-Compiling highlights (46 CSG Trees)...
-Geometries in cache: 635
-Geometry cache size in bytes: 34148164
-CGAL Polyhedrons in cache: 345
-CGAL cache size in bytes: 0
-Total rendering time: 0:00:46.840
+Total rendering time: 0:00:39.146
 Rendering doc_files/explore_fuse.scad to doc_files/explore_fuse.png
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-WARNING: Children index (0) out of bounds (0 children) in file ../planelib/fuselage.scad, line 287
-WARNING: Children index (1) out of bounds (0 children) in file ../planelib/fuselage.scad, line 288
+WARNING: Children index (0) out of bounds (0 children) in file ../planelib/fuselage.scad, line 294
+WARNING: Children index (1) out of bounds (0 children) in file ../planelib/fuselage.scad, line 295
 Compiling design (CSG Products normalization)...
-Normalized CSG tree has 30 elements
-Geometries in cache: 403
-Geometry cache size in bytes: 29419632
-CGAL Polyhedrons in cache: 345
+Normalized CSG tree has 36 elements
+Geometries in cache: 420
+Geometry cache size in bytes: 29364064
+CGAL Polyhedrons in cache: 163
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:38.621
+Total rendering time: 0:00:26.977
 Rendering doc_files/explore_wing.scad to doc_files/explore_wing.png
 ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
+ECHO: "rneg", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rneg", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: [-131.176, 2.80074, 280], [-88.976, 2.27528, 530]
+ECHO: "rpos", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rneg", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rpos", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rneg", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rpos", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rneg", [-131.176, 2.80074, 280], [-115.984, 2.61158, 370], [-3.90799e-14, -0.189168, 91.2732], 9.58121
+ECHO: "rpos", [-115.984, 2.61158, 370], [-104.168, 2.46444, 440], [1.42109e-14, -0.147131, 70.9903], 9.58121
+ECHO: "rneg", [-104.168, 2.46444, 440], [-88.976, 2.27528, 530], [-1.06581e-14, -0.189168, 91.2732], 9.58121
+ECHO: [-131.176, 2.80074, 280], [-88.976, 2.27528, 530]
 Compiling design (CSG Products normalization)...
-Normalized CSG tree has 485 elements
-Compiling highlights (19 CSG Trees)...
+Normalized CSG tree has 797 elements
+Compiling highlights (1 CSG Trees)...
 Geometries in cache: 122
-Geometry cache size in bytes: 1514924
+Geometry cache size in bytes: 1603340
 CGAL Polyhedrons in cache: 1
 CGAL cache size in bytes: 0
-Total rendering time: 0:00:03.552
-zip stl_files/body_0.stl to inspectoer.zip
-Rendering scad_files/body_0.scad to stl_files/body_0.stl
-ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 377
-Geometry cache size in bytes: 29272784
-CGAL Polyhedrons in cache: 90
-CGAL cache size in bytes: 0
-Total rendering time: 0:00:21.453
-   Top level object is a 3D object (manifold):
-   Status:     NoError
-   Genus:      12
-   Vertices:     2616
-   Facets:       5276
-Rendering scad_files/body_1.scad to stl_files/body_1.stl
-ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 377
-Geometry cache size in bytes: 29272784
-CGAL Polyhedrons in cache: 90
-CGAL cache size in bytes: 0
-Total rendering time: 0:00:21.790
-   Top level object is a 3D object (manifold):
-   Status:     NoError
-   Genus:      17
-   Vertices:     5954
-   Facets:      11972
-Rendering scad_files/body_2.scad to stl_files/body_2.stl
-ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 377
-Geometry cache size in bytes: 29272784
-CGAL Polyhedrons in cache: 90
-CGAL cache size in bytes: 0
-Total rendering time: 0:00:21.354
-   Top level object is a 3D object (manifold):
-   Status:     NoError
-   Genus:      6
-   Vertices:     3106
-   Facets:       6232
-Rendering scad_files/body_3.scad to stl_files/body_3.stl
-ECHO: 280, [144.976, 2.80074], [13.8, 0, 280], 15.9127
-Geometries in cache: 377
-Geometry cache size in bytes: 29272784
-CGAL Polyhedrons in cache: 90
-CGAL cache size in bytes: 0
-Total rendering time: 0:00:21.291
-   Top level object is a 3D object (manifold):
-   Status:     NoError
-   Genus:      5
-   Vertices:     4979
-   Facets:       9974
+Total rendering time: 0:00:05.621
 zip stl_files/body_0.stl to inspectoer.zip

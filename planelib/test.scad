@@ -66,7 +66,7 @@ include <inspectoer.scad>
 *fuseCoverFront(d=0);
 *fuseCoverHook( true );
 *fuseCoverHook( false );
-translate([20,35,0]) rotate([90,90,0]) fuseCoverHookKnop2();
+*translate([20,35,0]) rotate([90,90,0]) fuseCoverHookKnop2();
 *fuseSegment([3]);
 *fuseSegment([0,1,2,3]);
 *import("../stl_files/body_3.stl");
