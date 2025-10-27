@@ -184,10 +184,13 @@ module wingElectric()
 {
 	// tunnel for wing servos
     off1 = (tubeOffset1+tubeOffset2)/2;
-    l1 = 770+27;
+    l1 = 770+27-8.6;
     //translate([-off1 + o(zBase).x-8,-2-2,0])  // based of the 1st segment
     translate([-off1 + o(zBase).x-8,-2-2+4,0])  // based of the 1st segment - todo: check the change
         translate([0,4,0]) cube( [12,6,l1],center=true);
+
+	translate([-off1 + o(zBase).x-8+12,4,+(l1/2-6)]) cube( [12,6,12],center=true);
+	translate([-off1 + o(zBase).x-8+12,4,-(l1/2-6)]) cube( [12,6,12],center=true);
 
 	// Tunnel for motor cable and hservo	
     l2= 290-2;

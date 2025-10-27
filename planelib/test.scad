@@ -25,7 +25,7 @@ include <inspectoer.scad>
         }
 }
 
-*RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+#RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
     intersection(){
         wingSegment( [s(zRuder1),s(zRuder2)], [o(zRuder1),o(zRuder2)] ); // the complete ruder part
         RuderCutBox( p1 = QRPoints(zRuder1+zRuderDist, ptQRuder)[0], p2 = QRPoints(zRuder2, ptQRuder)[0] ); // cut lower and upper side
@@ -71,9 +71,9 @@ include <inspectoer.scad>
 *fuseSegment([0,1,2,3]);
 *import("../stl_files/body_3.stl");
 *translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku
-color("Green") fuseCoverFront();
-color("Green") fuseCoverMid();
-color("Green") fuseCoverBak();
+*color("Green") fuseCoverFront();
+*color("Green") fuseCoverMid();
+*color("Green") fuseCoverBak();
 *fuseSkid2( r=0.1 );
 *fuseCoverMount_1()
 
