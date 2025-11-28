@@ -1,6 +1,8 @@
 
-OPENSCAD = openscad
+#OPENSCAD = openscad
 #OPENSCAD = /home/dab/Applications/OpenSCAD-2025.01.20.ai22731-x86_64_a4c72bcfe5c1c89d509dc8e83641dfac.AppImage
+#OPENSCAD = flatpak run org.openscad.OpenSCAD
+OPENSCAD = openscad-nightly
 ARGS := --backend=manifold --imgsize=4000,3000 --camera=141.80,32.00,175.50,-53.96,18.54,-15.60,1824.86 --viewall --autocenter
 #rotation: [ 141.80, 32.00, 175.50 ]
 #verschiebung: [ -53.96, 18.54, -15.60 ]

@@ -25,7 +25,7 @@ include <inspectoer.scad>
         }
 }
 
-#RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+*RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
     intersection(){
         wingSegment( [s(zRuder1),s(zRuder2)], [o(zRuder1),o(zRuder2)] ); // the complete ruder part
         RuderCutBox( p1 = QRPoints(zRuder1+zRuderDist, ptQRuder)[0], p2 = QRPoints(zRuder2, ptQRuder)[0] ); // cut lower and upper side
@@ -59,7 +59,9 @@ include <inspectoer.scad>
 *fuseSolid();  
 *fuseBattery();
 *#translate([fuseLength0-40,1.5+fuseY0,0]) fuseCamera2( ang=0, open=false );
-*CamPan()
+*CamPan();
+*left(60) xrot(180) bottom_half() fuseCamera3();
+*top_half() fuseCamera3();
 
 *fusePoly();
 *translate([335,0,50]) spant3d( d=0.3, offset=[0,0,0],    size=605,   r=0, p=pClarkFuse );
@@ -82,11 +84,11 @@ include <inspectoer.scad>
 *wingConnect();
 *wingElectric();
 
-*HRuder1();
+*Ruder1();
 *HRuder2();
 *sideSolid();
 *tubeFlansh2();
-*tail();  
+tail();  
 *#fuseCoverHookKnop2( a=10);
 *#fuseCoverHookBase2();
 

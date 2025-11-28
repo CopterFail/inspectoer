@@ -1,5 +1,7 @@
 
 include <BOSL2/std.scad>
+include <servo_arm.scad>
+
 
 
 pFuseProfile = pSD6060; // use SD6060 profile for the inner fuselage, former alternative was pClarkY
@@ -343,6 +345,35 @@ module fuseCamera2( ang=0, open=true )
 					cube([21,21,12], center=true);
                 }
 }
+
+module fuseCamera3( ang=0, open=true )
+{
+//pan cam mount?
+	//front_half()
+	//bottom_half()
+	difference() {
+	yrot( -90 ) onion(d=35, ang=35);
+	//left(10) xcyl(d=15,h=20);
+	up(1) left(14) fuseCamera2();
+	down(17) zcyl(d=2,h=15,chamfer2=-0.6);
+	// down(19) zcyl(d=4.2,h=15); // servo head will replace this
+	down(15) servo_head(MY_FT90M_SPLINE, clear = SERVO_HEAD_CLEAR);
+	down(22.5) zcyl(d=6,h=15); // some space to support servo head
+	down(23) zcyl(d=15,h=15); // cut for the servo body
+	left(20)xcyl(d=4,h=24,chamfer2=-3);// cam cable
+	#fwd(8) left(10){
+		down(10) zcyl(d=1.8,h=20);
+		up(3) zcyl(d=2.6,h=6);
+		up(12) zcyl(d=4,h=12);
+		}
+	#back(8) left(10){
+		down(10) zcyl(d=1.8,h=20);
+		up(3) zcyl(d=2.6,h=6);
+		up(12) zcyl(d=4,h=12);
+		}
+	}
+}
+
 module fuseCamera()
 {
 	translate([fuseLength0-40,1.5+fuseY0,0]){

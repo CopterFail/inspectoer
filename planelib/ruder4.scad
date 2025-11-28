@@ -57,18 +57,26 @@ module rpos(p1, h1, p2, h2, d=0.4, dir=false)
 	a = RuderAngle((p2-p1).x, (p2-p1).z );
 	p2_help = yrot(a = -a, p = p2-p1);
 
+	poly1_2d = dir ? xflip(rpos2d(h1)) : rpos2d(h1);
+	poly2_2d = dir ? xflip(rpos2d(h2)) : rpos2d(h2);
+
+	// here is the problem: poly1_2d and poly2_2d are arrays with one element, need to extract that element
+	// why has this happened? was working before...
+	//echo(poly1_2d);
+	//echo(poly2_2d);
+
 	move(p1)	// move the origin to p1
 	yrot(a = a)
   	skin(
     	[
-      	move([0,0], dir ? xflip(rpos2d(h1)) : rpos2d(h1)),
-      	move([p2_help.x, p2_help.y], dir ? xflip(rpos2d(h2)) : rpos2d(h2)),
+      	move([0,0], poly1_2d[0]),
+      	move([p2_help.x, p2_help.y], poly2_2d[0] ),
     	],
     	z=[0 + d, p2_help.z - d],
     	slices=0
   		);
 
-  	echo( "rpos",p1,p2,p2_help,a );
+  	//echo( "rpos",p1,p2,p2_help,a );
 }
 
 // // create the negative 3D ruder mask  part from the 2D masks above, begins at p1 with h1 and ends at p2 with h2, the z gap is positive d.
@@ -77,18 +85,24 @@ module rneg(p1, h1, p2, h2, d=0.4, dir=false )
 	a = RuderAngle((p2-p1).x, (p2-p1).z );
 	p2_help = yrot(a = -a, p = p2-p1);
 
+	poly1_2d = dir ? xflip(rneg2d(h1)) : rneg2d(h1);
+	poly2_2d = dir ? xflip(rneg2d(h2)) : rneg2d(h2);
+
+	//echo(poly1_2d);
+	//echo(poly2_2d);
+
 	move(p1)	// move the origin to p1
 	yrot(a = a)
 	skin(
 		[
-		move([0,0], dir ? xflip(rneg2d(h1)) : rneg2d(h1)),
-		move([p2_help.x, p2_help.y], dir ? xflip(rneg2d(h2)) : rneg2d(h2)),
+		move([0,0], poly1_2d[0]),
+		move([p2_help.x, p2_help.y], poly1_2d[0]),
 		],
 	z=[0 - d, p2_help.z + d],
 	slices=0
 	);
 
-  	echo( "rneg",p1,p2,p2_help,a );
+  	//echo( "rneg",p1,p2,p2_help,a );
 }
 
 // calculate ruder points and heights along z axis. this is done by separate functions for HR and QR
