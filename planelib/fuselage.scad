@@ -241,6 +241,45 @@ module fuseCoverFront()
 		}
 	translate([CoverPositionFront,15,-10]) rotate([0,0,160]) fuseCoverMount_1();
 }
+module fuseCoverFrontVtx()
+{
+	base = [CoverPositionFront-40,25-5,0];
+	rot = [0,0,170];
+	dist = 10.0; //12.5;
+	module VtxHole() {
+		translate(base) rotate(rot)
+			cuboid([35,35,35], rounding=3, edges=[TOP,BOTTOM] );
+	}
+	module VtxMount(){
+		translate(base) rotate(rot)
+		difference(){
+			cuboid([6,10,42], rounding=2, edges=[BACK] );
+			translate([0,-1,0]) cuboid([7,8,35]);
+			translate([0,0,+dist]) ycyl(d=2.5,h=10);
+			translate([0,0,-dist]) ycyl(d=2.5,h=10);
+		}
+	}
+	module AntMount(h1=16)
+	{
+		translate([30,-1,-15]) 
+		translate(base) rotate(rot) rotate([90+15,0,3])
+		difference(){
+			cylinder(d=8, h=h1+10 );
+			translate([0,0,0]) cylinder(d=4.25, h=h1+10 );
+			translate([0,2,0]) cube([2,8,2.5*(h1+10)],center=true);   
+    	}
+	}
+
+	difference() {
+		fuseCoverFront();
+		VtxHole();
+	}
+	translate([+dist,-1.8,0]) VtxMount();
+	translate([-dist,+1.8,0]) VtxMount();
+	AntMount();
+	mirror([0,0,1]) AntMount();
+}
+
 
 module fuseCoverMid()
 {
