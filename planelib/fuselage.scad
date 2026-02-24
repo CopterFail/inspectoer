@@ -246,22 +246,31 @@ module fuseCoverFrontVtx()
 	base = [CoverPositionFront-40,25-5,0];
 	rot = [0,0,170];
 	dist = 10.0; //12.5;
-	module VtxHole() {
-		translate(base) rotate(rot)
-			cuboid([35,35,35], rounding=3, edges=[TOP,BOTTOM] );
+	off = (12.5-10.0)/2;
+
+	module VtxHole(s=[35,35,35], off=[0,0,0]) {
+		translate(base+off) rotate(rot)
+			cuboid(size=s, rounding=3, edges=[BACK, BOT+RIGHT, BOT+LEFT, TOP+RIGHT, TOP+LEFT ] );
 	}
-	module VtxMount(){
+	module VtxMount(m=true){
 		translate(base) rotate(rot)
+		mirror([m?1:0,0,0])
 		difference(){
-			cuboid([6,10,42], rounding=2, edges=[BACK] );
-			translate([0,-1,0]) cuboid([7,8,35]);
-			translate([0,0,+dist]) ycyl(d=2.5,h=10);
-			translate([0,0,-dist]) ycyl(d=2.5,h=10);
+			translate([-off,0,0]) cuboid([6+4,10+1,42], rounding=2, edges=[BACK] );
+			translate([-off,-1,0]) cuboid([6+4+1,8+1,35]);
+			hull(){
+				translate([0,0,+dist]) ycyl(d=2.5,h=15);
+				translate([-2*off,0,+dist+2*off]) ycyl(d=2.5,h=15);
+			}
+			hull(){
+				translate([0,0,-dist]) ycyl(d=2.5,h=15);
+				translate([-2*off,0,-dist-2*off]) ycyl(d=2.5,h=15);
+			}
 		}
 	}
 	module AntMount(h1=16)
 	{
-		translate([30,-1,-15]) 
+		translate([25,-2,-15]) 
 		translate(base) rotate(rot) rotate([90+15,0,3])
 		difference(){
 			cylinder(d=8, h=h1+10 );
@@ -271,11 +280,14 @@ module fuseCoverFrontVtx()
 	}
 
 	difference() {
-		fuseCoverFront();
+		union() {
+			fuseCoverFront();
+			VtxHole([42,3,42], off=[0,3+0.8,0]);
+			}
 		VtxHole();
 	}
-	translate([+dist,-1.8,0]) VtxMount();
-	translate([-dist,+1.8,0]) VtxMount();
+	translate([+dist,-1.8,0]) VtxMount(m=false);
+	translate([-dist,+1.8,0]) VtxMount(m=true);
 	AntMount();
 	mirror([0,0,1]) AntMount();
 }
