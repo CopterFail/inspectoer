@@ -152,13 +152,44 @@ module wingSegment( s=[s(zBase),s(zBoom)], o=[o(zBase),o(zBoom)] )
 
 module wingConnect( d=0 )
 {   
+	p1 = QRPoints(zBoom, ptQRuder)[0];
+	p2 = QRPoints(zRuder1+zRuderDist, ptQRuder)[0];
+	a = RuderAngle((p2-p1).x, (p2-p1).z );
+
+	d3 = [d,d,d];
+	size = [70,40,12] + d3; 
+	pos = [-tubeOffset1-70+10,-20,zRuder1+zRuderDist-2.7] - d3/2;
+	posgap = [+50, +23, 0];
+	posscrew = [+66.5, +23, +12/2 ];
+
     difference()
     {
         intersection()
         {
             wingSolid(r=0);
-            //translate( [-tubeOffset1-70+10,-20,zHorn] ) cube([70+d,40+d,12+d], center= false ); //body
+            translate( pos ) yrot( a ) cube(size, center= false ); //body
+        }
+        if( d==0 ){
+			// srew and gap in the cube
+			translate( pos ) yrot( a ) translate( posgap ) cube([20,1,12], center= false ); //cut
+			translate( pos ) yrot( a ) translate( posscrew ) rotate([-90,0,0]) ScrewAndHexNut( m=2 );
+
+			// diffs with defined positions, independant from the connector position
+			xTube( diameter=8, length=lBar1, tubeoffset=tubeOffset1 );  //tube 8mm,dBar1 will not work
+			mirror([0,0,1]) ServoDiff(pos=wingservopos,rot=wingservorot);   // servo, what about the electric connection?
+			wingElectric();
+        }
+    }
+}
+module wingConnect_org( d=0 )
+{   
+    difference()
+    {
+        intersection()
+        {
+            wingSolid(r=0);
             translate( [-tubeOffset1-70+10,-20,zHorn] ) cube([70+d,40+d,12+d], center= false ); //body
+					cube([70+d,40+d,12+d], center= false ); //body
         }
        
         if( d==0 ){
