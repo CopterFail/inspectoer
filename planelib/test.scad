@@ -2,6 +2,7 @@ include <inspectoer.scad>
 
 //solid:
 *wingSolid();
+*wingSegment([s(zBase),s(zBow)], [o(zBase),o(zBow)]);
 
 //the right wing in 4 parts + ruder in 2 parts:
 *wingSegment( [s(zBase),s(zBoom)], [o(zBase),o(zBoom)] ); // (no ruder)
@@ -25,7 +26,7 @@ include <inspectoer.scad>
         }
 }
 
-RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
+*RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positiv=true ){
     intersection(){
         wingSegment( [s(zRuder1),s(zRuder2)], [o(zRuder1),o(zRuder2)] ); // the complete ruder part
         RuderCutBox( p1 = QRPoints(zRuder1+zRuderDist, ptQRuder)[0], p2 = QRPoints(zRuder2, ptQRuder)[0] ); // cut lower and upper side
@@ -82,7 +83,7 @@ RuderWingCut( zList=zQList, ptRuder=ptQRuder, hRuder=hQRuder, dSpace=0.4, positi
 
 *tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
 *tubeFlansh();
-xmove(200) wingConnect();
+wingConnect();
 *wingElectric();
 
 *Ruder1();

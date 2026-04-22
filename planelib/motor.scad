@@ -13,7 +13,6 @@ module wingBoom( bd=8, diff=0.1, len=500 )
 {
     translate([xoff,yoff,zBoom])
     translate([ -200,0,0]) rotate([0,90,0])cylinder(d=bd+diff,h=len,center=true);  //8mm version
-
 }
 
 
@@ -147,12 +146,17 @@ module wingMotor(diff=0, holes=true) //use diff!!!!!
 module wingMotorCoverSolid()
 {
     diff=0;
+	l=65-0.5+tubeOffset1-30;
     hull(){
         translate([xoff-55,yoff,zBoom]) // body cylinder taken from wingMotorPlate()
             rotate([0,-90,0]) 
                 translate([ 0,0,-3-diff ]) 
                     cylinder(d=33+diff, h=1,center=false);   
-        translate([ xoff-120+0.5-tubeOffset1, yoff, zBoom]) rotate([0,90,0])cylinder(d=8+4+2,h=1,center=true);  // taken from wingMotor
+        translate([ xoff-120+0.5-tubeOffset1, yoff, zBoom]) 
+			rotate([0,90,0])
+				cylinder(d=8+4+2,h=1,center=true);  // taken from wingMotor
+		translate([xoff-tubeOffset1-l/2-25,yoff-5,zBoom])
+			cube([l,1,45], center=true);	// hack to allow 3d printing
         }
 }
 

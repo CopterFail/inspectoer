@@ -159,7 +159,7 @@ module wingConnect( d=0 )
 
 	d3 = [d,d,d];
 	size = [70,40,12] + d3; 
-	pos = [-tubeOffset1-70+10,-20,zRuder1+zRuderDist-2.7] - d3/2;
+	pos = [-tubeOffset1-70+10,-20,zRuder1+zRuderDist-2.7+0.12] - d3/2;
 	posgap = [+50, +23, 0];
 	posscrew = [+66.5, +23, +12/2 ];
 
