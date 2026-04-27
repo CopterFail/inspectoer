@@ -926,3 +926,4 @@ Total rendering time: 0:00:00.042
    Vertices:      501
    Facets:       1010
 zip stl_files/body_0.stl to inspectoer.zip
+zip stl_files/body_0.stl to inspectoer.zip

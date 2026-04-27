@@ -49,6 +49,7 @@ include <inspectoer.scad>
         }
 }
 
+*RuderRepair(da=14, di=dPoly,h=0.6 );
 *RuderHorn( 
         dbase=hQRuder * s(zQList[1]),
         pos = o(zQList[1]) + [-ptQRuder.x*s(zQList[1]), +ptQRuder.y*s(zQList[1]), -2-0.4],
@@ -83,7 +84,7 @@ include <inspectoer.scad>
 
 *tubeConnect( d1=dBar1, d2=dBar1+2, a=8, w=6 );
 *tubeFlansh();
-wingConnect();
+*wingConnect();
 *wingElectric();
 
 *Ruder1();

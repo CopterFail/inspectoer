@@ -73,6 +73,14 @@ module fuseCoverMask( x=0, r=45, h=100 )
 		}
 }
 
+module fuseCoverMask2( x=CoverPositionFront, h=CoverLenthFront, r=45, h=100, d=3 )
+{	
+	difference(){
+		fuseCoverMask(x=x, r=CoverWidth-6, h=h);
+		fuseCoverMask(x=x-d, r=CoverWidth-6-d, h=h-2*d);
+	}
+}
+
 module fuseFinger( df=25 )
 {
     translate([-30,-58-2,-45-1-8])
@@ -239,6 +247,12 @@ module fuseCoverFront()
 		fuseSolid( 10, r=-1.5 ); // reduced by the cover skin	
 		fuseCoverMask(x=CoverPositionFront, r=CoverWidth, h=CoverLenthFront);
 		}
+	fuseCover(){
+		fuseSolid( 10, r=-1.5 );	// regular solid
+		fuseSolid( 10, r=-5 ); // reduced by the cover skin	
+		fuseCoverMask2(x=CoverPositionFront-5-0.5, r=CoverWidth-6-2*0.5, h=CoverLenthFront-10-2*0.5);
+		}
+
 	translate([CoverPositionFront,15,-10]) rotate([0,0,160]) fuseCoverMount_1();
 }
 module fuseCoverFrontVtx()
@@ -256,8 +270,8 @@ module fuseCoverFrontVtx()
 		translate(base) rotate(rot)
 		mirror([m?1:0,0,0])
 		difference(){
-			translate([-off,0,0]) cuboid([6+4,10+1,42], rounding=2, edges=[BACK] );
-			translate([-off,-1,0]) cuboid([6+4+1,8+1,35]);
+			translate([-off,0,0]) cuboid([6+4,10+1,42+4], rounding=2, edges=[BACK] );
+			translate([-off,-1,0]) cuboid([6+4+1,8+1,35+4]);
 			hull(){
 				translate([0,0,+dist]) ycyl(d=2.5,h=15);
 				translate([-2*off,0,+dist+2*off]) ycyl(d=2.5,h=15);
@@ -270,7 +284,8 @@ module fuseCoverFrontVtx()
 	}
 	module AntMount(h1=16)
 	{
-		translate([25,-2,-15]) 
+		//translate([25,-2,-15]) // position vorne
+		translate([-40,9.5,-14]) 
 		translate(base) rotate(rot) rotate([90+15,0,3])
 		difference(){
 			cylinder(d=8, h=h1+10 );
@@ -278,13 +293,19 @@ module fuseCoverFrontVtx()
 			translate([0,2,0]) cube([2,8,2.5*(h1+10)],center=true);   
     	}
 	}
+	module CableHole()
+	{
+		translate(base+[-20,9.5,0]) cuboid([10,20,22], rounding=1 );
+		translate(base+[+21,9.5,+3]) cuboid([10,20,16], rounding=1 );
+	}
 
 	difference() {
 		union() {
 			fuseCoverFront();
-			VtxHole([42,3,42], off=[0,3+0.8,0]);
+			//VtxHole([42,3,42], off=[0,3+0.8,0]);
 			}
 		VtxHole();
+		CableHole();
 	}
 	translate([+dist,-1.8,0]) VtxMount(m=false);
 	translate([-dist,+1.8,0]) VtxMount(m=true);
@@ -292,13 +313,17 @@ module fuseCoverFrontVtx()
 	mirror([0,0,1]) AntMount();
 }
 
-
 module fuseCoverMid()
 {
 	fuseCover(){
 		fuseSolid( 10, r=0 );	// regular solid
 		fuseSolid( 10, r=-1.5 ); // reduced by the cover skin	
 		fuseCoverMask(x=CoverPositionMid, r=CoverWidth, h=CoverLenthMid);
+		}
+	fuseCover(){
+		fuseSolid( 10, r=-1.5 );	// regular solid
+		fuseSolid( 10, r=-5 ); // reduced by the cover skin	
+		fuseCoverMask2(x=CoverPositionMid-5-0.5, r=CoverWidth-6-2*0.5, h=CoverLenthMid-10-2*0.5);
 		}
 	translate([CoverPositionMid,33.5,-10]) rotate([0,0,175]) fuseCoverMount_1();
 }
@@ -309,6 +334,11 @@ module fuseCoverBak()
 		fuseSolid( 10, r=0 );	// regular solid
 		fuseSolid( 10, r=-1.5 ); // reduced by the cover skin	
 		fuseCoverMask(x=CoverPositionBack, r=CoverWidth, h=CoverLenthBack);
+		}
+	fuseCover(){
+		fuseSolid( 10, r=-1.5 );	// regular solid
+		fuseSolid( 10, r=-5 ); // reduced by the cover skin	
+		fuseCoverMask2(x=CoverPositionBack-5-0.5, r=CoverWidth-6-2*0.5, h=CoverLenthBack-10-2*0.5);
 		}
 	translate([CoverPositionBack,29.5,-10]) rotate([0,0,185]) fuseCoverMount_1();
 }

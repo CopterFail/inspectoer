@@ -217,3 +217,10 @@ module RuderHorn( dbase, daxsis=2.2, dwire=2, pos=[0,0,0], rot=[0,0,0], h=2, a=1
     }
 }
 
+module RuderRepair(da=14, di=dPoly,h=0.6 )
+{
+	difference() {
+		zcyl(d=da,h=h);
+		zcyl(d=di,h=h+0.5);
+	}
+}
