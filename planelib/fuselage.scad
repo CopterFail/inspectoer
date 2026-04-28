@@ -267,18 +267,21 @@ module fuseCoverFrontVtx()
 			cuboid(size=s, rounding=3, edges=[BACK, BOT+RIGHT, BOT+LEFT, TOP+RIGHT, TOP+LEFT ] );
 	}
 	module VtxMount(m=true){
+		ds=2.8;
 		translate(base) rotate(rot)
 		mirror([m?1:0,0,0])
 		difference(){
 			translate([-off,0,0]) cuboid([6+4,10+1,42+4], rounding=2, edges=[BACK] );
 			translate([-off,-1,0]) cuboid([6+4+1,8+1,35+4]);
-			hull(){
-				translate([0,0,+dist]) ycyl(d=2.5,h=15);
-				translate([-2*off,0,+dist+2*off]) ycyl(d=2.5,h=15);
+			//hull()
+			{
+				translate([0,0,+dist]) ycyl(d=ds,h=15);
+				translate([-2*off,0,+dist+2*off]) ycyl(d=ds,h=15);
 			}
-			hull(){
-				translate([0,0,-dist]) ycyl(d=2.5,h=15);
-				translate([-2*off,0,-dist-2*off]) ycyl(d=2.5,h=15);
+			//hull()
+			{
+				translate([0,0,-dist]) ycyl(d=ds,h=15);
+				translate([-2*off,0,-dist-2*off]) ycyl(d=ds,h=15);
 			}
 		}
 	}
@@ -289,14 +292,16 @@ module fuseCoverFrontVtx()
 		translate(base) rotate(rot) rotate([90+15,0,3])
 		difference(){
 			cylinder(d=8, h=h1+10 );
-			translate([0,0,0]) cylinder(d=4.25, h=h1+10 );
-			translate([0,2,0]) cube([2,8,2.5*(h1+10)],center=true);   
-    	}
+			translate([0,0,0]) cylinder(d=3.25/*4.25*/, h=h1+10 );
+			translate([0,2,0]) cube([2,8-2,2.5*(h1+10)],center=true);   
+		}
 	}
 	module CableHole()
 	{
 		translate(base+[-20,9.5,0]) cuboid([10,20,22], rounding=1 );
 		translate(base+[+21,9.5,+3]) cuboid([10,20,16], rounding=1 );
+		translate(base+[0,9.5,+12]) cuboid([10,20,15], rounding=1 );
+		translate(base+[2,9.5,-12]) cuboid([10,20,15], rounding=1 );
 	}
 
 	difference() {

@@ -76,7 +76,7 @@ include <inspectoer.scad>
 *import("../stl_files/body_3.stl");
 *translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku
 *color("Green") fuseCoverFront();
-*color("Green") fuseCoverFrontVtx();
+color("Green") fuseCoverFrontVtx();
 *color("Green") fuseCoverMid();
 *color("Green") fuseCoverBak();
 *fuseSkid2( r=0.1 );
