@@ -1,7 +1,8 @@
 include <inspectoer.scad>
+include <fuselage2.scad>
 
 //solid:
-*wingSolid();
+wingSolid();
 *wingSegment([s(zBase),s(zBow)], [o(zBase),o(zBow)]);
 
 //the right wing in 4 parts + ruder in 2 parts:
