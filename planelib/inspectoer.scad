@@ -219,12 +219,12 @@ module tail()
     mirror([0,0,1]) sideSolid();
     sideSolid();
     
-    tubeFlansh2();
-    mirror([0,0,1]) tubeFlansh2();
+    *tubeFlansh2();
+    *mirror([0,0,1]) tubeFlansh2();
 
     //if($preview){
-    color( "BLACK") translate([-40, tailz0, +zBoom]) rotate([0,-90,0]) cylinder(d=8,h=450);
-    color( "BLACK") translate([-40, tailz0 ,-zBoom]) rotate([0,-90,0]) cylinder(d=8,h=450);
+    *color( "BLACK") translate([-40, tailz0, +zBoom]) rotate([0,-90,0]) cylinder(d=8,h=450);
+    *color( "BLACK") translate([-40, tailz0 ,-zBoom]) rotate([0,-90,0]) cylinder(d=8,h=450);
     //}
 }
 
@@ -275,10 +275,10 @@ module HRuder1()
                 }
             
         // servo cutout    
-        #ServoDiff(pos=[-460+8,yoff+tailz0-5,-3-13+(30-5.5+1)],yadd=3); // todo: das servo nach unten dicker machen damit es unten durch schaut und es mussweiter hoch
+        ServoDiff(pos=[-460+8,yoff+tailz0-5,-3-13+(30-5.5+1)],yadd=3); // todo: das servo nach unten dicker machen damit es unten durch schaut und es mussweiter hoch
         
         // helper to glue the split ruder
-        #translate( [-420 - 120 * ptHRuder.x ,yoff+tailz0-3 + 120 * ptHRuder.y, 0] ) 
+        translate( [-420 - 120 * ptHRuder.x ,yoff+tailz0-3 + 120 * ptHRuder.y, 0] ) 
             cylinder( d=dPoly, h=10, center=true ); // glue helper , missing in RuderHorn() ?
          
         // horizontal hole to mount ruder

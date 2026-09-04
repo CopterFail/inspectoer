@@ -2,7 +2,9 @@ include <inspectoer.scad>
 include <fuselage2.scad>
 
 //solid:
-wingSolid();
+zmove(-10) { wingSolid(); wingBow( draw=true ); }
+zflip() zmove(-10) { wingSolid(); wingBow( draw=true ); }
+
 *wingSegment([s(zBase),s(zBow)], [o(zBase),o(zBow)]);
 
 //the right wing in 4 parts + ruder in 2 parts:
@@ -75,9 +77,9 @@ wingSolid();
 *fuseSegment([3]);
 *fuseSegment([0,1,2,3]);
 *import("../stl_files/body_3.stl");
-*translate([10,0,0])  color("Red") cube([75,45,45],center=true); // akku
+translate([10+110,0,0])  color("Red") cube([75,45,45],center=true); // akku
 *color("Green") fuseCoverFront();
-color("Green") fuseCoverFrontVtx();
+*color("Green") fuseCoverFrontVtx();
 *color("Green") fuseCoverMid();
 *color("Green") fuseCoverBak();
 *fuseSkid2( r=0.1 );
@@ -92,7 +94,7 @@ color("Green") fuseCoverFrontVtx();
 *HRuder2();
 *sideSolid();
 *tubeFlansh2();
-*tail();  
+xmove(50) tail();  
 *#fuseCoverHookKnop2( a=10);
 *#fuseCoverHookBase2();
 

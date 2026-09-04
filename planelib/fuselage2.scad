@@ -10,10 +10,12 @@ include <BOSL2/std.scad>;
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // main
 ///////////////////////////////////////////////////////////////////////////////////////////////
-//fuse();
+#fuse();
 //partition(size=[500,200,200],spread=25, cutpath="flat") fuse();
-slide_cut();
-ymove(0) slide_cut2();
+//slide_cut();
+//ymove(0) slide_cut2();
+boom();
+zflip() boom();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // data
@@ -35,9 +37,6 @@ bez_o = [   // segmente o(x)
     mkbez( [0,3], [165,0], [30,0], [60,0]),    // point1 -> point2 with dir1 and dir2
     mkbez( [165,0], [400,0], [60,0], [60,0]),
     mkbez( [400,0], [600,0], [60,0], [135,0]),
-    //mkbez( [0,3], [160,20], [30,0], [60,0]),    // point1 -> point2 with dir1 and dir2
-    //mkbez( [200,20], [600,25], [60,0], [135,0]),
-    //mkbez( [600,3], [650,3], [35,0], [35,0])
     ];
 
 steps=20;
@@ -47,6 +46,33 @@ bo0 = bezier_join(bez_o,steps);
 bz1 = bezier_resample( bz0, by0 );
 bo1 = bezier_resample( bo0, by0 );
 fvnf_0 = vnf_drop_unused_points(fuse_vnf( bez_y, bez_z, bez_o, wall=0 ));
+
+// define the boom data
+bl=450;
+bd1=40;
+bd2=30;
+bd3=20;
+bh1=15;
+boom_bez_y = [   // segmente y(x) , hoehe
+    mkbez( [0,bd1], [150,bd2], [0,27], [100,0]),   // point1 -> point2 with dir1 and dir2
+    mkbez( [150,bd2], [bl-20,bd2], [100,0], [30,0]),
+    mkbez( [bl-20,bd2], [bl,3], [20,0], [0,-20])
+    ];
+boom_bez_z = [   // segmente z(x) , breite
+    mkbez( [0,bd1], [150,bd3], [0,27], [100,0]),   // point1 -> point2 with dir1 and dir2
+    mkbez( [150,bd3], [bl-20,bd3], [100,0], [30,0]),
+    mkbez( [bl-20,bd3], [bl,3], [20,0], [0,-20])
+    ];
+boom_bez_o = [   // segmente o(x)
+    mkbez( [0,3], [bl,bh1], [80,0], [60,0])    // point1 -> point2 with dir1 and dir2
+    ];
+
+boom_by0 = bezier_join(boom_bez_y,steps);
+boom_bz0 = bezier_join(boom_bez_z,steps);
+boom_bo0 = bezier_join(boom_bez_o,steps);
+boom_bz1 = bezier_resample( boom_bz0, boom_by0 );
+boom_bo1 = bezier_resample( boom_bo0, boom_by0 );
+bvnf_0 = vnf_drop_unused_points(fuse_vnf( boom_bez_y, boom_bez_z, boom_bez_o, wall=0 ));
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,3 +191,10 @@ module slide_cut2(){
 		slide_mask();
 	}
 }
+
+module boom(){
+	bvnf_10 = vnf_small_offset( bvnf_0, -10 ); 
+	move([20,0,150])
+	xflip()
+	vnf_polyhedron( bvnf_0 );
+  }
