@@ -530,7 +530,7 @@ module fuseBattery()
 	// 4s21700 battery, 72x44x44mm, critical with SD6060 profile
 	// ToDo: Platte zur Befestigung passt nicht mehr, Schraube bohrt sich in den Akku?
 	// ToDo: Cover lock funktioniert nicht mehr
-	translate([160,0,0]) 
+	translate([110,0,0])   // x= 110+10 or 160 , which is correct? 
 		rotate([0,0,0])
 			cube( [72,46,45], center=true );
 }

@@ -62,7 +62,7 @@ zflip() zmove(-10) { wingSolid(); wingBow( draw=true ); }
 *mirror([0,0,1]) ServoDiff(pos=wingservopos+[150,0,0],rot=wingservorot);
 
 *fuseSolid();  
-*fuseBattery();
+fuseBattery();
 *#translate([fuseLength0-40,1.5+fuseY0,0]) fuseCamera2( ang=0, open=false );
 *CamPan();
 *left(60) xrot(180) bottom_half() fuseCamera3();
@@ -77,7 +77,6 @@ zflip() zmove(-10) { wingSolid(); wingBow( draw=true ); }
 *fuseSegment([3]);
 *fuseSegment([0,1,2,3]);
 *import("../stl_files/body_3.stl");
-translate([10+110,0,0])  color("Red") cube([75,45,45],center=true); // akku
 *color("Green") fuseCoverFront();
 *color("Green") fuseCoverFrontVtx();
 *color("Green") fuseCoverMid();
