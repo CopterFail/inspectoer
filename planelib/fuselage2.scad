@@ -1,16 +1,10 @@
-$fn=30;
-
-// 2025/Nov/16 Design ist for the very old Lidl Glider  model
-// todo:
-// add neuer models
-// add front motor mount 16/19 mm holes 3.2mm diameter
 
 include <BOSL2/std.scad>;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // main
 ///////////////////////////////////////////////////////////////////////////////////////////////
-#fuse();
+fuse();
 //partition(size=[500,200,200],spread=25, cutpath="flat") fuse();
 //slide_cut();
 //ymove(0) slide_cut2();
@@ -45,7 +39,7 @@ bz0 = bezier_join(bez_z,steps);
 bo0 = bezier_join(bez_o,steps);
 bz1 = bezier_resample( bz0, by0 );
 bo1 = bezier_resample( bo0, by0 );
-fvnf_0 = vnf_drop_unused_points(fuse_vnf( bez_y, bez_z, bez_o, wall=0 ));
+fvnf_0 = vnf_drop_unused_points(fuse_vnf( bez_y, bez_z, bez_o, wall=0, path=squircle(1,squareness=0.5) ));
 
 // define the boom data
 bl=450;
@@ -72,7 +66,7 @@ boom_bz0 = bezier_join(boom_bez_z,steps);
 boom_bo0 = bezier_join(boom_bez_o,steps);
 boom_bz1 = bezier_resample( boom_bz0, boom_by0 );
 boom_bo1 = bezier_resample( boom_bo0, boom_by0 );
-bvnf_0 = vnf_drop_unused_points(fuse_vnf( boom_bez_y, boom_bez_z, boom_bez_o, wall=0 ));
+bvnf_0 = vnf_drop_unused_points(fuse_vnf( boom_bez_y, boom_bez_z, boom_bez_o, wall=0, path=star(n=5,r=1,ir=0.7) ));
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,7 +76,7 @@ bvnf_0 = vnf_drop_unused_points(fuse_vnf( boom_bez_y, boom_bez_z, boom_bez_o, wa
 // calculate the ellipse
 function my_ellipse( a, b, w ) = [ a * cos(w), b * sin(w) ];
 
-// calculate a path for a tube in the fuse, w is the angle of the ellipse and d is the distance in the wall
+// calculate a path for a tube in the fuse, w is the angle of the ellipse and d is the distance in the outer wall
 function epath(w,d) = [ 
     [-3,bo1[0].y,0], 
     for( i=[1:1:len(bz1)-1]) 
@@ -114,7 +108,7 @@ function bezier_join(bezs,steps=10) = ( [ for( i=bezs ) for( p=bezier_curve(i, s
 function bezier_resample( org, ref ) = ([ for( x=ref ) [x.x,lookup( x.x, org )],]);
 
 // creates a solid vnf based on elipses r(x)=y(x),z(x) and y offset is o(x)
-function seg_vnf( y=[[0,0]], z=[[0,0]], o=[[0,0]], wall=0, res=12 ) = (   
+function seg_vnf( y=[[0,0]], z=[[0,0]], o=[[0,0]], wall=0, res=12, path=ellipse(d=1) ) = (   
     let( l = len(y), dx=2*wall/l )
     //echo(y) // eg x=200 is doublicate
     vnf_vertex_array(
@@ -122,13 +116,15 @@ function seg_vnf( y=[[0,0]], z=[[0,0]], o=[[0,0]], wall=0, res=12 ) = (
             for( i=[0:l-1] ) 
                 apply(
                     back(o[i].y) * right(y[i].x-wall+i*dx) * yrot(90), 
-                    path3d( ellipse( d=[z[i].y+wall,y[i].y+wall], $fn=res ) )
+                    //path3d( ellipse( d=[z[i].y+wall,y[i].y+wall], $fn=res ) )
+                    //path3d( path * [z[i],y[i]] + [wall,wall] )
+                    path3d( scale( [z[i].y+wall,y[i].y+wall], p=path ))
                 )
         ],
         col_wrap=true, caps=true, reverse=false, style="alt" )
 );
 
-function fuse_vnf( y,z,o, wall=0, steps=10, res=50 ) = (
+function fuse_vnf( y,z,o, wall=0, steps=10, res=50, path=ellipse(d=1) ) = (
     let( by0 = bezier_join(y,steps), bz0 = bezier_join(z,steps), bo0 = bezier_join(o,steps) )
     let( bz1 = bezier_resample( bz0, by0 ), bo1 = bezier_resample( bo0, by0 ) )
     seg_vnf(    
@@ -136,7 +132,8 @@ function fuse_vnf( y,z,o, wall=0, steps=10, res=50 ) = (
             bz1,
             bo1, 
             wall=wall,
-            res=res )
+            res=res,
+            path=path )
 );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
