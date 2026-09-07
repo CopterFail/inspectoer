@@ -4,42 +4,46 @@ include <BOSL2/std.scad>;
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // main
 ///////////////////////////////////////////////////////////////////////////////////////////////
-fuse();
+
+#fuse();
 //partition(size=[500,200,200],spread=25, cutpath="flat") fuse();
 //slide_cut();
 //ymove(0) slide_cut2();
 boom();
 zflip() boom();
 
+tubes(height=fuse_height, width=fuse_width, offset=fuse_offset,path=fuse_path);
+//tubes(height=boom_height, width=boom_width, offset=boom_offset,path=boom_path);
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // data
 ///////////////////////////////////////////////////////////////////////////////////////////////
 fl=470;
+steps=20;
 
 // define the fuse data
-bez_y = [   // segmente y(x) , hoehe
-    mkbez( [0,1], [165,80], [0,27], [100,0]),   // point1 -> point2 with dir1 and dir2
-    mkbez( [165,80], [fl-20,30], [100,0], [30,0]),
-    mkbez( [fl-20,30], [fl,3], [20,0], [0,-20])
-    ];
-bez_z = [   // segmente z(x) , breite
-    mkbez( [0,1], [140,110], [0,35], [100,0]),   // point1 -> point2 with dir1 and dir2
-    mkbez( [140,110], [fl-20,90], [35,0], [30,0]),    
-    mkbez( [fl-20,90], [fl,3], [20,0], [0,-20]),    
-    ];
-bez_o = [   // segmente o(x)
-    mkbez( [0,3], [165,0], [30,0], [60,0]),    // point1 -> point2 with dir1 and dir2
-    mkbez( [165,0], [400,0], [60,0], [60,0]),
-    mkbez( [400,0], [600,0], [60,0], [135,0]),
-    ];
+fuse_path = squircle(1,squareness=0.5,$fn=25);
+fuse_height = bezier_join([   // segmente y(x) , hoehe
+        mkbez( [0,1], [165,80], [0,27], [100,0]),   // point1 -> point2 with dir1 and dir2
+        mkbez( [165,80], [fl-20,30], [100,0], [30,0]),
+        mkbez( [fl-20,30], [fl,3], [20,0], [0,-20])],
+        steps);
+fuse_width = bezier_resample( 
+        bezier_join([   // segmente z(x) , breite
+            mkbez( [0,1], [140,110], [0,35], [100,0]),   // point1 -> point2 with dir1 and dir2
+            mkbez( [140,110], [fl-20,90], [35,0], [30,0]),    
+            mkbez( [fl-20,90], [fl,3], [20,0], [0,-20])],
+            steps),
+        fuse_height);
+fuse_offset = bezier_resample( 
+        bezier_join([   // segmente o(x)
+            mkbez( [0,3], [165,0], [30,0], [60,0]),    // point1 -> point2 with dir1 and dir2
+            mkbez( [165,0], [400,0], [60,0], [60,0]),
+            mkbez( [400,0], [600,0], [60,0], [135,0])],
+            steps),
+        fuse_height);
 
-steps=20;
-by0 = bezier_join(bez_y,steps);
-bz0 = bezier_join(bez_z,steps);
-bo0 = bezier_join(bez_o,steps);
-bz1 = bezier_resample( bz0, by0 );
-bo1 = bezier_resample( bo0, by0 );
-fvnf_0 = vnf_drop_unused_points(fuse_vnf( bez_y, bez_z, bez_o, wall=0, path=squircle(1,squareness=0.5) ));
+fvnf_0 = vnf_drop_unused_points(fuse_vnf( fuse_height, fuse_width, fuse_offset, wall=0, path=fuse_path ));
 
 // define the boom data
 bl=450;
@@ -47,59 +51,61 @@ bd1=40;
 bd2=30;
 bd3=20;
 bh1=15;
-boom_bez_y = [   // segmente y(x) , hoehe
-    mkbez( [0,bd1], [150,bd2], [0,27], [100,0]),   // point1 -> point2 with dir1 and dir2
-    mkbez( [150,bd2], [bl-20,bd2], [100,0], [30,0]),
-    mkbez( [bl-20,bd2], [bl,3], [20,0], [0,-20])
-    ];
-boom_bez_z = [   // segmente z(x) , breite
-    mkbez( [0,bd1], [150,bd3], [0,27], [100,0]),   // point1 -> point2 with dir1 and dir2
-    mkbez( [150,bd3], [bl-20,bd3], [100,0], [30,0]),
-    mkbez( [bl-20,bd3], [bl,3], [20,0], [0,-20])
-    ];
-boom_bez_o = [   // segmente o(x)
-    mkbez( [0,3], [bl,bh1], [80,0], [60,0])    // point1 -> point2 with dir1 and dir2
-    ];
+boom_path = star(n=5,r=1,ir=0.7);
+boom_height = bezier_join( [   // segmente y(x) , hoehe
+        mkbez( [0,bd1], [150,bd2], [0,27], [100,0]),   // point1 -> point2 with dir1 and dir2
+        mkbez( [150,bd2], [bl-20,bd2], [100,0], [30,0]),
+        mkbez( [bl-20,bd2], [bl,3], [20,0], [0,-20])],
+        steps);
+boom_width = bezier_resample(
+        bezier_join([ 
+            mkbez( [0,bd1], [150,bd3], [0,27], [100,0]),   // point1 -> point2 with dir1 and dir2
+            mkbez( [150,bd3], [bl-20,bd3], [100,0], [30,0]),
+            mkbez( [bl-20,bd3], [bl,3], [20,0], [0,-20])],
+            steps),
+        boom_height);
+boom_offset = bezier_resample( 
+        bezier_join([ 
+            mkbez( [0,3], [bl,bh1], [80,0], [60,0]) ], 
+            steps), 
+        boom_height);
 
-boom_by0 = bezier_join(boom_bez_y,steps);
-boom_bz0 = bezier_join(boom_bez_z,steps);
-boom_bo0 = bezier_join(boom_bez_o,steps);
-boom_bz1 = bezier_resample( boom_bz0, boom_by0 );
-boom_bo1 = bezier_resample( boom_bo0, boom_by0 );
-bvnf_0 = vnf_drop_unused_points(fuse_vnf( boom_bez_y, boom_bez_z, boom_bez_o, wall=0, path=star(n=5,r=1,ir=0.7) ));
+bvnf_0 = vnf_drop_unused_points(fuse_vnf( boom_height, boom_width, boom_offset, wall=0, path=boom_path ));
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // functions
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-// calculate the ellipse
-function my_ellipse( a, b, w ) = [ a * cos(w), b * sin(w) ];
-
 // calculate a path for a tube in the fuse, w is the angle of the ellipse and d is the distance in the outer wall
-function epath(w,d) = [ 
-    [-3,bo1[0].y,0], 
-    for( i=[1:1:len(bz1)-1]) 
-        [bz1[i].x, bo1[i].y + (by0[i].y-d) * sin(w) / 2, (bz1[i].y-d) * cos(w) / 2], 
+function epath2(height,width,offset,w=0,d=3,start=1,end=1,path=ellipse(d=1)) = [
+    let(pt = polygon_line_intersection(path,[[0,0],[cos(w),sin(w)]]))
+    // using d is complicate because of x
+    //if(start<0)[start*10,offset[0].y,0], 
+    for( i=[start:1:end]) [
+        height[i].x, 
+        (height[i].y - d) * pt[0][0].x + offset[i].y, 
+        (width[i].y - d) * pt[0][0].y
+        ], 
     ];
-
-function epath2(w,d,start=1,end=len(bz1)-1) = [ 
-    if(start<0)[start,bo1[0].y,0], 
-    for( i=[start:1:end]) 
-    [bz1[i].x, bo1[i].y + (by0[i].y-d) * sin(w) / 2, (bz1[i].y-d) * cos(w) / 2], ];
+// polygon_line_intersection( scale( [z[i].y+wall,y[i].y+wall], p=path ), [sin(w),cos(w)] ) see also seg_vnf() below.
 
 // draw 3 tube with fix 2mm under the skin    
-module tubes(start=1, end=len(bz1)-1){
-    stroke( width=2, epath2(-90, 3.5,start,end) );
-    stroke( width=2, epath2(-15, 3.5,start,end) );
-    stroke( width=2, epath2(195, 3.5,start,end) );
+module tubes(height=fuse_height, width=fuse_width, offset=fuse_offset, start=0, path=ellipse(d=1)){
+    end = len( height ) - 1;
+    d = 3.5;
+    xmove( fl-260 ) 
+	xflip()
+    color("Blue") 
+    {
+        stroke( width=2, epath2( height, width, offset, w=90, d, start, end, path ) );
+        stroke( width=2, epath2( height, width, offset, w=0, d, start, end, path ) );
+        stroke( width=2, epath2( height, width, offset, w=180, d, start, end, path ) );
+    }
 }
 
 // create a bosl2 bezier with 2 point and 2 direction vectors from 4 points
 function mkbez(a=[0,0],b=[10,10],da=[1,0],db=[0,1]) = [ a, a+da, b-db, b];  
-
-// calculates the x-resolution - bad!
-function mkres(bez) = round((bez[3].x - bez[0].x) * 0.05);
 
 // join a set of bosl2 beziers, to a single set of 2d points using bezier_curve for each bezier
 function bezier_join(bezs,steps=10) = ( [ for( i=bezs ) for( p=bezier_curve(i, splinesteps=steps)) p,] );
@@ -107,33 +113,18 @@ function bezier_join(bezs,steps=10) = ( [ for( i=bezs ) for( p=bezier_curve(i, s
 // use a union x vector, resample
 function bezier_resample( org, ref ) = ([ for( x=ref ) [x.x,lookup( x.x, org )],]);
 
-// creates a solid vnf based on elipses r(x)=y(x),z(x) and y offset is o(x)
-function seg_vnf( y=[[0,0]], z=[[0,0]], o=[[0,0]], wall=0, res=12, path=ellipse(d=1) ) = (   
-    let( l = len(y), dx=2*wall/l )
-    //echo(y) // eg x=200 is doublicate
+// creates a solid vnf based on elipses r(x)=height(x),width(x) and height offset(x)
+function fuse_vnf( height=[[0,0]], width=[[0,0]], offset=[[0,0]], wall=0, steps=10, res=50, path=ellipse(d=1) ) = (
+    let( l = len(height), dx=2*wall/l )
     vnf_vertex_array(
         points=[
             for( i=[0:l-1] ) 
                 apply(
-                    back(o[i].y) * right(y[i].x-wall+i*dx) * yrot(90), 
-                    //path3d( ellipse( d=[z[i].y+wall,y[i].y+wall], $fn=res ) )
-                    //path3d( path * [z[i],y[i]] + [wall,wall] )
-                    path3d( scale( [z[i].y+wall,y[i].y+wall], p=path ))
+                    back(offset[i].y) * right(height[i].x-wall+i*dx) * yrot(90), 
+                    path3d( scale( [ width[i].y + wall, height[i].y + wall], p=path ))
                 )
         ],
         col_wrap=true, caps=true, reverse=false, style="alt" )
-);
-
-function fuse_vnf( y,z,o, wall=0, steps=10, res=50, path=ellipse(d=1) ) = (
-    let( by0 = bezier_join(y,steps), bz0 = bezier_join(z,steps), bo0 = bezier_join(o,steps) )
-    let( bz1 = bezier_resample( bz0, by0 ), bo1 = bezier_resample( bo0, by0 ) )
-    seg_vnf(    
-            by0,
-            bz1,
-            bo1, 
-            wall=wall,
-            res=res,
-            path=path )
 );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
