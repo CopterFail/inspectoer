@@ -5,14 +5,14 @@ include <BOSL2/std.scad>;
 // main
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-#fuse();
+//fuse();
 //partition(size=[500,200,200],spread=25, cutpath="flat") fuse();
-//slide_cut();
-//ymove(0) slide_cut2();
+slide_cut();
+ymove(30) xmove(30) slide_cut2();
 boom();
 zflip() boom();
 
-tubes(height=fuse_height, width=fuse_width, offset=fuse_offset,path=fuse_path);
+
 //tubes(height=boom_height, width=boom_width, offset=boom_offset,path=boom_path);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,29 +78,36 @@ bvnf_0 = vnf_drop_unused_points(fuse_vnf( boom_height, boom_width, boom_offset, 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 // calculate a path for a tube in the fuse, w is the angle of the ellipse and d is the distance in the outer wall
-function epath2(height,width,offset,w=0,d=3,start=1,end=1,path=ellipse(d=1)) = [
-    let(pt = polygon_line_intersection(path,[[0,0],[cos(w),sin(w)]]))
-    // using d is complicate because of x
-    //if(start<0)[start*10,offset[0].y,0], 
-    for( i=[start:1:end]) [
-        height[i].x, 
-        (height[i].y - d) * pt[0][0].x + offset[i].y, 
-        (width[i].y - d) * pt[0][0].y
+function epath2(height,width,offset,w=0,d=3,start=1,end=1,path=ellipse(d=1)) = 
+    let( pt = polygon_line_intersection(path,[[0,0],[cos(w),sin(w)]]) )
+    [
+    if(start > 1) // add an additional start point, depending on the start value
+        [ width[0].x - width[start].x, 0 + offset[0].y, 0 ], 
+    for( i=[start:1:end]) 
+        [
+            height[i].x, 
+            (height[i].y - d) * pt[0][0].x + offset[i].y, 
+            (width[i].y - d) * pt[0][0].y
+        ], 
+    if(end < (len( width )-1) ) // add an additional end point, depending on the end value
+        [ 
+            width[len( width )-1].x + (width[len( width )-1].x - (width[end].x)), 
+            (height[end].y - d) * pt[0][0].x + offset[end].y, 
+            (width[end].y - d) * pt[0][0].y 
         ], 
     ];
+    
 // polygon_line_intersection( scale( [z[i].y+wall,y[i].y+wall], p=path ), [sin(w),cos(w)] ) see also seg_vnf() below.
 
 // draw 3 tube with fix 2mm under the skin    
 module tubes(height=fuse_height, width=fuse_width, offset=fuse_offset, start=0, path=ellipse(d=1)){
     end = len( height ) - 1;
     d = 3.5;
-    xmove( fl-260 ) 
-	xflip()
     color("Blue") 
     {
-        stroke( width=2, epath2( height, width, offset, w=90, d, start, end, path ) );
-        stroke( width=2, epath2( height, width, offset, w=0, d, start, end, path ) );
-        stroke( width=2, epath2( height, width, offset, w=180, d, start, end, path ) );
+        stroke( width=2, epath2( height, width, offset, w=90, d, start+5, end-20, path ) );
+        stroke( width=2, epath2( height, width, offset, w=0, d, start+5, end-20, path ) );
+        stroke( width=2, epath2( height, width, offset, w=-90, d, start+5, end-20, path ) );
     }
 }
 
@@ -132,17 +139,24 @@ function fuse_vnf( height=[[0,0]], width=[[0,0]], offset=[[0,0]], wall=0, steps=
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 module fuse(){
-	fvnf_10 = vnf_small_offset( fvnf_0, -10 ); // alternative calculation for fvnf_5
   	xmove(fl-260) 
 	xflip() 
-	//difference() {
-	vnf_polyhedron( fvnf_0 );
-	//vnf_polyhedron( fvnf_10 );
-	//}
+	difference() {
+	    vnf_polyhedron( fvnf_0 );
+        innerfuse();
+	}
   }
+module innerfuse()
+{
+	fvnf_20 = vnf_small_offset( fvnf_0, -20 ); // alternative calculation for fvnf_5
+//	move([-120,-25, -45/2])cube([210,45,45]);
+    vnf_polyhedron( fvnf_20 );
+    tubes(height=fuse_height, width=fuse_width, offset=fuse_offset,path=fuse_path);
+}
+
 module slide_mask(){
 	d=5;
-	a=75;
+	a=85;
 	l=300;
 	o=120;
 	ymove(10)
@@ -154,34 +168,22 @@ module slide_mask(){
 	move([+l-60,0,0])cube([l,l,l],center=true);
 }
 
-module innerfuse()
-{
-	move([-120,-25, -45/2])cube([210,45,45]);
-
-}
-
 module slide_cut(){
 	difference() {
-		difference() {
-			fuse();
-			innerfuse();
-			}
+		fuse();
 		slide_mask();
 	}
 }
 
 module slide_cut2(){
 	intersection() {
-		difference() {
-			fuse();
-			innerfuse();
-			}
+		fuse();
 		slide_mask();
 	}
 }
 
 module boom(){
-	bvnf_10 = vnf_small_offset( bvnf_0, -10 ); 
+	bvnf_5 = vnf_small_offset( bvnf_0, -5 ); 
 	move([20,0,150])
 	xflip()
 	vnf_polyhedron( bvnf_0 );
