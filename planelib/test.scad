@@ -2,8 +2,8 @@ include <inspectoer.scad>
 include <fuselage2.scad>
 
 //solid:
-zmove(-10) { wingSolid(); wingBow( draw=true ); }
-zflip() zmove(-10) { wingSolid(); wingBow( draw=true ); }
+*zmove(-10) { wingSolid(); wingBow( draw=true ); }
+*zflip() zmove(-10) { wingSolid(); wingBow( draw=true ); }
 
 *wingSegment([s(zBase),s(zBow)], [o(zBase),o(zBow)]);
 
@@ -62,7 +62,7 @@ zflip() zmove(-10) { wingSolid(); wingBow( draw=true ); }
 *mirror([0,0,1]) ServoDiff(pos=wingservopos+[150,0,0],rot=wingservorot);
 
 *fuseSolid();  
-fuseBattery();
+fuseBattery(p=1); // p=1 or 2 for battery size
 *#translate([fuseLength0-40,1.5+fuseY0,0]) fuseCamera2( ang=0, open=false );
 *CamPan();
 *left(60) xrot(180) bottom_half() fuseCamera3();
@@ -93,7 +93,7 @@ fuseBattery();
 *HRuder2();
 *sideSolid();
 *tubeFlansh2();
-xmove(50) tail();  
+*xmove(50) tail();  
 *#fuseCoverHookKnop2( a=10);
 *#fuseCoverHookBase2();
 

@@ -6,11 +6,26 @@ include <BOSL2/std.scad>;
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 //fuse();
-//partition(size=[500,200,200],spread=25, cutpath="flat") fuse();
-slide_cut();
-ymove(30) xmove(30) slide_cut2();
-boom();
-zflip() boom();
+//innerfuse();
+fuse2Segment( [0,1,3,4] );
+//ymove(100/2) partition(size=[500,200,200],spread=100, cutpath="flat",cutpath_centered=false) fuse();
+//slide_cut();
+//ymove(30) xmove(30) slide_cut2();
+//boom();
+//zflip() boom();
+//color( "Green") stroke( width=0.1, slide_path(e=0) );
+//color( "Blue") stroke( width=0.1, slide_path(e=+0.2) );
+//color( "Red") stroke( width=0.1, slide_path(e=-0.2) );
+
+function slide_path( a=60, d=5, e=0 ) = (
+    let ( y = 5 , x = 5 )
+    union(
+			//[[0, 0], [x, y], [100, y], [100, -y], [x, -y]],
+			move( [0, 1.5*d], rect( [a+2*d-2*e, d-2*e], rounding=d/5, $fn=25 ) ),
+            move( [0, d-e/2], rect( [a-2*e, 2*d-e] ) ),
+		)
+);
+
 
 
 //tubes(height=boom_height, width=boom_width, offset=boom_offset,path=boom_path);
@@ -31,8 +46,9 @@ fuse_height = bezier_join([   // segmente y(x) , hoehe
 fuse_width = bezier_resample( 
         bezier_join([   // segmente z(x) , breite
             mkbez( [0,1], [140,110], [0,35], [100,0]),   // point1 -> point2 with dir1 and dir2
-            mkbez( [140,110], [fl-20,90], [35,0], [30,0]),    
-            mkbez( [fl-20,90], [fl,3], [20,0], [0,-20])],
+            mkbez( [140,110], [350,110], [35,0], [30,0]),    
+            mkbez( [350,110], [fl-20,110], [35,0], [30,0]),    
+            mkbez( [fl-20,110], [fl,3], [20,0], [0,-20])],
             steps),
         fuse_height);
 fuse_offset = bezier_resample( 
@@ -138,6 +154,78 @@ function fuse_vnf( height=[[0,0]], width=[[0,0]], offset=[[0,0]], wall=0, steps=
 // modules
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
+// external called fuse modules, to be implemented (see also fuseflage.scad):
+//module fuseSolid
+module fuse2Solid( seg=0, r=0 )
+{
+    difference(){
+        union(){
+			length = (seg<4) ? 170 : 4 * 170;
+			start = (seg<4) ? -140+seg*length : -140+3*170;
+			radialSlice( sh=length, sx=100, org=[-length+start,0,0], rot=[0,90,0], mode=2, center=false ){
+                xmove(fl-260) 
+	                xflip() 
+                        vnf_polyhedron( vnf_small_offset( fvnf_0, r ));
+			}
+		}
+		union(){
+			fuseFinger( df=25-r );  // here r has only the half effect 
+			mirror([0,0,1]) fuseFinger(  df=25-r  );
+			// 3mm cutout for wind with SD6060 profile, oversize is 0.5mm:
+			#spant3d( d=5, offset=+(o(zBase)+[0,0,r]), size=s(zBase), r=0.5-r, p=pSD6060 );
+			spant3d( d=5, offset=-(o(zBase)+[0,0,r+5]), size=s(zBase), r=0.5-r, p=pSD6060 ); // spant3d is not centered, so we need to substract 5mm to the offset
+			translate([-308-r,0,0]) cube([fuseWidth*2,fuseWidth*2,fuseWidth*2], center=true); // cutout for the tail of the fuselage
+        }
+     }
+}
+
+//module fuseSegment([0,1,2,3]);
+module fuse2Skin()
+{
+    difference(){
+		difference(){
+			children(0);
+			children(1);
+			}
+
+		
+		fuseGps();
+		*fuseElrs();
+			
+		xTube( diameter=dBar1, length=100, tubeoffset=tubeOffset1, $fn=50 );
+		mirror([0,0,1]) xTube( diameter=dBar1, length=100, tubeoffset=tubeOffset1, $fn=50 );
+		xTube( diameter=dBar2, length=100, tubeoffset=tubeOffset2, $fn=50 );
+		mirror([0,0,1]) xTube( diameter=dBar2, length=100, tubeoffset=tubeOffset2, $fn=50 );
+		
+		
+		//fusePoly();
+        tubes();
+		wingElectric();
+
+		*fuseCamera();
+		*fuseCamera1();
+		*translate([296,4,0]) rotate([-90,180,-12]) servo_sg90( yadd=0 ); // cam on servo with usual arm
+			
+		translate([260-40,-2,+23+6]) rotate([8,0,0 ]) scale(7) fuseNaca(w=-10);
+		translate([260-40,-2,-23-6]) rotate([180-8,0,0 ]) scale(7) fuseNaca(w=-10);
+		translate([-210,-10,+30+3]) rotate([0,-90,20]) cylinder(d=10+4,h=50,center=true);  // ToFix: collision with inner tube
+		translate([-210,-10,-30-3]) rotate([0,-90,20]) cylinder(d=10+4,h=50,center=true);
+	}
+}
+
+module fuse2Segment( vseg=[0] )
+{
+	render(convexity = 2)
+		for( seg=vseg )
+			fuse2Skin(){
+				fuse2Solid( seg, r=0 );	// regular solid
+				difference(){ 
+					fuse2Solid( seg, r=-fuseWall ); // 5mm reduced solid for 5 mm walls, cut the front to make the fuse solid solid
+					;
+					}	
+				fuse2Solid( seg, r=-SkidWall ); // reduced by the skid thickness
+				}
+}
 module fuse(){
   	xmove(fl-260) 
 	xflip() 
@@ -148,9 +236,8 @@ module fuse(){
   }
 module innerfuse()
 {
-	fvnf_20 = vnf_small_offset( fvnf_0, -20 ); // alternative calculation for fvnf_5
-//	move([-120,-25, -45/2])cube([210,45,45]);
-    vnf_polyhedron( fvnf_20 );
+	fvnf_5 = vnf_small_offset( fvnf_0, -5 ); // alternative calculation for fvnf_5
+    vnf_polyhedron( fvnf_5 );
     tubes(height=fuse_height, width=fuse_width, offset=fuse_offset,path=fuse_path);
 }
 
