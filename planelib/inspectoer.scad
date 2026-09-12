@@ -115,14 +115,14 @@ module wingSegment( s=[s(zBase),s(zBoom)], o=[o(zBase),o(zBoom)] )
             linearSlice( sx=s[0], sh=o[1].z-o[0].z, org=o[0], center=true ){
                 union(){
                     segment(size=s, pos=o, r=0);
-                    wingMotorCoverSolid();
+                    *wingMotorCoverSolid();
                     }
                 }
             }
         union(){    
             mirror([0,0,1]) ServoDiff(pos=wingservopos, rot=wingservorot, yadd=wingservoyadd );
 
-            wingBoom();
+            *wingBoom();
             xTube( diameter=dBar1, length=lBar1, tubeoffset=tubeOffset1 );
             xTube( diameter=dBar2, length=lBar2, tubeoffset=tubeOffset2 );
 
@@ -130,8 +130,8 @@ module wingSegment( s=[s(zBase),s(zBoom)], o=[o(zBase),o(zBoom)] )
             wingPolyLine( d=dPoly, pt=ptQRuder, off=[+0,+0] );
             wingElectric();
              
-            wingMotor(diff=0.3, holes=false);
-            wingMotorPlate(diff=0.3, holes=false);
+            *wingMotor(diff=0.3, holes=false);
+            *wingMotorPlate(diff=0.3, holes=false);
             
             for(i=[1:len(o)-1])
                 translate(o[i] - s[i]*[ptQRuder.x , ptQRuder.y, 0] + [-30,2.5,0] ) 
@@ -141,7 +141,7 @@ module wingSegment( s=[s(zBase),s(zBoom)], o=[o(zBase),o(zBoom)] )
             
             // ruder glue helper is missing??
 
-            translate([5-35,10+2-15,zBoom-13])
+            *translate([5-35,10+2-15,zBoom-13])
                 translate([-113,8,0]) cylinder(d=3.5,h=10); //hole for screw in wingMotor(), used for tail mount
 
 

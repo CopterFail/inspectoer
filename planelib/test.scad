@@ -62,7 +62,7 @@ include <fuselage2.scad>
 *mirror([0,0,1]) ServoDiff(pos=wingservopos+[150,0,0],rot=wingservorot);
 
 *fuseSolid();  
-fuseBattery(p=1); // p=1 or 2 for battery size
+*fuseBattery(p=1); // p=1 or 2 for battery size
 *#translate([fuseLength0-40,1.5+fuseY0,0]) fuseCamera2( ang=0, open=false );
 *CamPan();
 *left(60) xrot(180) bottom_half() fuseCamera3();

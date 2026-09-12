@@ -7,11 +7,12 @@ include <BOSL2/std.scad>;
 
 //fuse();
 //innerfuse();
-fuse2Segment( [0,1,3,4] );
+//fuse2Segment( [0,1,3,4] );
 //ymove(100/2) partition(size=[500,200,200],spread=100, cutpath="flat",cutpath_centered=false) fuse();
 //slide_cut();
 //ymove(30) xmove(30) slide_cut2();
-//boom();
+boom();
+*boomSolid( seg=2, r=0 );
 //zflip() boom();
 //color( "Green") stroke( width=0.1, slide_path(e=0) );
 //color( "Blue") stroke( width=0.1, slide_path(e=+0.2) );
@@ -67,22 +68,26 @@ bd1=40;
 bd2=30;
 bd3=20;
 bh1=15;
-boom_path = star(n=5,r=1,ir=0.7);
+//boom_path = squircle(1,squareness=0.5,$fn=25);
+boom_path = ellipse(d=1,$fn=25);
 boom_height = bezier_join( [   // segmente y(x) , hoehe
-        mkbez( [0,bd1], [150,bd2], [0,27], [100,0]),   // point1 -> point2 with dir1 and dir2
-        mkbez( [150,bd2], [bl-20,bd2], [100,0], [30,0]),
+        mkbez( [0,bd1], [80,bd1+10], [10,10], [40,0]),   // point1 -> point2 with dir1 and dir2
+        mkbez( [80,bd1+10], [250,bd2], [30,0], [30,0]),
+        mkbez( [250,bd2], [bl-20,bd2], [100,0], [30,0]),
         mkbez( [bl-20,bd2], [bl,3], [20,0], [0,-20])],
         steps);
 boom_width = bezier_resample(
         bezier_join([ 
-            mkbez( [0,bd1], [150,bd3], [0,27], [100,0]),   // point1 -> point2 with dir1 and dir2
-            mkbez( [150,bd3], [bl-20,bd3], [100,0], [30,0]),
+            mkbez( [0,bd1], [120,bd1+30], [10,10], [40,0]),   // point1 -> point2 with dir1 and dir2
+            mkbez( [120,bd1+30], [250,bd2], [30,0], [30,0]),
+            mkbez( [250,bd2], [bl-20,bd3], [100,0], [30,0]),
             mkbez( [bl-20,bd3], [bl,3], [20,0], [0,-20])],
             steps),
         boom_height);
 boom_offset = bezier_resample( 
         bezier_join([ 
-            mkbez( [0,3], [bl,bh1], [80,0], [60,0]) ], 
+            mkbez( [0,3], [220,3], [80,0], [60,0]), 
+            mkbez( [220,3], [bl,bh1], [80,0], [60,0]) ], 
             steps), 
         boom_height);
 
@@ -98,7 +103,13 @@ function epath2(height,width,offset,w=0,d=3,start=1,end=1,path=ellipse(d=1)) =
     let( pt = polygon_line_intersection(path,[[0,0],[cos(w),sin(w)]]) )
     [
     if(start > 1) // add an additional start point, depending on the start value
-        [ width[0].x - width[start].x, 0 + offset[0].y, 0 ], 
+        [ 
+            width[0].x - width[start].x, 
+            //0 + offset[0].y, 
+            //0 
+            (height[start].y - d) * pt[0][0].x + offset[start].y, 
+            (width[start].y - d) * pt[0][0].y 
+        ], 
     for( i=[start:1:end]) 
         [
             height[i].x, 
@@ -116,15 +127,12 @@ function epath2(height,width,offset,w=0,d=3,start=1,end=1,path=ellipse(d=1)) =
 // polygon_line_intersection( scale( [z[i].y+wall,y[i].y+wall], p=path ), [sin(w),cos(w)] ) see also seg_vnf() below.
 
 // draw 3 tube with fix 2mm under the skin    
-module tubes(height=fuse_height, width=fuse_width, offset=fuse_offset, start=0, path=ellipse(d=1)){
+module tubes(height=fuse_height, width=fuse_width, offset=fuse_offset, angs=[90,5,-90], start=0, path=ellipse(d=1)){
     end = len( height ) - 1;
     d = 3.5;
     color("Blue") 
-    {
-        stroke( width=2, epath2( height, width, offset, w=90, d, start+5, end-20, path ) );
-        stroke( width=2, epath2( height, width, offset, w=0, d, start+5, end-20, path ) );
-        stroke( width=2, epath2( height, width, offset, w=-90, d, start+5, end-20, path ) );
-    }
+    for(w=angs)
+        stroke( width=2, epath2( height, width, offset, w=w, d, start, end, path ) );
 }
 
 // create a bosl2 bezier with 2 point and 2 direction vectors from 4 points
@@ -172,9 +180,9 @@ module fuse2Solid( seg=0, r=0 )
 			fuseFinger( df=25-r );  // here r has only the half effect 
 			mirror([0,0,1]) fuseFinger(  df=25-r  );
 			// 3mm cutout for wind with SD6060 profile, oversize is 0.5mm:
-			#spant3d( d=5, offset=+(o(zBase)+[0,0,r]), size=s(zBase), r=0.5-r, p=pSD6060 );
+			spant3d( d=5, offset=+(o(zBase)+[0,0,r]), size=s(zBase), r=0.5-r, p=pSD6060 );
 			spant3d( d=5, offset=-(o(zBase)+[0,0,r+5]), size=s(zBase), r=0.5-r, p=pSD6060 ); // spant3d is not centered, so we need to substract 5mm to the offset
-			translate([-308-r,0,0]) cube([fuseWidth*2,fuseWidth*2,fuseWidth*2], center=true); // cutout for the tail of the fuselage
+			*translate([-308-r,0,0]) cube([fuseWidth*2,fuseWidth*2,fuseWidth*2], center=true); // cutout for the tail of the fuselage
         }
      }
 }
@@ -199,7 +207,7 @@ module fuse2Skin()
 		
 		
 		//fusePoly();
-        tubes();
+        xmove(fl-260) xflip() tubes();
 		wingElectric();
 
 		*fuseCamera();
@@ -208,8 +216,8 @@ module fuse2Skin()
 			
 		translate([260-40,-2,+23+6]) rotate([8,0,0 ]) scale(7) fuseNaca(w=-10);
 		translate([260-40,-2,-23-6]) rotate([180-8,0,0 ]) scale(7) fuseNaca(w=-10);
-		translate([-210,-10,+30+3]) rotate([0,-90,20]) cylinder(d=10+4,h=50,center=true);  // ToFix: collision with inner tube
-		translate([-210,-10,-30-3]) rotate([0,-90,20]) cylinder(d=10+4,h=50,center=true);
+		translate([-210,-10,+30+3]) rotate([0,-90,20]) cylinder(d=10+4,h=70,center=true);  // ToFix: collision with inner tube
+		translate([-210,-10,-30-3]) rotate([0,-90,20]) cylinder(d=10+4,h=70,center=true);
 	}
 }
 
@@ -270,8 +278,30 @@ module slide_cut2(){
 }
 
 module boom(){
-	bvnf_5 = vnf_small_offset( bvnf_0, -5 ); 
-	move([20,0,150])
-	xflip()
-	vnf_polyhedron( bvnf_0 );
+	//bvnf_5 = vnf_small_offset( bvnf_0, -5 ); 
+    difference() {
+        boomSolid( seg=0, r=0 );
+        boomSolid( seg=0, r=-5 );
+        move([-550,-50,150])cube([600,100,100]);
+        //wingSegment( [s(zBase),s(zBoom)], [o(zBase),o(zBoom)] );
+        //segment(size=[s(zBase),s(zBoom)], pos=[o(zBase),o(zBoom)], r=0);
+    }
   }
+
+module boomSolid( seg=0, r=0 )
+{
+    difference(){
+        union(){
+			//length = (seg<4) ? 170 : 4 * 170;
+			//start = (seg<4) ? -140+seg*length : -140+3*170;
+			//radialSlice( sh=length, sx=100, org=[-length+start,0,0], rot=[0,90,0], mode=2, center=false ){
+            move([20,0,zBoom]) xflip() vnf_polyhedron( vnf_small_offset( bvnf_0, r ));
+			//}
+		}
+		union(){
+			//cutout for wing with SD6060 profile, oversize is 0.5mm:
+			spant3d( d=100, offset=+(o(zBoom)+[0,0,-50+5+r]), size=s(zBoom), r=0.5-r, p=pSD6060 ); //todo: use the real wing
+            move([20,0,zBoom]) xflip() #tubes(height=boom_height, width=boom_width, offset=boom_offset, angs=[0,180], start=0, path=ellipse(d=1));
+        }
+     }
+}
